@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Fourtop</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="home_second">Home Second</string>
+
+    NAV
+    <string name="menu_home">Главная</string>
+    <string name="menu_profile">Профиль</string>
+    <string name="menu_userImages">Мои фотографии</string>
+    <string name="menu_voting">Голосование</string>
+    <string name="menu_topImages">Топ фотографий</string>
+    <string name="menu_topUsers">Топ пользователей</string>
+
+    LOGIN
+    <string name="login_text_userLogin">Логин:</string>
+    <string name="login_text_userPass">Пароль:</string>
+    <string name="login_btn_btnLogin">Войти</string>
+    <string name="login_btn_btnRegister">Зарегистироваться</string>
+
+    REGISTER
+    <string name="register_text_userLogin">E-mail:</string>
+    <string name="register_text_userPass">Пароль:</string>
+    <string name="register_text_userConfirmPass">Подтвердите пароль:</string>
+    <string name="register_text_userName">Ник:</string>
+    <string name="register_btn_btnRegister">Зарегистироваться</string>
+</resources>
