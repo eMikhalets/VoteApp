@@ -10,12 +10,13 @@
     <string name="home_second">Home Second</string>
 
     NAV
-    <string name="menu_home">Главная</string>
-    <string name="menu_profile">Профиль</string>
-    <string name="menu_userImages">Мои фотографии</string>
-    <string name="menu_voting">Голосование</string>
-    <string name="menu_topImages">Топ фотографий</string>
-    <string name="menu_topUsers">Топ пользователей</string>
+    <string name="main_home">Главная</string>
+    <string name="main_profile">Профиль</string>
+    <string name="main_user_images">Мои фотографии</string>
+    <string name="main_voting">Голосование</string>
+    <string name="main_top_images">Топ фотографий</string>
+    <string name="main_top_users">Топ пользователей</string>
+    <string name="main_exit">Выйти</string>
 
     LOGIN
     <string name="login_text_userLogin">Логин:</string>
