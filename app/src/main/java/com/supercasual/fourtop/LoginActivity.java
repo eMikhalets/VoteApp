@@ -7,74 +7,133 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.supercasual.fourtop.network.ApiFactory;
-import com.supercasual.fourtop.network.ApiService;
-import com.supercasual.fourtop.network.CurrentUser;
-import com.supercasual.fourtop.network.pojo.Login;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.supercasual.fourtop.model.CurrentUser;
+import com.supercasual.fourtop.utils.Requests;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private String userLogin;
-    private String userPass;
+    private static final String LOG_TAG = "debug_logs";
+
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     private EditText etUserLogin;
     private EditText etUserPass;
+
+    private String userLogin;
+    private String userPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        etUserLogin = findViewById(R.id.et_login_userLogin);
-        etUserPass = findViewById(R.id.et_login_userPass);
+        requestQueue = Volley.newRequestQueue(this);
+
+        etUserLogin = findViewById(R.id.et_login_user_login);
+        etUserPass = findViewById(R.id.et_login_user_pass);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        userLogin = etUserLogin.getText().toString();
-        userPass = etUserPass.getText().toString();
-        callLogin();
+    protected void onResume() {
+        super.onResume();
+        String tempLogin = CurrentUser.get().getLogin();
+        String tempPass = CurrentUser.get().getPass();
+        if (!tempLogin.equals("") && !tempPass.equals("")) {
+            etUserLogin.setText(tempLogin);
+            etUserPass.setText(tempPass);
+        }
     }
 
     public void onClickLoginBtn(View view) {
         switch (view.getId()) {
-            case R.id.btn_login_login:
-                finish();
+            case R.id.btn_login_request_login:
+                userLogin = etUserLogin.getText().toString().trim();
+                userPass = etUserPass.getText().toString().trim();
+
+                if (userLogin.equals("") || userPass.equals("")) {
+                    Toast.makeText(this, "Все поля должны быть заполнены",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    doLoginRequest();
+                }
                 break;
-            case R.id.btn_login_register:
-                startActivity(new Intent(this, RegisterActivity.class));
+            case R.id.btn_login_register_activity:
+                Intent intent = new Intent(
+                        LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
                 break;
         }
     }
 
-    public void callLogin() {
-        ApiService apiService = ApiFactory.getInstance().getApiService();
-        RequestBody bodyLogin = RequestBody.create(MediaType.parse("text/plain"), userLogin);
-        RequestBody bodyPass = RequestBody.create(MediaType.parse("text/plain"), userPass);
-
-        apiService.login(bodyLogin, bodyPass).enqueue(new Callback<Login>() {
+    private void doLoginRequest() {
+        stringRequest = new StringRequest(Request.Method.POST, Requests.LOGIN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            int status = new JSONObject(response)
+                                    .getInt("status");
+                            int errorCode = new JSONObject(response)
+                                    .getInt("error_code");
+                            String errorMsg = new JSONObject(response)
+                                    .getString("error_msg");
+                            String errorUCode = new JSONObject(response)
+                                    .getString("error_ucode");
+                            if (status == 500) {
+                                Toast.makeText(LoginActivity.this,
+                                        "status 500",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.d(LOG_TAG, "status: " + status
+                                        + "errorCode: " + errorCode + ", "
+                                        + "errorMsg: " + errorMsg + ", "
+                                        + "errorUCode: " + errorUCode);
+                            } else {
+                                String token = new JSONObject(response)
+                                        .getJSONObject("data")
+                                        .getString("user_token");
+                                CurrentUser.get().setToken(token);
+                                if (token.equals("")) {
+                                    Toast.makeText(LoginActivity.this,
+                                            "Токен пользователя не установлен",
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    LoginActivity.this.finish();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d(LOG_TAG, "JSONException: " + e.toString());
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onResponse(Call<Login> call, Response<Login> response) {
-                if (response.isSuccessful() && response.body() !=null) {
-                    CurrentUser.setUserToken(response.body().getData().getUserToken());
-                    CurrentUser.setLogin(userLogin);
-                    Log.d("testLogs", "token: " + CurrentUser.getUserToken());
-                }
+            public void onErrorResponse(VolleyError error) {
+                Log.d(LOG_TAG, "onErrorResponse: " + error.toString());
             }
-
-            @Override
-            public void onFailure(Call<Login> call, Throwable t) {
-                Log.d("testLogs", t.toString());
-                Log.d("testLogs", t.getMessage());
+        })
+        {
+            protected Map<String, String> getParams() {
+                HashMap<String, String> hashMapParams = new HashMap<>();
+                hashMapParams.put("login", userLogin);
+                hashMapParams.put("password", userPass);
+                return hashMapParams;
             }
-        });
+        };
+        requestQueue.add(stringRequest);
     }
 }

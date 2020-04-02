@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/btn_main_home"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClickNavigation"
         android:text="@string/main_home"
@@ -19,7 +19,7 @@
 
     <Button
         android:id="@+id/btn_main_profile"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
@@ -30,7 +30,7 @@
 
     <Button
         android:id="@+id/btn_main_user_images"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
@@ -41,7 +41,7 @@
 
     <Button
         android:id="@+id/btn_main_voting"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
@@ -52,7 +52,7 @@
 
     <Button
         android:id="@+id/btn_main_top_images"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
@@ -63,7 +63,7 @@
 
     <Button
         android:id="@+id/btn_main_top_users"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
@@ -74,7 +74,7 @@
 
     <Button
         android:id="@+id/btn_main_exit"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:onClick="onClickNavigation"

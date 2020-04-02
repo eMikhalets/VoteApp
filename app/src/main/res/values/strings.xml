@@ -19,15 +19,15 @@
     <string name="main_exit">Выйти</string>
 
     LOGIN
-    <string name="login_text_userLogin">Логин:</string>
-    <string name="login_text_userPass">Пароль:</string>
-    <string name="login_btn_btnLogin">Войти</string>
-    <string name="login_btn_btnRegister">Зарегистироваться</string>
+    <string name="login_text_user_login">Логин:</string>
+    <string name="login_text_user_pass">Пароль:</string>
+    <string name="login_btn_btn_login">Войти</string>
+    <string name="login_btn_btn_register">Зарегистироваться</string>
 
     REGISTER
-    <string name="register_text_userLogin">E-mail:</string>
-    <string name="register_text_userPass">Пароль:</string>
-    <string name="register_text_userConfirmPass">Подтвердите пароль:</string>
-    <string name="register_text_userName">Ник:</string>
-    <string name="register_btn_btnRegister">Зарегистироваться</string>
+    <string name="register_text_user_login">Электронная почта:</string>
+    <string name="register_text_user_pass">Пароль:</string>
+    <string name="register_text_confirm_pass">Подтвердите пароль:</string>
+    <string name="register_text_user_name">Никнейм (для тестирования):</string>
+    <string name="register_btn_register">Зарегистироваться</string>
 </resources>

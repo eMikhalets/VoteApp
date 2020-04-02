@@ -4,12 +4,14 @@ public class CurrentUser {
 
     private static CurrentUser currentUser;
 
-    private String userToken;
-    private String userLogin;
+    private String token;
+    private String login;
+    private String pass;
 
     private CurrentUser() {
-        userToken = "";
-        userLogin = "";
+        token = "";
+        login = "";
+        pass = "";
     }
 
     public static synchronized CurrentUser get() {
@@ -19,19 +21,27 @@ public class CurrentUser {
         return currentUser;
     }
 
-    public String getUserToken() {
-        return userToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getUserLogin() {
-        return userLogin;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 }

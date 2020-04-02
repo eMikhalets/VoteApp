@@ -4,13 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.model.User;
 
@@ -38,7 +36,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // TODO: complete image upload
         User user = new User();
-        holder.textName.setText(user.getName());
+        holder.textName.setText(user.getLogin());
     }
 
     @Override

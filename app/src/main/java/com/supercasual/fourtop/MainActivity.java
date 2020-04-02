@@ -6,12 +6,27 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.supercasual.fourtop.model.CurrentUser;
+
 public class MainActivity extends AppCompatActivity {
+
+    private String currentUserToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        currentUserToken = CurrentUser.get().getToken();
+        if (!checkUserToken(currentUserToken)) {
+            startIntent(LoginActivity.class);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkUserToken(currentUserToken);
     }
 
     public void onClickNavigation(View view) {
@@ -43,5 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private void startIntent(Class cls) {
         Intent intent = new Intent(MainActivity.this, cls);
         startActivity(intent);
+    }
+
+    private boolean checkUserToken(String currentUserToken) {
+        return !currentUserToken.equals("");
     }
 }

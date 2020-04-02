@@ -22,6 +22,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        textUserToken.setText(CurrentUser.get().getUserToken());
+        textUserToken.setText(CurrentUser.get().getToken());
     }
 }
