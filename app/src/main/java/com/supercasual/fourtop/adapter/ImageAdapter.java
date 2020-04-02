@@ -1,6 +1,7 @@
 package com.supercasual.fourtop.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,9 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
     private Context context;
-    private List<Image> imageList;
+    private List<String> imageList;
 
-    public ImageAdapter(Context context, List<Image> imageList) {
+    public ImageAdapter(Context context, List<String> imageList) {
         this.context = context;
         this.imageList = imageList;
     }
@@ -37,7 +38,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // TODO: complete image upload
         Image image = new Image();
-        Picasso.get().load(image.getImageURL()).into(holder.imageView);
+        Picasso.get().load(imageList.get(position)).into(holder.imageView);
     }
 
     @Override

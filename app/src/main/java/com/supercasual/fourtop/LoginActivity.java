@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, "Все поля должны быть заполнены",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    doLoginRequest();
+                    loginRequest();
                 }
                 break;
             case R.id.btn_login_register_activity:
@@ -80,52 +80,44 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void doLoginRequest() {
+    private void loginRequest() {
         stringRequest = new StringRequest(Request.Method.POST, Requests.LOGIN,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            int status = new JSONObject(response)
-                                    .getInt("status");
-                            int errorCode = new JSONObject(response)
-                                    .getInt("error_code");
-                            String errorMsg = new JSONObject(response)
-                                    .getString("error_msg");
-                            String errorUCode = new JSONObject(response)
-                                    .getString("error_ucode");
-                            if (status == 500) {
+                response -> {
+                    try {
+                        int status = new JSONObject(response)
+                                .getInt("status");
+                        int errorCode = new JSONObject(response)
+                                .getInt("error_code");
+                        String errorMsg = new JSONObject(response)
+                                .getString("error_msg");
+                        String errorUCode = new JSONObject(response)
+                                .getString("error_ucode");
+                        if (status == 500) {
+                            Toast.makeText(LoginActivity.this,
+                                    "status 500",
+                                    Toast.LENGTH_SHORT).show();
+                            Log.d(LOG_TAG, "status: " + status
+                                    + "errorCode: " + errorCode + ", "
+                                    + "errorMsg: " + errorMsg + ", "
+                                    + "errorUCode: " + errorUCode);
+                        } else {
+                            String token = new JSONObject(response)
+                                    .getJSONObject("data")
+                                    .getString("user_token");
+                            CurrentUser.get().setToken(token);
+                            if (token.equals("")) {
                                 Toast.makeText(LoginActivity.this,
-                                        "status 500",
+                                        "Токен пользователя не установлен",
                                         Toast.LENGTH_SHORT).show();
-                                Log.d(LOG_TAG, "status: " + status
-                                        + "errorCode: " + errorCode + ", "
-                                        + "errorMsg: " + errorMsg + ", "
-                                        + "errorUCode: " + errorUCode);
                             } else {
-                                String token = new JSONObject(response)
-                                        .getJSONObject("data")
-                                        .getString("user_token");
-                                CurrentUser.get().setToken(token);
-                                if (token.equals("")) {
-                                    Toast.makeText(LoginActivity.this,
-                                            "Токен пользователя не установлен",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    LoginActivity.this.finish();
-                                }
+                                LoginActivity.this.finish();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d(LOG_TAG, "JSONException: " + e.toString());
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.d(LOG_TAG, "JSONException: " + e.toString());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(LOG_TAG, "onErrorResponse: " + error.toString());
-            }
-        })
+                }, error -> Log.d(LOG_TAG, "onErrorResponse: " + error.toString()))
         {
             protected Map<String, String> getParams() {
                 HashMap<String, String> hashMapParams = new HashMap<>();

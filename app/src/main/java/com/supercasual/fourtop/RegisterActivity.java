@@ -68,56 +68,48 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(this, "Все поля должны быть заполнены",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    doRegisterRequest();
+                    registerRequest();
                 }
                 break;
         }
     }
 
-    private void doRegisterRequest() {
+    private void registerRequest() {
         stringRequest = new StringRequest(Request.Method.POST, Requests.REGISTER,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            int status = new JSONObject(response)
-                                    .getInt("status");
-                            if (status == 200) {
-                                CurrentUser.get().setLogin(userLogin.split("@")[0]);
-                                CurrentUser.get().setPass(userPass);
-                                RegisterActivity.this.finish();
-                            } else if (status == 500) {
-                                int errorCode = new JSONObject(response)
-                                        .getInt("error_code");
-                                String errorMsg = new JSONObject(response)
-                                        .getString("error_msg");
-                                String errorUCode = new JSONObject(response)
-                                        .getString("error_ucode");
-                                Toast.makeText(RegisterActivity.this,
-                                        "status 500",
-                                        Toast.LENGTH_SHORT).show();
-                                Log.d(LOG_TAG, "status: " + status
-                                        + "errorCode: " + errorCode + ", "
-                                        + "errorMsg: " + errorMsg + ", "
-                                        + "errorUCode: " + errorUCode);
-                            } else {
-                                Toast.makeText(RegisterActivity.this,
-                                        "status: " + status,
-                                        Toast.LENGTH_SHORT).show();
-                                Log.d(LOG_TAG, "status: " + status);
+                response -> {
+                    try {
+                        int status = new JSONObject(response)
+                                .getInt("status");
+                        if (status == 200) {
+                            CurrentUser.get().setLogin(userLogin.split("@")[0]);
+                            CurrentUser.get().setPass(userPass);
+                            RegisterActivity.this.finish();
+                        } else if (status == 500) {
+                            int errorCode = new JSONObject(response)
+                                    .getInt("error_code");
+                            String errorMsg = new JSONObject(response)
+                                    .getString("error_msg");
+                            String errorUCode = new JSONObject(response)
+                                    .getString("error_ucode");
+                            Toast.makeText(RegisterActivity.this,
+                                    "status 500",
+                                    Toast.LENGTH_SHORT).show();
+                            Log.d(LOG_TAG, "status: " + status
+                                    + "errorCode: " + errorCode + ", "
+                                    + "errorMsg: " + errorMsg + ", "
+                                    + "errorUCode: " + errorUCode);
+                        } else {
+                            Toast.makeText(RegisterActivity.this,
+                                    "status: " + status,
+                                    Toast.LENGTH_SHORT).show();
+                            Log.d(LOG_TAG, "status: " + status);
 
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d(LOG_TAG, "JSONException: " + e.toString());
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.d(LOG_TAG, "JSONException: " + e.toString());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(LOG_TAG, "onErrorResponse: " + error.toString());
-            }
-        })
+                }, error -> Log.d(LOG_TAG, "onErrorResponse: " + error.toString()))
         {
             protected Map<String, String> getParams() {
                 HashMap<String, String> hashMapParams = new HashMap<>();

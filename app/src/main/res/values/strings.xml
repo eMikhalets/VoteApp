@@ -1,11 +1,5 @@
 <resources>
     <string name="app_name">Fourtop</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <string name="home_second">Home Second</string>
 
@@ -30,4 +24,7 @@
     <string name="register_text_confirm_pass">Подтвердите пароль:</string>
     <string name="register_text_user_name">Никнейм (для тестирования):</string>
     <string name="register_btn_register">Зарегистироваться</string>
+
+    USER IMAGES
+    <string name="user_images_btn_upload">Добавить фото</string>
 </resources>
