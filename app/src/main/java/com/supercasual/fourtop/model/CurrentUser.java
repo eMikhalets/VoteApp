@@ -7,11 +7,13 @@ public class CurrentUser {
     private String token;
     private String login;
     private String pass;
+    private String voteToken;
 
     private CurrentUser() {
         token = "";
         login = "";
         pass = "";
+        voteToken = "";
     }
 
     public static synchronized CurrentUser get() {
@@ -43,5 +45,13 @@ public class CurrentUser {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public String getVoteToken() {
+        return voteToken;
+    }
+
+    public void setVoteToken(String voteToken) {
+        this.voteToken = voteToken;
     }
 }

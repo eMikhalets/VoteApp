@@ -1,154 +1,113 @@
 package com.supercasual.fourtop;
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.supercasual.fourtop.adapter.ImageAdapter;
-import com.supercasual.fourtop.model.CurrentUser;
-import com.supercasual.fourtop.utils.Requests;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.supercasual.fourtop.model.Image;
+import com.supercasual.fourtop.utils.FilePath;
+import com.supercasual.fourtop.utils.Network;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class UserImagesActivity extends AppCompatActivity {
+public class UserImagesActivity extends AppCompatActivity implements ImageAdapter.OnImageListener {
 
-    private static final String TAG = "debug_logs";
     private static final int RESULT_LOAD_IMAGE = 0;
-
-    private RequestQueue requestQueue;
-    private StringRequest stringRequest;
-    private List<String> imagesList;
 
     private RecyclerView recyclerView;
     private ImageAdapter imageAdapter;
+    private List<Image> imagesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_images);
 
-        requestQueue = Volley.newRequestQueue(this);
         imagesList = new ArrayList<>();
-
         recyclerView = findViewById(R.id.recycler_user_images);
-        galleryRequest();
+        recyclerView.setHasFixedSize(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        // if adapter == null, imageList == null
+        if (imageAdapter == null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            imagesList = Network.get(this).galleryRequest(10, 0,
+                    () -> {
+                        imageAdapter.notifyDataSetChanged();
+                        // TODO: remove TextView
+                    });
+            imageAdapter = new ImageAdapter(this, imagesList, this);
+            recyclerView.setAdapter(imageAdapter);
+        } else {
+            imageAdapter.notifyDataSetChanged();
+        }
+
+        if (imagesList.isEmpty()) {
+            // TODO: add TextView with text = "загрузите фотографию"
+        } else {
+            // TODO: remove TextView
+        }
     }
 
-    private void galleryRequest() {
-        stringRequest = new StringRequest(Request.Method.POST, Requests.GALLERY,
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            imagesList.add(jsonArray.getJSONObject(i).getString("link"));
-                        }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOAD_IMAGE && data != null) {
+                Uri uri = data.getData();
+                FilePath filePath = new FilePath();
+                String imagePath = filePath.getUriRealPath(this, uri);
 
-                        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                        imageAdapter = new ImageAdapter(this, imagesList);
-                        recyclerView.setAdapter(imageAdapter);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "JSONException: " + e.toString());
+                // TODO: the added image is not displayed until the screen is rotated
+                Network.get(this).galleryAddRequest(imagePath, new Network.VolleyCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        imagesList = Network.get(UserImagesActivity.this)
+                                .galleryRequest(10, 0,
+                                        () -> {
+                                            imageAdapter.notifyDataSetChanged();
+                                            // TODO: remove TextView
+                                        });
                     }
-                }, error -> Log.d(TAG, "onErrorResponse: " + error.toString())) {
-            protected Map<String, String> getParams() {
-                HashMap<String, String> hashMapParams = new HashMap<>();
-                hashMapParams.put("user_token", CurrentUser.get().getToken());
-                hashMapParams.put("count", "10");
-                hashMapParams.put("offset", "0");
-                return hashMapParams;
+                });
             }
-        };
-        requestQueue.add(stringRequest);
+        }
     }
 
-    private void galleryAddRequest() {
-        stringRequest = new StringRequest(Request.Method.POST, Requests.GALLERY_ADD,
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "JSONException: " + e.toString());
-                    }
-                }, error -> Log.d(TAG, "onErrorResponse: " + error.toString())) {
-            protected Map<String, String> getParams() {
-                HashMap<String, String> hashMapParams = new HashMap<>();
-                hashMapParams.put("user_token", CurrentUser.get().getToken());
-                return hashMapParams;
-            }
-        };
-        requestQueue.add(stringRequest);
-    }
-
-    private void galleryRemoveRequest() {
-        stringRequest = new StringRequest(Request.Method.POST, Requests.GALLERY_REMOVE,
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "JSONException: " + e.toString());
-                    }
-                }, error -> Log.d(TAG, "onErrorResponse: " + error.toString())) {
-            protected Map<String, String> getParams() {
-                HashMap<String, String> hashMapParams = new HashMap<>();
-                hashMapParams.put("user_token", CurrentUser.get().getToken());
-                return hashMapParams;
-            }
-        };
-        requestQueue.add(stringRequest);
+    @Override
+    public void onImageClick(int position) {
+        Image image = imagesList.get(position);
+        Toast.makeText(this, "Изображение удалено", Toast.LENGTH_SHORT).show();
+        Network.get(this).galleryRemoveRequest(image,
+                () -> {
+                    imagesList.remove(position);
+                    imageAdapter.notifyDataSetChanged();
+                });
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_user_images_upload:
-                pickFromGallery();
+                ActivityCompat.requestPermissions(UserImagesActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
                 break;
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case RESULT_LOAD_IMAGE:
-                    Uri selectedImage = data.getData();
-                    Log.d(TAG, "file: " + selectedImage);
-            }
-        }
-    }
-
-    private void pickFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        String[] mimeTypes = {"image/jpeg", "image/png"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        startActivityForResult(intent, RESULT_LOAD_IMAGE);
     }
 }

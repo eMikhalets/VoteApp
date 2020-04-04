@@ -1,7 +1,6 @@
 package com.supercasual.fourtop.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,13 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
     private Context context;
-    private List<String> imageList;
+    private List<Image> imageList;
+    private OnImageListener mOnImageListener;
 
-    public ImageAdapter(Context context, List<String> imageList) {
+    public ImageAdapter(Context context, List<Image> imageList, OnImageListener listener) {
         this.context = context;
         this.imageList = imageList;
+        this.mOnImageListener = listener;
     }
 
     @NonNull
@@ -31,14 +32,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.item_image, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mOnImageListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // TODO: complete image upload
-        Image image = new Image();
-        Picasso.get().load(imageList.get(position)).into(holder.imageView);
+        Image image = imageList.get(position);
+        Picasso.get().load(image.getImageURL()).into(holder.imageView);
     }
 
     @Override
@@ -46,14 +46,25 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return imageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView imageView;
+        OnImageListener onImageListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnImageListener listener) {
             super(itemView);
-
             imageView = itemView.findViewById(R.id.image_item);
+            this.onImageListener = listener;
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onImageListener.onImageClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnImageListener {
+        void onImageClick(int position);
     }
 }

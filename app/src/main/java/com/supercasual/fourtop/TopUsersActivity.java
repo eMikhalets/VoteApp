@@ -18,8 +18,8 @@ public class TopUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_users);
 
-        recyclerView = findViewById(R.id.recycler_top_users);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(userAdapter);
+//        recyclerView = findViewById(R.id.recycler_top_users);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setAdapter(userAdapter);
     }
 }

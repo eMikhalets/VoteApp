@@ -27,4 +27,5 @@
 
     USER IMAGES
     <string name="user_images_btn_upload">Добавить фото</string>
+    <string name="voting_btn_vote">Проголосовать</string>
 </resources>
