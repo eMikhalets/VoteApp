@@ -4,32 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    style="@style/ParentLayout"
+    android:paddingBottom="8dp"
     tools:context=".UserImagesActivity">
-
-    <Button
-        android:id="@+id/btn_user_images_upload"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/user_images_btn_upload"
-        android:onClick="onClick"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_user_images_upload" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_user_images"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_user_images_upload"

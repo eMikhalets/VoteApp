@@ -166,6 +166,8 @@ public class Network {
 
                         switch (status) {
                             case 200:
+                                CurrentUser.get().setLogin(userLogin);
+                                CurrentUser.get().setPass(userPass);
                                 CurrentUser.get().setToken(
                                         jsonObject.getJSONObject(DATA).getString(USER_TOKEN));
                                 Log.i(TAG, "Success /login/ request");

@@ -8,18 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.model.Image;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -52,6 +51,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         try {
             Bitmap bitmap = new AsyncRequest().execute(image).get();
             holder.imageView.setImageBitmap(bitmap);
+            holder.textRate.setText(context.getString(R.string.image_adapter_rate, image.getRate()));
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -65,11 +65,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView imageView;
+        private TextView textRate;
         OnImageListener onImageListener;
 
         public ViewHolder(@NonNull View itemView, OnImageListener listener) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_item);
+            textRate = itemView.findViewById(R.id.text_item_image_rate);
             this.onImageListener = listener;
             itemView.setOnClickListener(this);
         }

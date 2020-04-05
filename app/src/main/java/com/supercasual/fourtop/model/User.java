@@ -10,6 +10,10 @@ public class User {
         this.pass = "";
     }
 
+    public User(String login) {
+        this.login = login;
+    }
+
     public String getLogin() {
         return login;
     }

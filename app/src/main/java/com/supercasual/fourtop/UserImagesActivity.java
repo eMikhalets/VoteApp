@@ -4,9 +4,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -89,6 +93,27 @@ public class UserImagesActivity extends AppCompatActivity implements ImageAdapte
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_user_images, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_user_images_add:
+                ActivityCompat.requestPermissions(UserImagesActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onImageClick(int position) {
         Image image = imagesList.get(position);
         Toast.makeText(this, "Изображение удалено", Toast.LENGTH_SHORT).show();
@@ -97,17 +122,5 @@ public class UserImagesActivity extends AppCompatActivity implements ImageAdapte
                     imagesList.remove(position);
                     imageAdapter.notifyDataSetChanged();
                 });
-    }
-
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_user_images_upload:
-                ActivityCompat.requestPermissions(UserImagesActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
-                break;
-        }
     }
 }

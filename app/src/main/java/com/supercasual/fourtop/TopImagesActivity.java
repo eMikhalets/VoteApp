@@ -58,6 +58,6 @@ public class TopImagesActivity extends AppCompatActivity implements ImageAdapter
     @Override
     public void onImageClick(int position) {
         Image image = imagesList.get(position);
-        Toast.makeText(this, "rate = " + image.getRate(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Click! :) ", Toast.LENGTH_SHORT).show();
     }
 }

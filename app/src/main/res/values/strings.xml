@@ -1,9 +1,8 @@
 <resources>
-    <string name="app_name">Fourtop</string>
+    <string name="app_name">Four Top</string>
+    <string name="text_dev">Раздел находится в разработке</string>
 
-    <string name="home_second">Home Second</string>
-
-    NAV
+    <!-- NAV -->
     <string name="main_home">Главная</string>
     <string name="main_profile">Профиль</string>
     <string name="main_user_images">Мои фотографии</string>
@@ -12,20 +11,33 @@
     <string name="main_top_users">Топ пользователей</string>
     <string name="main_exit">Выйти</string>
 
-    LOGIN
-    <string name="login_text_user_login">Логин:</string>
-    <string name="login_text_user_pass">Пароль:</string>
+    <!-- LOGIN -->
+    <string name="login_text_label">АВТОРИЗАЦИЯ</string>
+    <string name="login_edit_text_hint_login">Логин</string>
+    <string name="login_edit_text_hint_pass">Пароль</string>
     <string name="login_btn_btn_login">Войти</string>
     <string name="login_btn_btn_register">Зарегистироваться</string>
 
-    REGISTER
-    <string name="register_text_user_login">Электронная почта:</string>
-    <string name="register_text_user_pass">Пароль:</string>
-    <string name="register_text_confirm_pass">Подтвердите пароль:</string>
-    <string name="register_text_user_name">Никнейм (для тестирования):</string>
+    <!-- REGISTER -->
+    <string name="register_text_label">РЕГИСТРАЦИЯ</string>
+    <string name="register_edit_text_hint_login">Логин</string>
+    <string name="register_edit_text_hint_email">Электронная почта</string>
+    <string name="register_edit_text_hint_pass">Пароль</string>
+    <string name="register_edit_text_hint_confirm_pass">Подтвердите пароль</string>
+    <string name="register_edit_text_hint_name">Никнейм тестера</string>
     <string name="register_btn_register">Зарегистироваться</string>
 
-    USER IMAGES
+    <!-- PROFILE -->
+    <string name="profile_text_greeting">Привет, %s!</string>
+    <string name="profile_text_user_token">Твой токен: %s!</string>
+
+    <!-- USER IMAGES -->
     <string name="user_images_btn_upload">Добавить фото</string>
+    <string name="menu_user_images_add">Добавить</string>
+
+    <!-- VOTING -->
     <string name="voting_btn_vote">Проголосовать</string>
+
+    <!-- IMAGE ADAPTER -->
+    <string name="image_adapter_rate">Рейтинг: %d</string>
 </resources>

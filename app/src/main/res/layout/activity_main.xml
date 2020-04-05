@@ -5,12 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    style="@style/ParentLayout"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/btn_main_home"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
         android:onClick="onClickNavigation"
         android:text="@string/main_home"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,9 +22,9 @@
 
     <Button
         android:id="@+id/btn_main_profile"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
         android:text="@string/main_profile"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,9 +33,9 @@
 
     <Button
         android:id="@+id/btn_main_user_images"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
         android:text="@string/main_user_images"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,9 +44,9 @@
 
     <Button
         android:id="@+id/btn_main_voting"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
         android:text="@string/main_voting"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,9 +55,9 @@
 
     <Button
         android:id="@+id/btn_main_top_images"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
         android:text="@string/main_top_images"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,9 +66,9 @@
 
     <Button
         android:id="@+id/btn_main_top_users"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:onClick="onClickNavigation"
         android:text="@string/main_top_users"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,9 +77,10 @@
 
     <Button
         android:id="@+id/btn_main_exit"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="32dp"
         android:onClick="onClickNavigation"
         android:text="@string/main_exit"
         app:layout_constraintEnd_toEndOf="parent"

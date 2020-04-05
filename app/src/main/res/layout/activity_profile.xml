@@ -8,12 +8,34 @@
     tools:context=".ProfileActivity">
 
     <TextView
-        android:id="@+id/text_profile_user_token"
+        android:id="@+id/text_profile_text"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/text_dev"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="User token here" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_profile_greeting"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/profile_text_greeting"
+        app:layout_constraintTop_toBottomOf="@+id/text_profile_text" />
+
+    <TextView
+        android:id="@+id/text_profile_user_token"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/profile_text_user_token"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_profile_greeting" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,19 +9,24 @@ import com.supercasual.fourtop.model.CurrentUser;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView textUserToken;
+    private TextView textGreeting;
+    private TextView textUserToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        textGreeting = findViewById(R.id.text_profile_greeting);
         textUserToken = findViewById(R.id.text_profile_user_token);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        textUserToken.setText(CurrentUser.get().getToken());
+        textGreeting.setText(
+                getString(R.string.profile_text_greeting, CurrentUser.get().getLogin()));
+        textUserToken.setText(
+                getString(R.string.profile_text_user_token, CurrentUser.get().getToken()));
     }
 }
