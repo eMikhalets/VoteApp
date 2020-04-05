@@ -1,6 +1,9 @@
 package com.supercasual.fourtop.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,13 @@ import com.squareup.picasso.Picasso;
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.model.Image;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
@@ -38,7 +47,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Image image = imageList.get(position);
-        Picasso.get().load(image.getImageURL()).into(holder.imageView);
+        //Picasso.get().load(image.getImageURL()).into(holder.imageView);
+
+        try {
+            Bitmap bitmap = new AsyncRequest().execute(image).get();
+            holder.imageView.setImageBitmap(bitmap);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -66,5 +82,24 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     public interface OnImageListener {
         void onImageClick(int position);
+    }
+
+    private class AsyncRequest extends AsyncTask<Image, Void, Bitmap> {
+
+        Bitmap bitmap;
+        @Override
+        protected Bitmap doInBackground(Image... images) {
+            try {
+                URL url = new URL(images[0].getImageURL()) ;
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+                return BitmapFactory.decodeStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
