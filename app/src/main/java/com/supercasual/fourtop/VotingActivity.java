@@ -65,7 +65,7 @@ public class VotingActivity extends AppCompatActivity {
 
         if (!retainedFragment.getData().isEmpty()) {
             imageList = retainedFragment.getData();
-            //Picasso.get().load(imageList.get(0).getImageURL()).into(image0);
+            //Picasso.get().load(imageList.get(0).getImageURL()).into(image0);0
             //Picasso.get().load(imageList.get(1).getImageURL()).into(image1);
             try {
                 Bitmap bitmap = new AsyncRequest().execute(imageList.get(0)).get();
