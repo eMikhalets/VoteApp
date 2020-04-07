@@ -1,11 +1,19 @@
-package com.supercasual.fourtop;
+package com.supercasual.fourtop.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-public class HomeActivity extends AppCompatActivity {
+import com.supercasual.fourtop.R;
+
+public class HomeFragment extends Fragment {
+
+    private Context context;
 
     private TextView textHeader;
     private TextView textContent;
@@ -31,16 +39,19 @@ public class HomeActivity extends AppCompatActivity {
             "рубли, так и из крупинок прочитанного составляется знание. Владимир Иванович Даль";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        context = view.getContext();
 
-        textHeader = findViewById(R.id.text_home_header);
-        textContent = findViewById(R.id.text_home_content);
+        textHeader = view.findViewById(R.id.text_home_header);
+        textContent = view.findViewById(R.id.text_home_content);
+
+        return view;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         textHeader.setText(header);
         textContent.setText(content);

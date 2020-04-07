@@ -17,6 +17,7 @@
 
     <style name="ParentLayout">
         <item name="android:background">@color/colorBackground</item>
+        <item name="android:padding">@dimen/parent_layout_padding</item>
     </style>
 
     <style name="TextStyle">

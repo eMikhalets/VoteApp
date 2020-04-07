@@ -26,6 +26,8 @@
     <string name="register_edit_text_hint_confirm_pass">Подтвердите пароль</string>
     <string name="register_edit_text_hint_name">Никнейм тестера</string>
     <string name="register_btn_register">Зарегистироваться</string>
+    <string name="register_text_test_app">ВНИМАНИЕ!!! Приложение находится в тестовом режиме, не
+        используйте настоящие пароли и электронную почту!!!</string>
 
     <!-- PROFILE -->
     <string name="profile_text_greeting">Привет, %s!</string>
@@ -40,4 +42,7 @@
 
     <!-- IMAGE ADAPTER -->
     <string name="image_adapter_rate">Рейтинг: %d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ParentLayout"
-    android:paddingBottom="8dp"
-    tools:context=".TopImagesActivity">
+    style="@style/ParentLayout">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_top_images"
+        android:id="@+id/recycler_user_images"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

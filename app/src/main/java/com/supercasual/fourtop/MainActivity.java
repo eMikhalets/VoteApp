@@ -17,47 +17,41 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (!checkUserToken(CurrentUser.get().getToken())) {
-            startIntent(LoginActivity.class);
+            //startIntent(LoginActivity.class);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkUserToken(CurrentUser.get().getToken());
+        //checkUserToken(CurrentUser.get().getToken());
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        userLogout();
-    }
-
-    public void onClickNavigation(View view) {
-        switch (view.getId()) {
-            case R.id.btn_main_home:
-                startIntent(HomeActivity.class);
-                break;
-            case R.id.btn_main_profile:
-                startIntent(ProfileActivity.class);
-                break;
-            case R.id.btn_main_user_images:
-                startIntent(UserImagesActivity.class);
-                break;
-            case R.id.btn_main_voting:
-                startIntent(VotingActivity.class);
-                break;
-            case R.id.btn_main_top_images:
-                startIntent(TopImagesActivity.class);
-                break;
-            case R.id.btn_main_top_users:
-                startIntent(TopUsersActivity.class);
-                break;
-            case R.id.btn_main_exit:
-                userLogout();
-                break;
-        }
-    }
+//    public void onClickNavigation(View view) {
+//        switch (view.getId()) {
+//            case R.id.btn_main_home:
+//                startIntent(HomeActivity.class);
+//                break;
+//            case R.id.btn_main_profile:
+//                startIntent(ProfileActivity.class);
+//                break;
+//            case R.id.btn_main_user_images:
+//                startIntent(UserImagesActivity.class);
+//                break;
+//            case R.id.btn_main_voting:
+//                startIntent(VotingActivity.class);
+//                break;
+//            case R.id.btn_main_top_images:
+//                startIntent(TopImagesActivity.class);
+//                break;
+//            case R.id.btn_main_top_users:
+//                startIntent(TopUsersActivity.class);
+//                break;
+//            case R.id.btn_main_exit:
+//                userLogout();
+//                break;
+//        }
+//    }
 
     private void userLogout() {
         Network.get(this).logoutRequest(MainActivity.this::finish);
