@@ -28,15 +28,11 @@ public class ProfileFragment extends Fragment {
         textGreeting = view.findViewById(R.id.text_profile_greeting);
         textUserToken = view.findViewById(R.id.text_profile_user_token);
 
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         textGreeting.setText(
                 getString(R.string.profile_text_greeting, CurrentUser.get().getLogin()));
         textUserToken.setText(
                 getString(R.string.profile_text_user_token, CurrentUser.get().getToken()));
+
+        return view;
     }
 }

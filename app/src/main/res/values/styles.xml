@@ -24,6 +24,12 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="TextNavHeaderStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="TextLabelStyle" parent="TextStyle">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">30sp</item>

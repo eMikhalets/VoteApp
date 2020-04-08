@@ -19,7 +19,7 @@ import com.supercasual.fourtop.utils.Network;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TopImagesFragment extends Fragment implements ImageAdapter.OnImageListener {
+public class TopImagesFragment extends Fragment {
 
     private Context context;
     private View view;
@@ -54,8 +54,7 @@ public class TopImagesFragment extends Fragment implements ImageAdapter.OnImageL
                         imageAdapter.notifyDataSetChanged();
                         // TODO: remove TextView
                     });
-            // TODO: delete image listener from adapter
-            //imageAdapter = new ImageAdapter(context, imagesList, context);
+            imageAdapter = new ImageAdapter(context, imagesList);
             recyclerView.setAdapter(imageAdapter);
         } else {
             imageAdapter.notifyDataSetChanged();
@@ -69,9 +68,9 @@ public class TopImagesFragment extends Fragment implements ImageAdapter.OnImageL
     }
 
     // TODO: add context menu for images
-    @Override
-    public void onImageClick(int position) {
-        Image image = imagesList.get(position);
-        Toast.makeText(context, "Click! :) ", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void onImageClick(int position) {
+//        Image image = imagesList.get(position);
+//        Toast.makeText(context, "Click! :) ", Toast.LENGTH_SHORT).show();
+//    }
 }

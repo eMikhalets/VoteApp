@@ -7,12 +7,14 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.model.CurrentUser;
@@ -45,49 +47,36 @@ public class LoginFragment extends Fragment {
         btnRegister = view.findViewById(R.id.btn_login_registration);
         imageBtnShowPass = view.findViewById(R.id.image_btn_login_show_pass);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userLogin = editUserLogin.getText().toString().trim();
-                userPass = editUserPass.getText().toString().trim();
+        btnLogin.setOnClickListener(v -> {
+            userLogin = editUserLogin.getText().toString().trim();
+            userPass = editUserPass.getText().toString().trim();
 
-                if (userLogin.equals("") || userPass.equals("")) {
-                    Toast.makeText(context, "Все поля должны быть заполнены",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Network.get(context).loginRequest(userLogin, userPass,
-                            new Network.VolleyCallBack() {
-                                @Override
-                                public void onSuccess() {
-                                    // TODO: go to home fragment
-                                }
-                            });
-                }
+            if (userLogin.equals("") || userPass.equals("")) {
+                Toast.makeText(context, "Все поля должны быть заполнены",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Network.get(context).loginRequest(userLogin, userPass,
+                        () -> {
+                            InputMethodManager imm =
+                                    (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                            Navigation.findNavController(view).popBackStack();
+                        });
             }
         });
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(
-//                        LoginActivity.this, RegisterActivity.class);
-//                startActivity(intent);
-                // TODO: go to register fragment
-            }
-        });
+        btnRegister.setOnClickListener(
+                v -> Navigation.findNavController(view).navigate(R.id.registerFragment));
 
-        imageBtnShowPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isPassVisible) {
-                    editUserPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
-                    isPassVisible = false;
-                } else {
-                    editUserPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_black_24dp);
-                    isPassVisible = true;
-                }
+        imageBtnShowPass.setOnClickListener(v -> {
+            if (isPassVisible) {
+                editUserPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
+                isPassVisible = false;
+            } else {
+                editUserPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_black_24dp);
+                isPassVisible = true;
             }
         });
 

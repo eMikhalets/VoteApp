@@ -21,6 +21,7 @@ import com.supercasual.fourtop.utils.Network;
 public class RegisterFragment extends Fragment {
 
     private Context context;
+    private View view;
 
     private EditText editUserLogin;
     private EditText editUserEmail;
@@ -43,7 +44,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
+        view = inflater.inflate(R.layout.fragment_register, container, false);
         context = view.getContext();
 
         editUserLogin = view.findViewById(R.id.edit_register_login);

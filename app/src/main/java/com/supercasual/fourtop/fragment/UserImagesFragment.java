@@ -25,7 +25,7 @@ import com.supercasual.fourtop.utils.Network;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserImagesFragment extends Fragment implements ImageAdapter.OnImageListener {
+public class UserImagesFragment extends Fragment {
 
     private Context context;
     private View view;
@@ -60,8 +60,7 @@ public class UserImagesFragment extends Fragment implements ImageAdapter.OnImage
                     () -> {
                         imageAdapter.notifyDataSetChanged();
                     });
-            // TODO: delete image listener from adapter
-            //imageAdapter = new ImageAdapter(context, imagesList, context);
+            imageAdapter = new ImageAdapter(context, imagesList);
             recyclerView.setAdapter(imageAdapter);
         } else {
             imageAdapter.notifyDataSetChanged();
@@ -117,14 +116,14 @@ public class UserImagesFragment extends Fragment implements ImageAdapter.OnImage
     }
 
     // TODO: add context menu for images
-    @Override
-    public void onImageClick(int position) {
-        Image image = imagesList.get(position);
-        Toast.makeText(context, "Изображение удалено", Toast.LENGTH_SHORT).show();
-        Network.get(context).galleryRemoveRequest(image,
-                () -> {
-                    imagesList.remove(position);
-                    imageAdapter.notifyDataSetChanged();
-                });
-    }
+//    @Override
+//    public void onImageClick(int position) {
+//        Image image = imagesList.get(position);
+//        Toast.makeText(context, "Изображение удалено", Toast.LENGTH_SHORT).show();
+//        Network.get(context).galleryRemoveRequest(image,
+//                () -> {
+//                    imagesList.remove(position);
+//                    imageAdapter.notifyDataSetChanged();
+//                });
+//    }
 }

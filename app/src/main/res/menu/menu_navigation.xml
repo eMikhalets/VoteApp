@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/menu_nav_profile"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/nav_profile" />
+
+    <item
+        android:id="@+id/menu_nav_user_images"
+        android:icon="@drawable/ic_image_black_24dp"
+        android:title="@string/nav_user_images" />
+
+    <item
+        android:id="@+id/menu_nav_voting"
+        android:icon="@drawable/ic_check_black_24dp"
+        android:title="@string/nav_voting" />
+
+    <item
+        android:id="@+id/menu_nav_top_images"
+        android:icon="@drawable/ic_burst_mode_black_24dp"
+        android:title="@string/nav_top_images" />
+
+    <item
+        android:id="@+id/menu_nav_top_users"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/nav_top_users" />
+
+</menu>

@@ -47,33 +47,20 @@ public class VotingFragment extends Fragment {
         image1 = view.findViewById(R.id.image_voting_image_1);
         btnVote = view.findViewById(R.id.btn_voting_vote);
 
-        image0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleImageClick(Network.VOTE_FIRST, "Выбрана первая фотография");
-            }
-        });
+        image0.setOnClickListener(
+                v -> handleImageClick(Network.VOTE_FIRST, "Выбрана первая фотография"));
 
-        image1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleImageClick(Network.VOTE_SECOND, "Выбрана вторая фотография");
-            }
-        });
+        image1.setOnClickListener(
+                v -> handleImageClick(Network.VOTE_SECOND, "Выбрана вторая фотография"));
 
-        btnVote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Network.get(context).voteRequest(vote,
-                        () -> {
-                            vote = 2;
-                            imageList = getVotingImages();
-                            retainedFragment.setData(imageList);
-                            // TODO: to onResume
-                            //VotingActivity.this.onResume();
-                        });
-            }
-        });
+        btnVote.setOnClickListener(v -> Network.get(context).voteRequest(vote,
+                () -> {
+                    vote = 2;
+                    imageList = getVotingImages();
+                    retainedFragment.setData(imageList);
+                    // TODO: to onResume
+                    //VotingActivity.this.onResume();
+                }));
 
         // TODO: handle rotation
         //fragmentManager = view.getSupportFragmentManager();
@@ -112,12 +99,9 @@ public class VotingFragment extends Fragment {
     }
 
     private List<Image> getVotingImages() {
-        return Network.get(context).voteCreateRequest(new Network.VolleyCallBack() {
-            @Override
-            public void onSuccess() {
-                // TODO: to onResume
-                //VotingActivity.this.onResume();
-            }
+        return Network.get(context).voteCreateRequest(() -> {
+            // TODO: to onResume
+            //VotingActivity.this.onResume();
         });
     }
 

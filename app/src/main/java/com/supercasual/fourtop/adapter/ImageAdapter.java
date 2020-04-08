@@ -20,12 +20,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     private Context context;
     private List<Image> imageList;
-    private OnImageListener mOnImageListener;
 
-    public ImageAdapter(Context context, List<Image> imageList, OnImageListener listener) {
+    public ImageAdapter(Context context, List<Image> imageList) {
         this.context = context;
         this.imageList = imageList;
-        this.mOnImageListener = listener;
     }
 
     @NonNull
@@ -33,7 +31,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.item_image, parent, false);
-        return new ViewHolder(view, mOnImageListener);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -47,27 +45,15 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return imageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imageView;
         private TextView textRate;
-        OnImageListener onImageListener;
 
-        public ViewHolder(@NonNull View itemView, OnImageListener listener) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_item);
             textRate = itemView.findViewById(R.id.text_item_image_rate);
-            this.onImageListener = listener;
-            itemView.setOnClickListener(this);
         }
-
-        @Override
-        public void onClick(View v) {
-            onImageListener.onImageClick(getAdapterPosition());
-        }
-    }
-
-    public interface OnImageListener {
-        void onImageClick(int position);
     }
 }

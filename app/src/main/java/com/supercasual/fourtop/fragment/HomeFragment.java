@@ -3,17 +3,22 @@ package com.supercasual.fourtop.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.supercasual.fourtop.R;
 
 public class HomeFragment extends Fragment {
 
     private Context context;
+    private View view;
 
     private TextView textHeader;
     private TextView textContent;
@@ -41,19 +46,15 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         context = view.getContext();
 
         textHeader = view.findViewById(R.id.text_home_header);
         textContent = view.findViewById(R.id.text_home_content);
 
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         textHeader.setText(header);
         textContent.setText(content);
+
+        return view;
     }
 }
