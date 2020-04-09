@@ -8,94 +8,90 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
+import com.supercasual.fourtop.databinding.FragmentLoginBinding;
 import com.supercasual.fourtop.model.CurrentUser;
 import com.supercasual.fourtop.network.Network;
 
+import org.jetbrains.annotations.NotNull;
+
 public class LoginFragment extends Fragment {
 
-    private Context context;
-    private View view;
+    private static final int LAYOUT = R.layout.fragment_login;
 
-    private EditText editUserLogin;
-    private EditText editUserPass;
-    private ImageButton imageBtnShowPass;
-    private Button btnLogin;
-    private Button btnRegister;
+    private FragmentLoginBinding binding;
 
     private String userLogin;
     private String userPass;
     private boolean isPassVisible;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_login, container, false);
-        context = view.getContext();
+        binding = DataBindingUtil.inflate(inflater, LAYOUT, container, false);
 
-        editUserLogin = view.findViewById(R.id.edit_login_login);
-        editUserPass = view.findViewById(R.id.edit_login_pass);
-        btnLogin = view.findViewById(R.id.btn_login_request_login);
-        btnRegister = view.findViewById(R.id.btn_login_registration);
-        imageBtnShowPass = view.findViewById(R.id.image_btn_login_show_pass);
+        binding.btnLoginRequestLogin.setOnClickListener(view -> {
+                    userLogin = binding.editLoginLogin.getText().toString().trim();
+                    userPass = binding.editLoginPass.getText().toString().trim();
 
-        btnLogin.setOnClickListener(v -> {
-            userLogin = editUserLogin.getText().toString().trim();
-            userPass = editUserPass.getText().toString().trim();
+                    if (userLogin.equals("") || userPass.equals("")) {
+                        Toast.makeText(getContext(), R.string.login_toast_empty_editText,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        login(view);
+                    }
+                }
+        );
 
-            if (userLogin.equals("") || userPass.equals("")) {
-                Toast.makeText(context, "Все поля должны быть заполнены",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Network.get(context).loginRequest(userLogin, userPass,
-                        () -> {
-                            InputMethodManager imm =
-                                    (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                            Navigation.findNavController(view).popBackStack();
-                        });
-            }
+        binding.btnLoginRegistration.setOnClickListener(view -> {
+            Navigation.findNavController(view).navigate(R.id.registerFragment);
         });
 
-        btnRegister.setOnClickListener(
-                v -> Navigation.findNavController(view).navigate(R.id.registerFragment));
-
-        imageBtnShowPass.setOnClickListener(v -> {
+        binding.imageBtnLoginShowPass.setOnClickListener(view -> {
             if (isPassVisible) {
-                editUserPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
+                binding.editLoginPass
+                        .setTransformationMethod(PasswordTransformationMethod.getInstance());
+                binding.imageBtnLoginShowPass.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
                 isPassVisible = false;
             } else {
-                editUserPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_black_24dp);
+                binding.editLoginPass
+                        .setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                binding.imageBtnLoginShowPass.setImageResource(R.drawable.ic_remove_eye_black_24dp);
                 isPassVisible = true;
             }
         });
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         setUserInfo();
     }
 
     private void setUserInfo() {
-        String tempLogin = CurrentUser.get().getLogin();
-        String tempPass = CurrentUser.get().getPass();
-        if (!tempLogin.equals("") && !tempPass.equals("")) {
-            editUserLogin.setText(tempLogin);
-            editUserPass.setText(tempPass);
+        String login = CurrentUser.get().getLogin();
+        String password = CurrentUser.get().getPass();
+        if (!login.equals("") && !password.equals("")) {
+            binding.editLoginLogin.setText(login);
+            binding.editLoginPass.setText(password);
         }
+    }
+
+    private void login(View view) {
+        Network.get(getContext()).loginRequest(userLogin, userPass,
+                () -> {
+                    InputMethodManager imm = (InputMethodManager) getActivity()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                    Navigation.findNavController(view).popBackStack();
+                });
     }
 }

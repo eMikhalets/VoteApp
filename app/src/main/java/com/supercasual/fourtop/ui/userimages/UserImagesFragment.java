@@ -3,6 +3,7 @@ package com.supercasual.fourtop.ui.userimages;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,8 @@ import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.adapter.ImageAdapter;
 import com.supercasual.fourtop.model.Image;
 import com.supercasual.fourtop.network.Network;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +114,15 @@ public class UserImagesFragment extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public void onCreateContextMenu(@NotNull ContextMenu menu, @NotNull View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = .getMenuInflater();
     }
 
     // TODO: add context menu for images

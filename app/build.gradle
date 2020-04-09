@@ -32,6 +32,9 @@ android {
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -46,7 +49,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'org.jetbrains:annotations:15.0'
+    implementation 'org.jetbrains:annotations:16.0.1'
     implementation 'dev.dworks.libs:volleyplus:+'
 
     implementation 'androidx.navigation:navigation-fragment:2.2.1'

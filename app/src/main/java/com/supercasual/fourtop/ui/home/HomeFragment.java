@@ -1,27 +1,23 @@
 package com.supercasual.fourtop.ui.home;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.supercasual.fourtop.R;
+import com.supercasual.fourtop.databinding.FragmentHomeBinding;
+
+import org.jetbrains.annotations.NotNull;
 
 public class HomeFragment extends Fragment {
 
-    private Context context;
-    private View view;
+    private static final int LAYOUT = R.layout.fragment_home;
 
-    private TextView textHeader;
-    private TextView textContent;
+    private FragmentHomeBinding binding;
 
     private String header = "Новости 4TOP";
     private String content = "Идет активная разработка сайта 4top. Представленный вниманию " +
@@ -44,17 +40,13 @@ public class HomeFragment extends Fragment {
             "рубли, так и из крупинок прочитанного составляется знание. Владимир Иванович Даль";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
-        context = view.getContext();
+        binding = DataBindingUtil.inflate(inflater, LAYOUT, container, false);
 
-        textHeader = view.findViewById(R.id.text_home_header);
-        textContent = view.findViewById(R.id.text_home_content);
+        binding.textHomeHeader.setText(header);
+        binding.textHomeContent.setText(content);
 
-        textHeader.setText(header);
-        textContent.setText(content);
-
-        return view;
+        return binding.getRoot();
     }
 }

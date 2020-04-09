@@ -1,10 +1,10 @@
 package com.supercasual.fourtop;
 
 import android.os.Bundle;
-import android.view.Gravity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -12,9 +12,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.supercasual.fourtop.databinding.ActivityMainBinding;
 import com.supercasual.fourtop.model.CurrentUser;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int LAYOUT = R.layout.activity_main;
+    private static final int NAV_HOST = R.id.navigation_host;
+
+    private ActivityMainBinding binding;
 
     private NavController navController;
     private DrawerLayout drawerLayout;
@@ -24,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, LAYOUT);
 
-        drawerLayout = findViewById(R.id.layout_drawer);
-        navigationView = findViewById(R.id.navigation_view);
+        drawerLayout = binding.layoutDrawer;
+        navigationView = binding.navigationView;
 
-        navController = Navigation.findNavController(this, R.id.navigation_host);
+        navController = Navigation.findNavController(this, NAV_HOST);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
         appBar = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupWithNavController(navigationView, navController);

@@ -1,118 +1,106 @@
 package com.supercasual.fourtop.ui.register;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
+import com.supercasual.fourtop.databinding.FragmentRegisterBinding;
 import com.supercasual.fourtop.model.CurrentUser;
 import com.supercasual.fourtop.network.Network;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RegisterFragment extends Fragment {
 
-    private Context context;
-    private View view;
+    private static final int LAYOUT = R.layout.fragment_register;
 
-    private EditText editUserLogin;
-    private EditText editUserEmail;
-    private EditText editUserPass;
-    private EditText editConfirmPass;
-    private EditText editTesterNickname;
-    private ImageButton imageBtnShowPass;
-    private ImageButton imageBtnShowConfPass;
-    private Button btnRegister;
+    private FragmentRegisterBinding binding;
 
     private String userLogin;
     private String userEmail;
     private String userPass;
     private String userConfirmPass;
     private String testerNickname;
-    private boolean isPassVisible;
-    private boolean isConfPassVisible;
-
+    private boolean isPassVisible = false;
+    private boolean isConfPassVisible = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_register, container, false);
-        context = view.getContext();
+        binding = DataBindingUtil.inflate(inflater, LAYOUT, container, false);
 
-        editUserLogin = view.findViewById(R.id.edit_register_login);
-        editUserEmail = view.findViewById(R.id.edit_register_email);
-        editUserPass = view.findViewById(R.id.edit_register_pass);
-        editConfirmPass = view.findViewById(R.id.edit_register_confirm_pass);
-        editTesterNickname = view.findViewById(R.id.edit_register_nackname);
-        imageBtnShowPass = view.findViewById(R.id.image_btn_register_show_pass);
-        imageBtnShowConfPass = view.findViewById(R.id.image_btn_register_show_conf_pass);
-        btnRegister = view.findViewById(R.id.btn_register_request_register);
+        binding.btnRegisterRequestRegister.setOnClickListener(view -> {
+            setUserInfo();
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setUserInfo();
-
-                if (!userPass.equals(userConfirmPass)) {
-                    Toast.makeText(context, "Пароли не совпадают",
-                            Toast.LENGTH_SHORT).show();
-                } else if (userEmail.equals("") || userPass.equals("") || testerNickname.equals("")) {
-                    Toast.makeText(context, "Все поля должны быть заполнены",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Network.get(context).registerRequest(userEmail, userLogin, userPass, testerNickname,
-                            () -> {
-                                CurrentUser.get().setLogin(userLogin);
-                                CurrentUser.get().setPass(userPass);
-                                // TODO: go to login fragment
-                            });
-                }
+            if (!userPass.equals(userConfirmPass)) {
+                Toast.makeText(getContext(), R.string.register_toast_no_match_pass,
+                        Toast.LENGTH_SHORT).show();
+            } else if (userEmail.equals("") || userPass.equals("") || testerNickname.equals("")) {
+                Toast.makeText(getContext(), R.string.register_toast_empty_editText,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                register(view);
             }
         });
 
-        imageBtnShowPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditTextVisibility(editUserPass, imageBtnShowPass, isPassVisible);
+        binding.imageBtnRegisterShowPass.setOnClickListener(view -> {
+            if (isPassVisible) {
+                binding.editRegisterPass
+                        .setTransformationMethod(PasswordTransformationMethod.getInstance());
+                binding.imageBtnRegisterShowPass
+                        .setImageResource(R.drawable.ic_remove_eye_gray_24dp);
+                isPassVisible = false;
+            } else {
+                binding.editRegisterPass
+                        .setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                binding.imageBtnRegisterShowPass
+                        .setImageResource(R.drawable.ic_remove_eye_black_24dp);
+                isPassVisible = true;
             }
         });
 
-        imageBtnShowConfPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEditTextVisibility(editConfirmPass, imageBtnShowConfPass, isConfPassVisible);
+        binding.imageBtnRegisterShowConfPass.setOnClickListener(view -> {
+            if (isConfPassVisible) {
+                binding.editRegisterConfirmPass
+                        .setTransformationMethod(PasswordTransformationMethod.getInstance());
+                binding.imageBtnRegisterShowConfPass
+                        .setImageResource(R.drawable.ic_remove_eye_gray_24dp);
+                isConfPassVisible = false;
+            } else {
+                binding.editRegisterConfirmPass
+                        .setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                binding.imageBtnRegisterShowConfPass
+                        .setImageResource(R.drawable.ic_remove_eye_black_24dp);
+                isConfPassVisible = true;
             }
         });
 
-        return view;
+        return binding.getRoot();
     }
 
     private void setUserInfo() {
-        userLogin = editUserLogin.getText().toString().trim();
-        userEmail = editUserEmail.getText().toString().trim();
-        userPass = editUserPass.getText().toString().trim();
-        userConfirmPass = editConfirmPass.getText().toString().trim();
-        testerNickname = editTesterNickname.getText().toString().trim();
+        userLogin = binding.editRegisterLogin.getText().toString().trim();
+        userEmail = binding.editRegisterEmail.getText().toString().trim();
+        userPass = binding.editRegisterPass.getText().toString().trim();
+        userConfirmPass = binding.editRegisterConfirmPass.getText().toString().trim();
+        testerNickname = binding.editRegisterNickname.getText().toString().trim();
     }
 
-    private void setEditTextVisibility(EditText editText, ImageButton imageButton,
-                                       boolean isVisible) {
-        if (isVisible) {
-            editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            imageButton.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
-            isVisible = false;
-        } else {
-            editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            imageButton.setImageResource(R.drawable.ic_remove_eye_black_24dp);
-            isVisible = true;
-        }
+    private void register(View view) {
+        Network.get(getContext()).registerRequest(userEmail, userLogin, userPass, testerNickname,
+                () -> {
+                    CurrentUser.get().setLogin(userLogin);
+                    CurrentUser.get().setPass(userPass);
+                    Navigation.findNavController(view).popBackStack();
+                });
     }
 }
