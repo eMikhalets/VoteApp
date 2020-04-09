@@ -17,7 +17,7 @@ import com.supercasual.fourtop.model.CurrentUser;
 public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
-    private DrawerLayout drawerLayout;
+    //private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private AppBarConfiguration appBar;
 
