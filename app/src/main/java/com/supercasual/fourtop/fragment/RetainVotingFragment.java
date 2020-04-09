@@ -9,6 +9,7 @@ import com.supercasual.fourtop.model.Image;
 
 import java.util.List;
 
+// TODO: delete this shit, create ViewModel
 public class RetainVotingFragment extends Fragment {
 
     private List<Image> imageList;

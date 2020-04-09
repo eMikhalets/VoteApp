@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.fragment;
+package com.supercasual.fourtop.ui.login;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.model.CurrentUser;
-import com.supercasual.fourtop.utils.Network;
+import com.supercasual.fourtop.network.Network;
 
 public class LoginFragment extends Fragment {
 

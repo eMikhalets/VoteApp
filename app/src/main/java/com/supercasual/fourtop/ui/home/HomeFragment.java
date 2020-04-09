@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.fragment;
+package com.supercasual.fourtop.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;

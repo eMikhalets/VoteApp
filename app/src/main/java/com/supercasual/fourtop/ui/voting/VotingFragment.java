@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.fragment;
+package com.supercasual.fourtop.ui.voting;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,8 +14,9 @@ import androidx.fragment.app.FragmentManager;
 
 import com.squareup.picasso.Picasso;
 import com.supercasual.fourtop.R;
+import com.supercasual.fourtop.fragment.RetainVotingFragment;
 import com.supercasual.fourtop.model.Image;
-import com.supercasual.fourtop.utils.Network;
+import com.supercasual.fourtop.network.Network;
 
 import java.util.ArrayList;
 import java.util.List;

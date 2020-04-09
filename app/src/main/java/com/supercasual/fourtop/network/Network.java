@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.utils;
+package com.supercasual.fourtop.network;
 
 import android.content.Context;
 import android.util.Log;
@@ -91,27 +91,23 @@ public class Network {
         return network;
     }
 
-    public interface VolleyCallBack {
-        void onSuccess();
-    }
-
-    private void responseStatusError(JSONObject jsonObject) throws JSONException {
+    private void responseStatusError(int status, JSONObject jsonObject) throws JSONException {
         int errorCode = jsonObject.getInt(ERROR_CODE);
         String errorMsg = jsonObject.getString(ERROR_MSG);
         String errorUCode = jsonObject.getString(ERROR_UCODE);
-        Log.e(TAG, "Response status = 500: " +
-                "error_code = " + errorCode +
+        Log.e(TAG, "Response status = " + status +
+                ", error_code = " + errorCode +
                 ", error_msg = " + errorMsg +
                 ", error_ucode = " + errorUCode);
     }
 
     /**
      * Send body:
-     * Text email;
-     * Text login;
-     * Text password;
-     * Text tester_name;
-     * <p>
+     *     Text email;
+     *     Text login;
+     *     Text password;
+     *     Text tester_name;
+     *
      * Return data: ""
      */
     public void registerRequest(String userEmail, String userLogin, String userPass,
@@ -122,18 +118,12 @@ public class Network {
                         JSONObject jsonObject = new JSONObject(response);
                         int status = jsonObject.getInt(STATUS);
 
-                        switch (status) {
-                            case 200:
-                                Log.i(TAG, "Success /register/ request");
-                                break;
-                            case 500:
-                                responseStatusError(jsonObject);
-                                break;
+                        if (status != 200) {
+                            responseStatusError(status, jsonObject);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     callBack.onSuccess();
 
                 }, Throwable::printStackTrace) {
@@ -151,11 +141,11 @@ public class Network {
 
     /**
      * Send body:
-     * Text login;
-     * Text password;
-     * <p>
+     *     Text login;
+     *     Text password;
+     *
      * Return data:
-     * "user_token": "d571379fbc8588f35e048a18c"
+     *     "user_token": "d571379fbc8588f35e048a18c"
      */
     public void loginRequest(String userLogin, String userPass, VolleyCallBack callBack) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_REQUEST,
@@ -164,22 +154,17 @@ public class Network {
                         JSONObject jsonObject = new JSONObject(response);
                         int status = jsonObject.getInt(STATUS);
 
-                        switch (status) {
-                            case 200:
-                                CurrentUser.get().setLogin(userLogin);
-                                CurrentUser.get().setPass(userPass);
-                                CurrentUser.get().setToken(
-                                        jsonObject.getJSONObject(DATA).getString(USER_TOKEN));
-                                Log.i(TAG, "Success /login/ request");
-                                break;
-                            case 500:
-                                responseStatusError(jsonObject);
-                                break;
+                        if (status == 200) {
+                            CurrentUser.get().setLogin(userLogin);
+                            CurrentUser.get().setPass(userPass);
+                            CurrentUser.get().setToken(
+                                    jsonObject.getJSONObject(DATA).getString(USER_TOKEN));
+                        } else {
+                            responseStatusError(status, jsonObject);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     callBack.onSuccess();
 
                 }, Throwable::printStackTrace) {
@@ -195,8 +180,8 @@ public class Network {
 
     /**
      * Send body:
-     * Text user_token;
-     * <p>
+     *     Text user_token;
+     *
      * Return data: ""
      */
     public void logoutRequest(VolleyCallBack callBack) {
@@ -206,18 +191,12 @@ public class Network {
                         JSONObject jsonObject = new JSONObject(response);
                         int status = jsonObject.getInt(STATUS);
 
-                        switch (status) {
-                            case 200:
-                                Log.i(TAG, "Success /logout/ request");
-                                break;
-                            case 500:
-                                responseStatusError(jsonObject);
-                                break;
+                        if (status != 200) {
+                            responseStatusError(status, jsonObject);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     callBack.onSuccess();
 
                 }, Throwable::printStackTrace) {
@@ -232,9 +211,9 @@ public class Network {
 
     /**
      * Send body:
-     * Text user_token;
-     * File file;
-     * <p>
+     *     Text user_token;
+     *     File file;
+     *
      * Return data: ""
      */
     public void galleryAddRequest(String imagePath, VolleyCallBack callBack) {
@@ -245,18 +224,12 @@ public class Network {
                                 JSONObject jsonObject = new JSONObject(response);
                                 int status = jsonObject.getInt(STATUS);
 
-                                switch (status) {
-                                    case 200:
-                                        Log.i(TAG, "Success /gallery/add/ request");
-                                        break;
-                                    case 500:
-                                        responseStatusError(jsonObject);
-                                        break;
+                                if (status != 200) {
+                                    responseStatusError(status, jsonObject);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                             callBack.onSuccess();
 
                         }, Throwable::printStackTrace);
@@ -290,31 +263,25 @@ public class Network {
                         JSONObject jsonObject = new JSONObject(response);
                         int status = jsonObject.getInt(STATUS);
 
-                        switch (status) {
-                            case 200:
-                                JSONArray jsonArray = jsonObject.getJSONArray(DATA);
+                        if (status == 200) {
+                            JSONArray jsonArray = jsonObject.getJSONArray(DATA);
 
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    Image image = new Image();
-                                    image.setId(jsonArray.getJSONObject(i).getInt(ID));
-                                    image.setName(jsonArray.getJSONObject(i).getString(NAME));
-                                    image.setImageURL(jsonArray.getJSONObject(i).getString(LINK));
-                                    image.setRate(jsonArray.getJSONObject(i).getInt(RATE));
-                                    images.add(image);
-                                }
-
-                                Log.i(TAG, "Success /gallery/ request");
-                                break;
-                            case 500:
-                                responseStatusError(jsonObject);
-                                break;
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Image image = new Image();
+                                image.setId(jsonArray.getJSONObject(i).getInt(ID));
+                                image.setName(jsonArray.getJSONObject(i).getString(NAME));
+                                image.setImageURL(jsonArray.getJSONObject(i).getString(LINK));
+                                image.setRate(jsonArray.getJSONObject(i).getInt(RATE));
+                                images.add(image);
+                            }
+                        } else {
+                            responseStatusError(status, jsonObject);
                         }
-
-                        callBack.onSuccess();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    callBack.onSuccess();
+
                 }, Throwable::printStackTrace) {
             protected Map<String, String> getParams() {
                 HashMap<String, String> hashMapParams = new HashMap<>();
@@ -343,20 +310,14 @@ public class Network {
                                 JSONObject jsonObject = new JSONObject(response);
                                 int status = jsonObject.getInt(STATUS);
 
-                                switch (status) {
-                                    case 200:
-                                        Log.i(TAG, "Success /gallery/remove/ request");
-                                        break;
-                                    case 500:
-                                        responseStatusError(jsonObject);
-                                        break;
+                                if (status != 200) {
+                                    responseStatusError(status, jsonObject);
                                 }
-
-                                callBack.onSuccess();
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            callBack.onSuccess();
+
                         }, Throwable::printStackTrace) {
                     protected Map<String, String> getParams() {
                         HashMap<String, String> hashMapParams = new HashMap<>();
@@ -370,25 +331,25 @@ public class Network {
 
     /**
      * Send body:
-     * Text user_token;
-     * <p>
+     *     Text user_token;
+     *
      * Return data:
      * {
-     * "photos": [
-     * {
-     * "id": 5,
-     * "name": "252580415678854431.jpg",
-     * "link": "http://s1.ntech.team:8092/252580415678854431.jpg",
-     * "rate": 0
-     * },
-     * {
-     * "id": 31,
-     * "name": "548105026384646746.jpg",
-     * "link": "http://s1.ntech.team:8092/548105026384646746.jpg",
-     * "rate": 0
-     * }
-     * ],
-     * "vote_token": "362b081e76d1cc394f15cbf10259c9f37b"
+     *     "photos": [
+     *         {
+     *             "id": 5,
+     *             "name": "252580415678854431.jpg",
+     *             "link": "http://s1.ntech.team:8092/252580415678854431.jpg",
+     *             "rate": 0
+     *         },
+     *         {
+     *             "id": 31,
+     *             "name": "548105026384646746.jpg",
+     *             "link": "http://s1.ntech.team:8092/548105026384646746.jpg",
+     *             "rate": 0
+     *         }
+     *     ],
+     *     "vote_token": "362b081e76d1cc394f15cbf10259c9f37b"
      * }
      */
     public List<Image> voteCreateRequest(VolleyCallBack callBack) {
@@ -400,34 +361,28 @@ public class Network {
                         JSONObject jsonObject = new JSONObject(response);
                         int status = jsonObject.getInt(STATUS);
 
-                        switch (status) {
-                            case 200:
-                                JSONObject jsonObjectData = jsonObject.getJSONObject(DATA);
-                                JSONArray jsonArray = jsonObjectData.getJSONArray(PHOTOS);
+                        if (status == 200) {
+                            JSONObject jsonObjectData = jsonObject.getJSONObject(DATA);
+                            JSONArray jsonArray = jsonObjectData.getJSONArray(PHOTOS);
 
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    Image image = new Image();
-                                    image.setId(jsonArray.getJSONObject(i).getInt(ID));
-                                    image.setName(jsonArray.getJSONObject(i).getString(NAME));
-                                    image.setImageURL(jsonArray.getJSONObject(i).getString(LINK));
-                                    image.setRate(jsonArray.getJSONObject(i).getInt(RATE));
-                                    images.add(image);
-                                }
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Image image = new Image();
+                                image.setId(jsonArray.getJSONObject(i).getInt(ID));
+                                image.setName(jsonArray.getJSONObject(i).getString(NAME));
+                                image.setImageURL(jsonArray.getJSONObject(i).getString(LINK));
+                                image.setRate(jsonArray.getJSONObject(i).getInt(RATE));
+                                images.add(image);
+                            }
 
-                                CurrentUser.get().setVoteToken(jsonObjectData.getString(VOTE_TOKEN));
-
-                                Log.i(TAG, "Success /vote/create/ request");
-                                break;
-                            case 500:
-                                responseStatusError(jsonObject);
-                                break;
+                            CurrentUser.get().setVoteToken(jsonObjectData.getString(VOTE_TOKEN));
+                        } else {
+                            responseStatusError(status, jsonObject);
                         }
-
-                        callBack.onSuccess();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    callBack.onSuccess();
+
                 }, Throwable::printStackTrace) {
             protected Map<String, String> getParams() {
                 HashMap<String, String> hashMapParams = new HashMap<>();
@@ -441,10 +396,10 @@ public class Network {
 
     /**
      * Send body:
-     * Text user_token;
-     * Text vote_token;
-     * Text vote = 0 or 1;
-     * <p>
+     *     Text user_token;
+     *     Text vote_token;
+     *     Text vote = 0 or 1;
+     *
      * Return data: ""
      */
     public void voteRequest(int vote, VolleyCallBack callBack) {
@@ -454,20 +409,15 @@ public class Network {
                         JSONObject jsonObject = new JSONObject(response);
                         int status = jsonObject.getInt(STATUS);
 
-                        switch (status) {
-                            case 200:
-                                Log.i(TAG, "Success /vote/ request");
-                                break;
-                            case 500:
-                                responseStatusError(jsonObject);
-                                break;
+                        if (status != 200) {
+                            responseStatusError(status, jsonObject);
                         }
-
-                        callBack.onSuccess();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    callBack.onSuccess();
+
                 }, Throwable::printStackTrace) {
             protected Map<String, String> getParams() {
                 HashMap<String, String> hashMapParams = new HashMap<>();
@@ -482,18 +432,18 @@ public class Network {
 
     /**
      * Send body:
-     * Text user_token;
-     * Text count;
-     * Text offset;
-     * <p>
+     *     Text user_token;
+     *     Text count;
+     *     Text offset;
+     *
      * Return data:
      * [
-     * {
-     * "id": 23,
-     * "name": "464608018433113178.jpg",
-     * "link": "http://s1.ntech.team:8092/464608018433113178.jpg",
-     * "rate": 0
-     * }
+     *     {
+     *          "id": 23,
+     *          "name": "464608018433113178.jpg",
+     *          "link": "http://s1.ntech.team:8092/464608018433113178.jpg",
+     *          "rate": 0
+     *     }
      * ]
      */
     public List<Image> topPhotosRequest(int count, int offset, VolleyCallBack callBack) {
@@ -505,31 +455,26 @@ public class Network {
                         JSONObject jsonObject = new JSONObject(response);
                         int status = jsonObject.getInt(STATUS);
 
-                        switch (status) {
-                            case 200:
-                                JSONArray jsonArray = jsonObject.getJSONArray(DATA);
+                        if (status == 200) {
+                            JSONArray jsonArray = jsonObject.getJSONArray(DATA);
 
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    Image image = new Image();
-                                    image.setId(jsonArray.getJSONObject(i).getInt(ID));
-                                    image.setName(jsonArray.getJSONObject(i).getString(NAME));
-                                    image.setImageURL(jsonArray.getJSONObject(i).getString(LINK));
-                                    image.setRate(jsonArray.getJSONObject(i).getInt(RATE));
-                                    images.add(image);
-                                }
-
-                                Log.i(TAG, "Success /top/photos/ request");
-                                break;
-                            case 500:
-                                responseStatusError(jsonObject);
-                                break;
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Image image = new Image();
+                                image.setId(jsonArray.getJSONObject(i).getInt(ID));
+                                image.setName(jsonArray.getJSONObject(i).getString(NAME));
+                                image.setImageURL(jsonArray.getJSONObject(i).getString(LINK));
+                                image.setRate(jsonArray.getJSONObject(i).getInt(RATE));
+                                images.add(image);
+                            }
+                        } else {
+                            responseStatusError(status, jsonObject);
                         }
-
-                        callBack.onSuccess();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    callBack.onSuccess();
+
                 }, Throwable::printStackTrace) {
             protected Map<String, String> getParams() {
                 HashMap<String, String> hashMapParams = new HashMap<>();

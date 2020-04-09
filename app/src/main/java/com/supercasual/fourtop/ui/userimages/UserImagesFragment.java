@@ -1,26 +1,24 @@
-package com.supercasual.fourtop.fragment;
+package com.supercasual.fourtop.ui.userimages;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.adapter.ImageAdapter;
 import com.supercasual.fourtop.model.Image;
-import com.supercasual.fourtop.utils.Network;
+import com.supercasual.fourtop.network.Network;
 
 import java.util.ArrayList;
 import java.util.List;
