@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.ui.topimages;
+package com.supercasual.fourtop.uimain;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ import com.supercasual.fourtop.adapter.ImageAdapter;
 import com.supercasual.fourtop.databinding.FragmentTopImagesBinding;
 import com.supercasual.fourtop.model.Image;
 import com.supercasual.fourtop.network.Network;
+import com.supercasual.fourtop.network.VolleyCallBack;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,13 +50,15 @@ public class TopImagesFragment extends Fragment {
         // TODO: Надо перенести imageList в ViewModel, чтобы не было этого костыля
         if (imageAdapter == null) {
             imagesList = Network.get(getContext()).topPhotosRequest(20, 0,
-                    () -> {
-                        binding.recyclerTopImages
-                                .setLayoutManager(new LinearLayoutManager(getContext()));
-                        imageAdapter = new ImageAdapter(getContext(), imagesList);
-                        binding.recyclerTopImages.setAdapter(imageAdapter);
-                    }
-            );
+                    new VolleyCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            binding.recyclerTopImages
+                                    .setLayoutManager(new LinearLayoutManager(getContext()));
+                            imageAdapter = new ImageAdapter(getContext(), imagesList);
+                            binding.recyclerTopImages.setAdapter(imageAdapter);
+                        }
+                    });
         } else {
             imageAdapter.notifyDataSetChanged();
         }

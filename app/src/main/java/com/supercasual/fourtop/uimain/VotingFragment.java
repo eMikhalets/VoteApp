@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.ui.voting;
+package com.supercasual.fourtop.uimain;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.fragment.RetainVotingFragment;
 import com.supercasual.fourtop.model.Image;
 import com.supercasual.fourtop.network.Network;
+import com.supercasual.fourtop.network.VolleyCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,12 +56,15 @@ public class VotingFragment extends Fragment {
                 v -> handleImageClick(Network.VOTE_SECOND, "Выбрана вторая фотография"));
 
         btnVote.setOnClickListener(v -> Network.get(context).voteRequest(vote,
-                () -> {
-                    vote = 2;
-                    imageList = getVotingImages();
-                    retainedFragment.setData(imageList);
-                    // TODO: to onResume
-                    //VotingActivity.this.onResume();
+                new VolleyCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        vote = 2;
+                        imageList = getVotingImages();
+                        retainedFragment.setData(imageList);
+                        // TODO: to onResume
+                        //VotingActivity.this.onResume();
+                    }
                 }));
 
         // TODO: handle rotation
@@ -100,9 +104,12 @@ public class VotingFragment extends Fragment {
     }
 
     private List<Image> getVotingImages() {
-        return Network.get(context).voteCreateRequest(() -> {
-            // TODO: to onResume
-            //VotingActivity.this.onResume();
+        return Network.get(context).voteCreateRequest(new VolleyCallBack() {
+            @Override
+            public void onSuccess() {
+                // TODO: to onResume
+                //VotingActivity.this.onResume();
+            }
         });
     }
 

@@ -1,24 +1,17 @@
-package com.supercasual.fourtop.ui.home;
+package com.supercasual.fourtop.viewmodel;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.supercasual.fourtop.R;
-import com.supercasual.fourtop.databinding.FragmentHomeBinding;
+public class HomeViewModel extends ViewModel {
 
-import org.jetbrains.annotations.NotNull;
+    private MutableLiveData<List<String>> tempNews;
 
-public class HomeFragment extends Fragment {
-
-    private static final int LAYOUT = R.layout.fragment_home;
-
-    private FragmentHomeBinding binding;
-
+    private List<String> stringList;
     private String header = "Новости 4TOP";
     private String content = "Идет активная разработка сайта 4top. Представленный вниманию " +
             "Толковый словарь «умных слов» включает в себя специфические слова, неупотребляемые " +
@@ -39,14 +32,14 @@ public class HomeFragment extends Fragment {
             " ни в бумажных словарях, ни в Википедии! полностью >>> Как из копеек составляются " +
             "рубли, так и из крупинок прочитанного составляется знание. Владимир Иванович Даль";
 
-    @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT, container, false);
-
-        binding.textHomeHeader.setText(header);
-        binding.textHomeContent.setText(content);
-
-        return binding.getRoot();
+    public LiveData<List<String>> getData() {
+        if (tempNews == null) {
+            tempNews = new MutableLiveData<>();
+            stringList = new ArrayList<>();
+            stringList.add(header);
+            stringList.add(content);
+            tempNews.setValue(stringList);
+        }
+        return tempNews;
     }
 }

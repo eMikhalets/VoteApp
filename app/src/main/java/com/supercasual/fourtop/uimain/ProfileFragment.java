@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.ui.profile;
+package com.supercasual.fourtop.uimain;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
