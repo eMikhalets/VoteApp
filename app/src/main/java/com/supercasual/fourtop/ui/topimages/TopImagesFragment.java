@@ -58,5 +58,18 @@ public class TopImagesFragment extends Fragment {
         } else {
             imageAdapter.notifyDataSetChanged();
         }
+
+        if (imagesList.isEmpty()) {
+            // TODO: add TextView with text = "загрузите фотографию"
+        } else {
+            // TODO: remove TextView
+        }
     }
+
+    // TODO: add context menu for images
+//    @Override
+//    public void onImageClick(int position) {
+//        Image image = imagesList.get(position);
+//        Toast.makeText(context, "Click! :) ", Toast.LENGTH_SHORT).show();
+//    }
 }

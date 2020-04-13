@@ -32,6 +32,7 @@ public class Network {
     private static final String REGISTER_REQUEST = BASE_URL + "/api/register";
     private static final String LOGIN_REQUEST = BASE_URL + "/api/login";
     private static final String LOGOUT_REQUEST = BASE_URL + "/api/logout";
+    private static final String TOKEN_REQUEST = BASE_URL + "/api/token";
     private static final String GALLERY_ADD_REQUEST = BASE_URL + "/api/gallery/add";
     private static final String GALLERY_REQUEST = BASE_URL + "/api/gallery";
     private static final String GALLERY_REMOVE_REQUEST = BASE_URL + "/api/gallery/remove";
@@ -99,6 +100,31 @@ public class Network {
                 ", error_code = " + errorCode +
                 ", error_msg = " + errorMsg +
                 ", error_ucode = " + errorUCode);
+    }
+
+    public void tokenRequest(String userToken, VolleyCallBack callBack) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, TOKEN_REQUEST,
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        int status = jsonObject.getInt(STATUS);
+
+                        if (status != 200) {
+                            responseStatusError(status, jsonObject);
+                        }
+
+                        callBack.onSuccess(status);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, Throwable::printStackTrace) {
+            protected Map<String, String> getParams() {
+                HashMap<String, String> hashMapParams = new HashMap<>();
+                hashMapParams.put(USER_TOKEN, userToken);
+                return hashMapParams;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
     /**

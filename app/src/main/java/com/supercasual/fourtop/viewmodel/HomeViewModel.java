@@ -1,28 +1,17 @@
-package com.supercasual.fourtop.ui.home;
+package com.supercasual.fourtop.viewmodel;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.supercasual.fourtop.R;
+public class HomeViewModel extends ViewModel {
 
-public class HomeFragment extends Fragment {
+    private MutableLiveData<List<String>> tempNews;
 
-    private Context context;
-    private View view;
-
-    private TextView textHeader;
-    private TextView textContent;
-
+    private List<String> stringList;
     private String header = "Новости 4TOP";
     private String content = "Идет активная разработка сайта 4top. Представленный вниманию " +
             "Толковый словарь «умных слов» включает в себя специфические слова, неупотребляемые " +
@@ -43,18 +32,14 @@ public class HomeFragment extends Fragment {
             " ни в бумажных словарях, ни в Википедии! полностью >>> Как из копеек составляются " +
             "рубли, так и из крупинок прочитанного составляется знание. Владимир Иванович Даль";
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
-        context = view.getContext();
-
-        textHeader = view.findViewById(R.id.text_home_header);
-        textContent = view.findViewById(R.id.text_home_content);
-
-        textHeader.setText(header);
-        textContent.setText(content);
-
-        return view;
+    public LiveData<List<String>> getData() {
+        if (tempNews == null) {
+            tempNews = new MutableLiveData<>();
+            stringList = new ArrayList<>();
+            stringList.add(header);
+            stringList.add(content);
+            tempNews.setValue(stringList);
+        }
+        return tempNews;
     }
 }

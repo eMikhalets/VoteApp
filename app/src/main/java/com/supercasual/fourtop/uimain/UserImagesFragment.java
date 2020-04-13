@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.ui.userimages;
+package com.supercasual.fourtop.uimain;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.adapter.ImageAdapter;
 import com.supercasual.fourtop.model.Image;
 import com.supercasual.fourtop.network.Network;
+import com.supercasual.fourtop.network.VolleyCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +56,11 @@ public class UserImagesFragment extends Fragment {
         if (imageAdapter == null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             imagesList = Network.get(context).galleryRequest(10, 0,
-                    () -> {
-                        imageAdapter.notifyDataSetChanged();
+                    new VolleyCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            imageAdapter.notifyDataSetChanged();
+                        }
                     });
             imageAdapter = new ImageAdapter(context, imagesList);
             recyclerView.setAdapter(imageAdapter);
