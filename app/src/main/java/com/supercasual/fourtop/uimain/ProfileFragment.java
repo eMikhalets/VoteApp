@@ -11,27 +11,25 @@ import androidx.fragment.app.Fragment;
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentProfileBinding;
 import com.supercasual.fourtop.model.CurrentUser;
+import com.supercasual.fourtop.utils.Constants;
 
 public class ProfileFragment extends Fragment {
 
-    private static final int LAYOUT = R.layout.fragment_profile;
-
-    FragmentProfileBinding binding;
+    private FragmentProfileBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT, container, false);
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container,
+                false);
+        setUserInfo();
         return binding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        binding.textProfileGreeting.setText(
-                getString(R.string.profile_text_greeting, CurrentUser.get().getLogin()));
-        binding.textProfileUserToken.setText(
-                getString(R.string.profile_text_user_token, CurrentUser.get().getToken()));
+    private void setUserInfo() {
+        binding.textProfileGreeting.setText(getString(R.string.profile_text_greeting,
+                getArguments().getString(Constants.ARGS_LOGIN)));
+        binding.textProfileUserToken.setText(getString(R.string.profile_text_user_token,
+                getArguments().getString(Constants.ARGS_TOKEN)));
     }
 }

@@ -1,6 +1,5 @@
 package com.supercasual.fourtop.uimain;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,12 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.adapter.ImageAdapter;
+import com.supercasual.fourtop.databinding.FragmentUserImagesBinding;
 import com.supercasual.fourtop.model.Image;
 import com.supercasual.fourtop.network.Network;
 import com.supercasual.fourtop.network.VolleyCallBack;
@@ -26,26 +26,23 @@ import java.util.List;
 
 public class UserImagesFragment extends Fragment {
 
-    private Context context;
-    private View view;
+    private FragmentUserImagesBinding binding;
 
     private static final int RESULT_LOAD_IMAGE = 0;
 
-    private RecyclerView recyclerView;
     private ImageAdapter imageAdapter;
     private List<Image> imagesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_user_images, container, false);
-        context = view.getContext();
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_images, container,
+                false);
 
         imagesList = new ArrayList<>();
-        recyclerView = view.findViewById(R.id.recycler_user_images);
-        recyclerView.setHasFixedSize(true);
+        binding.recyclerUserImages.setHasFixedSize(true);
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -54,16 +51,16 @@ public class UserImagesFragment extends Fragment {
 
         // if adapter == null, imageList == null
         if (imageAdapter == null) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            imagesList = Network.get(context).galleryRequest(10, 0,
+            binding.recyclerUserImages.setLayoutManager(new LinearLayoutManager(getContext()));
+            imagesList = Network.get(getContext()).galleryRequest(10, 0,
                     new VolleyCallBack() {
                         @Override
                         public void onSuccess() {
                             imageAdapter.notifyDataSetChanged();
                         }
                     });
-            imageAdapter = new ImageAdapter(context, imagesList);
-            recyclerView.setAdapter(imageAdapter);
+            imageAdapter = new ImageAdapter(getContext(), imagesList);
+            binding.recyclerUserImages.setAdapter(imageAdapter);
         } else {
             imageAdapter.notifyDataSetChanged();
         }

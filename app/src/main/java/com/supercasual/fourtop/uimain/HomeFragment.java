@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentHomeBinding;
+import com.supercasual.fourtop.utils.Constants;
 import com.supercasual.fourtop.viewmodel.HomeViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,5 +33,9 @@ public class HomeFragment extends Fragment {
         });
 
         return binding.getRoot();
+    }
+
+    private void setNabHeader() {
+        String token = getArguments().getString(Constants.ARGS_TOKEN);
     }
 }

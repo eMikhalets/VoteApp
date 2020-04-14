@@ -1,13 +1,14 @@
 package com.supercasual.fourtop.uiauth;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
@@ -16,15 +17,23 @@ import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentLoginBinding;
-import com.supercasual.fourtop.model.CurrentUser;
-import com.supercasual.fourtop.network.Network;
-import com.supercasual.fourtop.network.VolleyCallBack;
+import com.supercasual.fourtop.network.ApiFactory;
+import com.supercasual.fourtop.network.pojo.TokenResponse;
+import com.supercasual.fourtop.uimain.MainActivity;
+import com.supercasual.fourtop.utils.Constants;
 
 import org.jetbrains.annotations.NotNull;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
+    //private LoginViewModel viewModel;
 
     private boolean isPassVisible;
 
@@ -33,12 +42,12 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container,
                 false);
+        //viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        binding.btnLoginRequestLogin.setOnClickListener(this::getUserData);
+        binding.btnLoginRequestLogin.setOnClickListener(v -> sendLoginRequest());
 
-        binding.btnLoginRegistration.setOnClickListener(
-                view -> Navigation.findNavController(view)
-                        .navigate(R.id.action_registerFragment_to_loginFragment));
+        binding.btnLoginRegistration.setOnClickListener(view -> Navigation.findNavController(view)
+                .navigate(R.id.action_loginFragment_to_registerFragment));
 
         binding.imageBtnLoginShowPass.setOnClickListener(view -> setPassVisibility());
 
@@ -52,8 +61,13 @@ public class LoginFragment extends Fragment {
     }
 
     private void setUserInfo() {
-        String login = CurrentUser.get().getLogin();
-        String password = CurrentUser.get().getPass();
+        String login = "";
+        String password = "";
+
+        if (getArguments() != null) {
+            login = getArguments().getString(Constants.ARGS_LOGIN);
+            password = getArguments().getString(Constants.ARGS_PASS);
+        }
 
         if (!login.isEmpty() && !password.isEmpty()) {
             binding.editLoginLogin.setText(login);
@@ -61,7 +75,11 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void getUserData(View view) {
+    /**
+     * Save token to SharedPreferences
+     * Send Bundle (login, token) to mainActivity
+     */
+    private void sendLoginRequest() {
         String userLogin = binding.editLoginLogin.getText().toString().trim();
         String userPass = binding.editLoginPass.getText().toString().trim();
 
@@ -69,21 +87,45 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getContext(), R.string.login_toast_empty_editText,
                     Toast.LENGTH_SHORT).show();
         } else {
-            sendLoginRequest(userLogin, userPass, view);
-        }
-    }
+            RequestBody loginBody = RequestBody.create(MediaType.parse("text/plain"), userLogin);
+            RequestBody passBody = RequestBody.create(MediaType.parse("text/plain"), userPass);
 
-    private void sendLoginRequest(String userLogin, String userPass, View view) {
-        Network.get(getContext()).loginRequest(userLogin, userPass, new VolleyCallBack() {
-            @Override
-            public void onSuccess() {
-                InputMethodManager imm = (InputMethodManager) getActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                Navigation.findNavController(view)
-                        .navigate(R.id.action_loginFragment_to_mainActivity);
-            }
-        });
+            Call<TokenResponse> responseCall = ApiFactory.getApiFactory().getApiService().login(loginBody, passBody);
+            responseCall.enqueue(new Callback<TokenResponse>() {
+                                     @Override
+                                     public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                                         // HTTP code is always == 200
+                                         // check JSON "status"
+                                         int code = response.body().getStatus();
+
+                                         if (code == 200) {
+                                             String userToken = response.body().getData().getUserToken();
+                                             saveUserToken(userToken);
+
+                                             Intent intent = new Intent(getContext(), MainActivity.class);
+                                             intent.putExtra(Constants.ARGS_TOKEN, userToken);
+                                             intent.putExtra(Constants.ARGS_LOGIN, userLogin);
+                                             startActivity(intent);
+
+//                                             Bundle args = new Bundle();
+//                                             args.putString(Constants.ARGS_LOGIN, userLogin);
+//                                             args.putString(Constants.ARGS_TOKEN, userToken);
+//                                             Navigation.findNavController(binding.getRoot())
+//                                                     .navigate(R.id.action_loginFragment_to_mainActivity, args);
+                                         } else {
+                                             // TODO: ПРОТЕСТИТЬ!!!!!!!!!!!! :))
+                                             Toast.makeText(getContext(), response.body().getErrorMsg(),
+                                                     Toast.LENGTH_SHORT).show();
+                                         }
+                                     }
+
+                                     @Override
+                                     public void onFailure(Call<TokenResponse> call, Throwable t) {
+                                         t.printStackTrace();
+                                     }
+                                 }
+            );
+        }
     }
 
     private void setPassVisibility() {
@@ -98,5 +140,13 @@ public class LoginFragment extends Fragment {
             binding.imageBtnLoginShowPass.setImageResource(R.drawable.ic_remove_eye_black_24dp);
             isPassVisible = true;
         }
+    }
+
+    private void saveUserToken(String userToken) {
+        SharedPreferences sp = getActivity()
+                .getSharedPreferences(Constants.SHARED_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(Constants.SHARED_TOKEN, userToken);
+        editor.apply();
     }
 }

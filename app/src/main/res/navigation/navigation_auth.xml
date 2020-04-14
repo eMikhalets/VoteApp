@@ -12,7 +12,10 @@
         tools:layout="@layout/fragment_logo">
         <action
             android:id="@+id/action_logoFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fade_in"
+            app:popUpTo="@id/logoFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_logoFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
@@ -25,7 +28,8 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_right_in" />
         <action
             android:id="@+id/action_loginFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
@@ -38,7 +42,9 @@
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <activity

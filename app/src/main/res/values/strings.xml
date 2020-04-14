@@ -39,6 +39,8 @@
         используйте настоящие пароли и электронную почту!!!</string>
     <string name="register_toast_no_match_pass">Пароли не совпадают</string>
     <string name="register_toast_empty_editText">Все поля должны быть заполнены</string>
+    <string name="register_text_loginBusy">Логин занят</string>
+    <string name="register_text_emailBusy">Почта занята</string>
 
     <!-- PROFILE -->
     <string name="profile_text_greeting">Привет, %s!</string>
@@ -55,4 +57,5 @@
     <string name="image_adapter_rate">Рейтинг: %d</string>
     <string name="image_item_desc">Image item</string>
     <string name="menu_item_image_delete">Удалить</string>
+    <string name="register_toast_registerError">Ошибка регистрации</string>
 </resources>

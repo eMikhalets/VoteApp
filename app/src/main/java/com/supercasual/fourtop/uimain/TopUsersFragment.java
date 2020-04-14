@@ -22,8 +22,6 @@ import java.util.List;
 
 public class TopUsersFragment extends Fragment {
 
-    private static final int LAYOUT = R.layout.fragment_top_users;
-
     private FragmentTopUsersBinding binding;
 
     private UserAdapter userAdapter;
@@ -31,7 +29,8 @@ public class TopUsersFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_users, container,
+                false);
         binding.recyclerTopUsers.setHasFixedSize(true);
 
         List<User> users = new ArrayList<>();

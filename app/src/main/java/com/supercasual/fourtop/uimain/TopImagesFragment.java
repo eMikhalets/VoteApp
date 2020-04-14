@@ -23,8 +23,6 @@ import java.util.List;
 
 public class TopImagesFragment extends Fragment {
 
-    private static final int LAYOUT = R.layout.fragment_top_images;
-
     private FragmentTopImagesBinding binding;
 
     private ImageAdapter imageAdapter;
@@ -34,7 +32,8 @@ public class TopImagesFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_images, container,
+                false);
 
         imagesList = new ArrayList<>();
         binding.recyclerTopImages.setHasFixedSize(true);
