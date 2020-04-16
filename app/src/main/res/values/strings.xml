@@ -41,10 +41,12 @@
     <string name="register_toast_empty_editText">Все поля должны быть заполнены</string>
     <string name="register_text_loginBusy">Логин занят</string>
     <string name="register_text_emailBusy">Почта занята</string>
+    <string name="register_toast_registerError">Ошибка регистрации</string>
 
     <!-- PROFILE -->
     <string name="profile_text_greeting">Привет, %s!</string>
     <string name="profile_text_user_token">Твой токен: %s!</string>
+    <string name="profile_btn_logout">Выйти</string>
 
     <!-- USER IMAGES -->
     <string name="user_images_btn_upload">Добавить фото</string>
@@ -57,5 +59,4 @@
     <string name="image_adapter_rate">Рейтинг: %d</string>
     <string name="image_item_desc">Image item</string>
     <string name="menu_item_image_delete">Удалить</string>
-    <string name="register_toast_registerError">Ошибка регистрации</string>
 </resources>

@@ -62,10 +62,6 @@ public class LogoFragment extends Fragment {
                                          Intent intent = new Intent(getContext(), MainActivity.class);
                                          intent.putExtra(Constants.ARGS_TOKEN, userToken);
                                          startActivity(intent);
-//                                         Bundle args = new Bundle();
-//                                         args.putString(Constants.ARGS_TOKEN, userToken);
-//                                         Navigation.findNavController(binding.getRoot())
-//                                                 .navigate(R.id.action_logoFragment_to_mainActivity, args);
                                      } else {
                                          Navigation.findNavController(binding.getRoot())
                                                  .navigate(R.id.action_logoFragment_to_loginFragment);

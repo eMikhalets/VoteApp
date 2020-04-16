@@ -12,58 +12,59 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.adapter.ImageAdapter;
 import com.supercasual.fourtop.databinding.FragmentUserImagesBinding;
-import com.supercasual.fourtop.model.Image;
-import com.supercasual.fourtop.network.Network;
-import com.supercasual.fourtop.network.VolleyCallBack;
+import com.supercasual.fourtop.network.pojo.ImagesData;
+import com.supercasual.fourtop.utils.Constants;
+import com.supercasual.fourtop.viewmodel.UserImagesViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserImagesFragment extends Fragment {
 
-    private FragmentUserImagesBinding binding;
-
     private static final int RESULT_LOAD_IMAGE = 0;
 
+    private FragmentUserImagesBinding binding;
+    private UserImagesViewModel viewModel;
     private ImageAdapter imageAdapter;
-    private List<Image> imagesList;
+    private List<ImagesData> images;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_images, container,
                 false);
+        viewModel = new ViewModelProvider(this).get(UserImagesViewModel.class);
 
-        imagesList = new ArrayList<>();
+        images = new ArrayList<>();
         binding.recyclerUserImages.setHasFixedSize(true);
+        binding.recyclerUserImages.setLayoutManager(new LinearLayoutManager(getContext()));
+        imageAdapter = new ImageAdapter(images);
+        binding.recyclerUserImages.setAdapter(imageAdapter);
+
+        loadImages();
 
         return binding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void loadImages() {
+        String token = getArguments().getString(Constants.ARGS_TOKEN);
+        viewModel.sendGalleryRequest(token, imageAdapter);
 
-        // if adapter == null, imageList == null
-        if (imageAdapter == null) {
-            binding.recyclerUserImages.setLayoutManager(new LinearLayoutManager(getContext()));
-            imagesList = Network.get(getContext()).galleryRequest(10, 0,
-                    new VolleyCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            imageAdapter.notifyDataSetChanged();
-                        }
-                    });
-            imageAdapter = new ImageAdapter(getContext(), imagesList);
-            binding.recyclerUserImages.setAdapter(imageAdapter);
-        } else {
-            imageAdapter.notifyDataSetChanged();
-        }
+        LiveData<List<ImagesData>> liveData = viewModel.getLiveData();
+        liveData.observe(getViewLifecycleOwner(), new Observer<List<ImagesData>>() {
+            @Override
+            public void onChanged(List<ImagesData> imagesData) {
+                imageAdapter.setImages(imagesData);
+            }
+        });
     }
 
     // TODO: add image to List<> from content provider in fragment

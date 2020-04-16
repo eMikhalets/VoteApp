@@ -32,7 +32,9 @@
             app:enterAnim="@anim/slide_right_in" />
         <action
             android:id="@+id/action_loginFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
+            app:destination="@id/mainActivity"
+            app:popUpTo="@id/mainActivity"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

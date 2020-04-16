@@ -2,6 +2,7 @@ package com.supercasual.fourtop.uimain;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,26 +41,28 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navigationView, navController);
 
         binding.navigationView.setNavigationItemSelectedListener(item -> {
+            Bundle args = new Bundle();
+            args.putString(Constants.ARGS_TOKEN, token);
+
             switch (item.getItemId()) {
                 case R.id.menu_nav_profile:
-                    Bundle args = new Bundle();
                     args.putString(Constants.ARGS_LOGIN, login);
-                    args.putString(Constants.ARGS_TOKEN, token);
                     navController.navigate(R.id.action_homeFragment_to_profileFragment, args);
                     break;
                 case R.id.menu_nav_user_images:
-                    navController.navigate(R.id.action_homeFragment_to_userImagesFragment);
+                    navController.navigate(R.id.action_homeFragment_to_userImagesFragment, args);
                     break;
                 case R.id.menu_nav_voting:
-                    navController.navigate(R.id.action_homeFragment_to_votingFragment);
+                    navController.navigate(R.id.action_homeFragment_to_votingFragment, args);
                     break;
                 case R.id.menu_nav_top_images:
-                    navController.navigate(R.id.action_homeFragment_to_topImagesFragment);
+                    navController.navigate(R.id.action_homeFragment_to_topImagesFragment, args);
                     break;
                 case R.id.menu_nav_top_users:
                     navController.navigate(R.id.action_homeFragment_to_topUsersFragment);
                     break;
             }
+
             NavigationUI.onNavDestinationSelected(item, navController);
             binding.layoutDrawer.closeDrawers();
             return true;
