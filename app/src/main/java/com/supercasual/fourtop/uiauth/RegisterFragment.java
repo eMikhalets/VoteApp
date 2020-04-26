@@ -8,180 +8,139 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentRegisterBinding;
-import com.supercasual.fourtop.network.ApiFactory;
-import com.supercasual.fourtop.network.pojo.ApiResponse;
+import com.supercasual.fourtop.network.pojo.AppResponse;
 import com.supercasual.fourtop.utils.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class RegisterFragment extends Fragment {
 
     private FragmentRegisterBinding binding;
+    private RegisterViewModel viewModel;
 
     private boolean isPassVisible = false;
     private boolean isConfPassVisible = false;
+    private String login;
+    private String email;
+    private String password;
+    private String confPassword;
+    private String nickname;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container,
                 false);
-
-        binding.btnRegisterRequestRegister.setOnClickListener(v -> registerRequest());
-
-        binding.imageBtnRegisterShowPass.setOnClickListener(view -> setPassVisibility());
-
-        binding.imageBtnRegisterShowConfPass.setOnClickListener(view -> setConfPassVisibility());
-
+        viewModel = ViewModelProviders.of(this).get(RegisterViewModel.class);
         return binding.getRoot();
     }
 
-    private void registerRequest() {
-        String userLogin = binding.editRegisterLogin.getText().toString().trim();
-        String userEmail = binding.editRegisterEmail.getText().toString().trim();
-        String userPass = binding.editRegisterPass.getText().toString().trim();
-        String userConfirmPass = binding.editRegisterConfirmPass.getText().toString().trim();
-        String testerNickname = binding.editRegisterNickname.getText().toString().trim();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        if (!userEmail.isEmpty()) {
-            sendRegisterEmailRequest(userEmail);
-        } else if (!userLogin.isEmpty()) {
-            sendRegisterLoginRequest(userLogin);
-        } else if (!userPass.equals(userConfirmPass)) {
-            Toast.makeText(getContext(), R.string.register_toast_no_match_pass,
-                    Toast.LENGTH_SHORT).show();
-        } else if (userPass.isEmpty() || testerNickname.isEmpty()) {
-            Toast.makeText(getContext(), R.string.register_toast_empty_editText,
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            sendRegisterRequest(userEmail, userLogin, userPass, testerNickname);
-        }
+        // TODO: email and login responses
+        binding.btnRegister.setOnClickListener(v -> {
+            setUserDataFromFields();
+
+            if (isFieldsFilled()) {
+                if (!isPasswordsMatched()) {
+                    Toast.makeText(getContext(), getString(R.string.register_toast_no_match_pass),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    LiveData<AppResponse> liveData = viewModel.register(email, login, password, nickname);
+
+                    liveData.observe(getViewLifecycleOwner(), appResponse -> {
+                        if (appResponse.getDataString().equals("500")) {
+                            Toast.makeText(getContext(), getString(R.string.register_toast_register_failed),
+                                    Toast.LENGTH_SHORT).show();
+                        } else if (appResponse.getDataString().matches("\\d{3}")) {
+                            Toast.makeText(getContext(), appResponse.getDataString(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            backToLoginFragment();
+                        }
+                    });
+                }
+            } else {
+                Toast.makeText(getContext(), getString(R.string.register_toast_empty_fields),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.imageBtnShowPass.setOnClickListener(v -> {
+            if (isPassVisible) {
+                hidePassword();
+            } else {
+                showPassword();
+            }
+        });
+
+        binding.imageBtnShowConfPass.setOnClickListener(v -> {
+            if (isConfPassVisible) {
+                hideConfirmPassword();
+            } else {
+                showConfirmPassword();
+            }
+        });
     }
 
-    private void sendRegisterRequest(String email, String login, String pass, String nickname) {
-        RequestBody emailBody = RequestBody.create(MediaType.parse("text/plain"), email);
-        RequestBody loginBody = RequestBody.create(MediaType.parse("text/plain"), login);
-        RequestBody passBody = RequestBody.create(MediaType.parse("text/plain"), pass);
-        RequestBody nameBody = RequestBody.create(MediaType.parse("text/plain"), nickname);
-
-        Call<ApiResponse> responseCall = ApiFactory.getApiFactory().getApiService()
-                .register(emailBody, loginBody, passBody, nameBody);
-        responseCall.enqueue(new Callback<ApiResponse>() {
-                                 @Override
-                                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                     // HTTP code is always == 200
-                                     // check JSON "status"
-                                     int code = response.body().getStatus();
-
-                                     if (code == 200) {
-                                         Bundle args = new Bundle();
-                                         args.putString(Constants.ARGS_LOGIN, login);
-                                         args.putString(Constants.ARGS_PASS, pass);
-                                         Navigation.findNavController(binding.getRoot())
-                                                 .navigate(R.id.action_registerFragment_to_loginFragment, args);
-                                     } else {
-                                         Toast.makeText(getContext(), R.string.register_toast_registerError,
-                                                 Toast.LENGTH_SHORT).show();
-                                     }
-                                 }
-
-                                 @Override
-                                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                                     t.printStackTrace();
-                                 }
-                             }
-        );
+    private void backToLoginFragment() {
+        Bundle args = new Bundle();
+        args.putString(Constants.ARGS_LOGIN, login);
+        args.putString(Constants.ARGS_PASS, password);
+        Navigation.findNavController(binding.getRoot())
+                .navigate(R.id.action_registerFragment_to_loginFragment, args);
     }
 
-    private void sendRegisterEmailRequest(String email) {
-        RequestBody emailBody = RequestBody.create(MediaType.parse("text/plain"), email);
-
-        Call<ApiResponse> responseCall = ApiFactory.getApiFactory().getApiService().registerLogin(emailBody);
-        responseCall.enqueue(new Callback<ApiResponse>() {
-                                 @Override
-                                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                     // HTTP code is always == 200
-                                     // check JSON "status"
-                                     int code = response.body().getStatus();
-
-                                     if (code != 200) {
-                                         binding.textRegisterEmailBusy.setVisibility(View.VISIBLE);
-                                     }
-                                 }
-
-                                 @Override
-                                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                                     t.printStackTrace();
-                                 }
-                             }
-        );
+    private void setUserDataFromFields() {
+        login = binding.etLogin.getText().toString().trim();
+        email = binding.etEmail.getText().toString().trim();
+        password = binding.etPassword.getText().toString().trim();
+        confPassword = binding.etConfirmPass.getText().toString().trim();
+        nickname = binding.etNickname.getText().toString().trim();
     }
 
-    private void sendRegisterLoginRequest(String login) {
-        RequestBody loginBody = RequestBody.create(MediaType.parse("text/plain"), login);
-
-        Call<ApiResponse> responseCall = ApiFactory.getApiFactory().getApiService().registerLogin(loginBody);
-        responseCall.enqueue(new Callback<ApiResponse>() {
-                                 @Override
-                                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                     // HTTP code is always == 200
-                                     // check JSON "status"
-                                     int code = response.body().getStatus();
-
-                                     if (code != 200) {
-                                         binding.textRegisterLoginBusy.setVisibility(View.VISIBLE);
-                                     }
-                                 }
-
-                                 @Override
-                                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                                     t.printStackTrace();
-                                 }
-                             }
-        );
+    private boolean isPasswordsMatched() {
+        return password.equals(confPassword);
     }
 
-    private void setPassVisibility() {
-        if (isPassVisible) {
-            binding.editRegisterPass
-                    .setTransformationMethod(PasswordTransformationMethod.getInstance());
-            binding.imageBtnRegisterShowPass
-                    .setImageResource(R.drawable.ic_remove_eye_gray_24dp);
-            isPassVisible = false;
-        } else {
-            binding.editRegisterPass
-                    .setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            binding.imageBtnRegisterShowPass
-                    .setImageResource(R.drawable.ic_remove_eye_black_24dp);
-            isPassVisible = true;
-        }
+    private boolean isFieldsFilled() {
+        return !login.isEmpty() && !email.isEmpty() && !password.isEmpty()
+                && !confPassword.isEmpty() && nickname.isEmpty();
     }
 
-    private void setConfPassVisibility() {
-        if (isConfPassVisible) {
-            binding.editRegisterConfirmPass
-                    .setTransformationMethod(PasswordTransformationMethod.getInstance());
-            binding.imageBtnRegisterShowConfPass
-                    .setImageResource(R.drawable.ic_remove_eye_gray_24dp);
-            isConfPassVisible = false;
-        } else {
-            binding.editRegisterConfirmPass
-                    .setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            binding.imageBtnRegisterShowConfPass
-                    .setImageResource(R.drawable.ic_remove_eye_black_24dp);
-            isConfPassVisible = true;
-        }
+    private void showPassword() {
+        binding.etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+        binding.imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_black_24dp);
+        isPassVisible = true;
+    }
+
+    private void hidePassword() {
+        binding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        binding.imageBtnShowPass.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
+        isPassVisible = false;
+    }
+
+    private void showConfirmPassword() {
+        binding.etConfirmPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+        binding.imageBtnShowConfPass.setImageResource(R.drawable.ic_remove_eye_black_24dp);
+        isConfPassVisible = true;
+    }
+
+    private void hideConfirmPassword() {
+        binding.etConfirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        binding.imageBtnShowConfPass.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
+        isConfPassVisible = false;
     }
 }

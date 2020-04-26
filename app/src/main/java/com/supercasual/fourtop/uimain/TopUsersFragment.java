@@ -10,15 +10,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.supercasual.fourtop.R;
-import com.supercasual.fourtop.adapter.UserAdapter;
 import com.supercasual.fourtop.databinding.FragmentTopUsersBinding;
-import com.supercasual.fourtop.model.CurrentUser;
-import com.supercasual.fourtop.model.User;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TopUsersFragment extends Fragment {
 

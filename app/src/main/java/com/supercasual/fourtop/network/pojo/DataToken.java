@@ -3,7 +3,7 @@ package com.supercasual.fourtop.network.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TokenData {
+public class DataToken {
 
     @SerializedName("user_token")
     @Expose

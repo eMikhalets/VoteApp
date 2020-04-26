@@ -1,10 +1,11 @@
 package com.supercasual.fourtop.network;
 
-import com.supercasual.fourtop.network.pojo.ApiResponse;
-import com.supercasual.fourtop.network.pojo.ImagesResponse;
-import com.supercasual.fourtop.network.pojo.TokenResponse;
-import com.supercasual.fourtop.network.pojo.VoteResponse;
+import com.supercasual.fourtop.network.pojo.ResponseImages;
+import com.supercasual.fourtop.network.pojo.ResponseSimple;
+import com.supercasual.fourtop.network.pojo.ResponseToken;
+import com.supercasual.fourtop.network.pojo.ResponseVoting;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Multipart;
@@ -15,7 +16,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/register")
-    Call<ApiResponse> register(
+    Call<ResponseSimple> register(
             @Part("email") RequestBody email,
             @Part("login") RequestBody login,
             @Part("password") RequestBody password,
@@ -23,63 +24,73 @@ public interface ApiService {
 
     @Multipart
     @POST("api/register/email")
-    Call<ApiResponse> registerEmail(@Part("email") RequestBody email);
+    Call<ResponseSimple> registerEmail(@Part("email") RequestBody email);
 
     @Multipart
     @POST("api/register/login")
-    Call<ApiResponse> registerLogin(@Part("login") RequestBody login);
+    Call<ResponseSimple> registerLogin(@Part("login") RequestBody login);
 
     @Multipart
     @POST("api/login")
-    Call<TokenResponse> login(
+    Call<ResponseToken> login(
             @Part("login") RequestBody login,
             @Part("password") RequestBody pass);
 
     @Multipart
     @POST("api/logout")
-    Call<ApiResponse> logout(@Part("user_token") RequestBody userToken);
+    Call<ResponseSimple> logout(@Part("user_token") RequestBody userToken);
 
     @Multipart
     @POST("api/token")
-    Call<ApiResponse> token(@Part("user_token") RequestBody body);
+    Call<ResponseSimple> token(@Part("user_token") RequestBody body);
 
 
     @Multipart
     @POST("api/gallery/add")
-    Call<ApiResponse> galleryAdd(
+    Call<ResponseSimple> galleryAdd(
             @Part("user_token") RequestBody userToken,
-            @Part("file") RequestBody file);
+            @Part("file") MultipartBody.Part file);
 
     @Multipart
     @POST("api/gallery")
-    Call<ImagesResponse> gallery(
+    Call<ResponseImages> gallery(
             @Part("user_token") RequestBody userToken,
             @Part("count") RequestBody count,
             @Part("offset") RequestBody offset);
 
     @Multipart
     @POST("api/gallery/remove")
-    Call<ApiResponse> galleryRemove(
+    Call<ResponseSimple> galleryRemove(
             @Part("user_token") RequestBody userToken,
             @Part("id") RequestBody id);
 
 
     @Multipart
     @POST("api/vote/create")
-    Call<VoteResponse> voteCreate(@Part("user_token") RequestBody userToken);
+    Call<ResponseVoting> voteCreate(@Part("user_token") RequestBody userToken);
 
     @Multipart
     @POST("api/vote")
-    Call<ApiResponse> vote(
+    Call<ResponseSimple> vote(
             @Part("user_token") RequestBody userToken,
             @Part("vote_token") RequestBody voteToken,
             @Part("vote") RequestBody vote);
 
     @Multipart
     @POST("api/top/photos")
-    Call<ImagesResponse> topPhotos(
+    Call<ResponseImages> topPhotos(
             @Part("user_token") RequestBody userToken,
             @Part("count") RequestBody count,
             @Part("offset") RequestBody offset);
+
+    /**
+     * Этот запрос еще не реализован на сервере
+     */
+//    @Multipart
+//    @POST("api/top/users")
+//    Call<ResponseUsers> topUsers(
+//            @Part("user_token") RequestBody userToken,
+//            @Part("count") RequestBody count,
+//            @Part("offset") RequestBody offset);
 
 }

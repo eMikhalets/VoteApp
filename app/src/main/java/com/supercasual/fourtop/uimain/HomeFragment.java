@@ -7,12 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentHomeBinding;
-import com.supercasual.fourtop.utils.Constants;
-import com.supercasual.fourtop.viewmodel.HomeViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,8 +22,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container,
+                false);
+        viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
         viewModel.getData().observe(this.getViewLifecycleOwner(), strings -> {
             binding.textHomeHeader.setText(strings.get(0));
@@ -33,9 +32,5 @@ public class HomeFragment extends Fragment {
         });
 
         return binding.getRoot();
-    }
-
-    private void setNabHeader() {
-        String token = getArguments().getString(Constants.ARGS_TOKEN);
     }
 }

@@ -6,25 +6,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentProfileBinding;
-import com.supercasual.fourtop.network.ApiFactory;
-import com.supercasual.fourtop.network.pojo.ApiResponse;
+import com.supercasual.fourtop.network.pojo.AppResponse;
 import com.supercasual.fourtop.utils.Constants;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
+    private ProfileViewModel viewModel;
+    private SharedPreferences sharedPreferences;
 
     private String login;
     private String token;
@@ -34,46 +34,45 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container,
                 false);
-        setUserData();
-        binding.btnProfileLogout.setOnClickListener(v -> sendLogoutRequest());
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        setArguments();
+        initSharedPreferences();
         return binding.getRoot();
     }
 
-    private void sendLogoutRequest() {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), token);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserData();
+        binding.btnProfileLogout.setOnClickListener(v -> {
+            LiveData<AppResponse> liveData = viewModel.logout(token);
 
-        Call<ApiResponse> responseCall = ApiFactory.getApiFactory().getApiService().logout(requestBody);
-        responseCall.enqueue(new Callback<ApiResponse>() {
-                                 @Override
-                                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                     // HTTP code is always == 200
-                                     // check JSON "status"
-                                     int code = response.body().getStatus();
-
-                                     if (code == 200) {
-                                         deleteSharedUserToken();
-                                     }
-                                 }
-
-                                 @Override
-                                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                                     t.printStackTrace();
-                                 }
-                             }
-        );
+            liveData.observe(getViewLifecycleOwner(), appResponse -> {
+                if (appResponse.getDataString().equals(token)) {
+                    viewModel.deleteUserToken(sharedPreferences);
+                    getActivity().finishAffinity();
+                } else {
+                    Toast.makeText(getContext(), "Some Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
-    private void deleteSharedUserToken() {
-        SharedPreferences sp = getActivity().getSharedPreferences(Constants.SHARED_FILE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Constants.SHARED_TOKEN, "");
-        editor.apply();
+    private void setArguments() {
+        Bundle args = this.getArguments();
+
+        if (args != null) {
+            login = getArguments().getString(Constants.ARGS_LOGIN);
+            token = getArguments().getString(Constants.ARGS_TOKEN);
+        }
+    }
+
+    private void initSharedPreferences() {
+        SharedPreferences sp = getActivity()
+                .getSharedPreferences(Constants.SHARED_FILE, Context.MODE_PRIVATE);
     }
 
     private void setUserData() {
-        login = getArguments().getString(Constants.ARGS_LOGIN);
-        token = getArguments().getString(Constants.ARGS_TOKEN);
-
         binding.textProfileGreeting.setText(getString(R.string.profile_text_greeting, login));
         binding.textProfileUserToken.setText(getString(R.string.profile_text_user_token, token));
     }

@@ -5,20 +5,20 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class VoteData {
+public class DataVoting {
 
     @SerializedName("photos")
     @Expose
-    private List<ImagesData> images;
+    private List<DataImages> images;
     @SerializedName("vote_token")
     @Expose
     private String voteToken;
 
-    public List<ImagesData> getImages() {
+    public List<DataImages> getImages() {
         return images;
     }
 
-    public void setImages(List<ImagesData> images) {
+    public void setImages(List<DataImages> images) {
         this.images = images;
     }
 

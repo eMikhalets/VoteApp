@@ -1,25 +1,30 @@
-package com.supercasual.fourtop.adapter;
+package com.supercasual.fourtop.uimain;
 
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.ItemImageBinding;
-import com.supercasual.fourtop.network.pojo.ImagesData;
+import com.supercasual.fourtop.network.pojo.DataImages;
 
 import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
+    private Context context;
     private ItemImageBinding binding;
-    private List<ImagesData> images;
+    private List<DataImages> images;
 
-    public ImageAdapter(List<ImagesData> images) {
+    public ImageAdapter(Context context, List<DataImages> images) {
+        this.context = context;
         this.images = images;
     }
 
@@ -33,8 +38,22 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Picasso.get().load(images.get(position).getLink()).into(binding.imageItem);
-        binding.textItemImageRate.setText("Рейтинг:" + images.get(position).getRate());
+        showProgressBar();
+        String textRating = context.getString(
+                R.string.image_adapter_rating, images.get(position).getRate());
+
+        Picasso.get().load(images.get(position).getLink())
+                .into(binding.imageItem, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        hideProgressBar();
+                        binding.textItemImageRate.setText(textRating);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                    }
+                });
     }
 
     @Override
@@ -42,9 +61,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return images.size();
     }
 
-    public void setImages(List<ImagesData> images) {
+    public void setImages(List<DataImages> images) {
         this.images = images;
         notifyDataSetChanged();
+    }
+
+    private void showProgressBar() {
+        binding.pbLoadImage.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        binding.pbLoadImage.setVisibility(View.GONE);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

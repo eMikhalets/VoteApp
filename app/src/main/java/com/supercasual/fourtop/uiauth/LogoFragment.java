@@ -7,72 +7,75 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentLogoBinding;
-import com.supercasual.fourtop.network.ApiFactory;
-import com.supercasual.fourtop.network.pojo.ApiResponse;
+import com.supercasual.fourtop.network.pojo.AppResponse;
 import com.supercasual.fourtop.uimain.MainActivity;
 import com.supercasual.fourtop.utils.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class LogoFragment extends Fragment {
 
     private FragmentLogoBinding binding;
+    private LogoViewModel viewModel;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_logo, container,
                 false);
-        sendTokenRequest();
+        viewModel = ViewModelProviders.of(this).get(LogoViewModel.class);
         return binding.getRoot();
     }
 
-    private String loadUserToken() {
-        SharedPreferences sp = getActivity()
-                .getSharedPreferences(Constants.SHARED_FILE, Context.MODE_PRIVATE);
-        return sp.getString(Constants.SHARED_TOKEN, "");
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewIsLoaded();
     }
 
-    private void sendTokenRequest() {
-        String userToken = loadUserToken();
-        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), userToken);
+    /**
+     * Initialising ShapedPreferences, loading user token and send token request.
+     * If user token is correct, return token and send it to MainActivity.
+     * If user token isn't correct, start LoginFragment
+     */
+    public void viewIsLoaded() {
+        initSharedPreferences();
+        String userToken = viewModel.loadUserToken(sharedPreferences);
+        LiveData<AppResponse> liveData = viewModel.checkUserToken(userToken);
 
-        Call<ApiResponse> responseCall = ApiFactory.getApiFactory().getApiService().token(requestBody);
-        responseCall.enqueue(new Callback<ApiResponse>() {
-                                 @Override
-                                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                     // HTTP code is always == 200
-                                     // check JSON "status"
-                                     int code = response.body().getStatus();
+        liveData.observe(getViewLifecycleOwner(), appResponse -> {
+            if (appResponse.getDataString().equals("403")) {
+                Navigation.findNavController(binding.getRoot())
+                        .navigate(R.id.action_logoFragment_to_loginFragment);
+            } else if (appResponse.getDataString().matches("\\d{3}")) {
+                Toast.makeText(getContext(), appResponse.getDataString(), Toast.LENGTH_SHORT).show();
+            } else {
+                // String contains user token
+                startMainActivity(appResponse.getDataString());
+            }
+        });
+    }
 
-                                     if (code == 200) {
-                                         Intent intent = new Intent(getContext(), MainActivity.class);
-                                         intent.putExtra(Constants.ARGS_TOKEN, userToken);
-                                         startActivity(intent);
-                                     } else {
-                                         Navigation.findNavController(binding.getRoot())
-                                                 .navigate(R.id.action_logoFragment_to_loginFragment);
-                                     }
-                                 }
+    private void initSharedPreferences() {
+        sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_FILE, Context.MODE_PRIVATE);
+    }
 
-                                 @Override
-                                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                                     t.printStackTrace();
-                                 }
-                             }
-        );
+    private void startMainActivity(String userToken) {
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.putExtra(Constants.ARGS_TOKEN, userToken);
+        startActivity(intent);
     }
 }

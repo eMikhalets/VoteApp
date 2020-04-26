@@ -3,9 +3,7 @@ package com.supercasual.fourtop.network.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class ImagesResponse {
+public class ResponseToken {
 
     @SerializedName("status")
     @Expose
@@ -21,7 +19,7 @@ public class ImagesResponse {
     private String errorUcode;
     @SerializedName("data")
     @Expose
-    private List<ImagesData> data;
+    private DataToken data;
 
     public int getStatus() {
         return status;
@@ -55,11 +53,11 @@ public class ImagesResponse {
         this.errorUcode = errorUcode;
     }
 
-    public List<ImagesData> getData() {
+    public DataToken getData() {
         return data;
     }
 
-    public void setData(List<ImagesData> data) {
+    public void setData(DataToken data) {
         this.data = data;
     }
 }

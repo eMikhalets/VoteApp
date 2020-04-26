@@ -2,7 +2,7 @@
     <string name="app_name">Four Top</string>
     <string name="text_dev">Раздел находится в разработке</string>
 
-    <!-- FRAGMENT LABELS -->
+    <!-- FRAGMENTS LABELS -->
     <string name="label_fragment_login">Авторизация</string>
     <string name="label_fragment_register">Регистрация</string>
     <string name="label_fragment_home">Главная</string>
@@ -25,7 +25,8 @@
     <string name="login_edit_text_hint_pass">Пароль</string>
     <string name="login_btn_btn_login">Войти</string>
     <string name="login_btn_btn_register">Зарегистироваться</string>
-    <string name="login_toast_empty_editText">Все поля должны быть заполнены</string>
+    <string name="login_toast_empty_data">Все поля должны быть заполнены</string>
+    <string name="login_toast_login_failed">Неверно введены логин или пароль</string>
 
     <!-- REGISTER -->
     <string name="register_text_label">РЕГИСТРАЦИЯ</string>
@@ -38,10 +39,10 @@
     <string name="register_text_test_app">ВНИМАНИЕ!!! Приложение находится в тестовом режиме, не
         используйте настоящие пароли и электронную почту!!!</string>
     <string name="register_toast_no_match_pass">Пароли не совпадают</string>
-    <string name="register_toast_empty_editText">Все поля должны быть заполнены</string>
+    <string name="register_toast_empty_fields">Все поля должны быть заполнены</string>
     <string name="register_text_loginBusy">Логин занят</string>
     <string name="register_text_emailBusy">Почта занята</string>
-    <string name="register_toast_registerError">Ошибка регистрации</string>
+    <string name="register_toast_register_failed">Почта или логин заняты</string>
 
     <!-- PROFILE -->
     <string name="profile_text_greeting">Привет, %s!</string>
@@ -56,7 +57,7 @@
     <string name="voting_btn_vote">Проголосовать</string>
 
     <!-- IMAGE ADAPTER -->
-    <string name="image_adapter_rate">Рейтинг: %d</string>
+    <string name="image_adapter_rating">Рейтинг: %d</string>
     <string name="image_item_desc">Image item</string>
     <string name="menu_item_image_delete">Удалить</string>
 </resources>

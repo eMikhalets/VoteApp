@@ -3,7 +3,7 @@ package com.supercasual.fourtop.network.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TokenResponse {
+public class ResponseVoting {
 
     @SerializedName("status")
     @Expose
@@ -19,7 +19,7 @@ public class TokenResponse {
     private String errorUcode;
     @SerializedName("data")
     @Expose
-    private TokenData data;
+    private DataVoting data;
 
     public int getStatus() {
         return status;
@@ -53,11 +53,11 @@ public class TokenResponse {
         this.errorUcode = errorUcode;
     }
 
-    public TokenData getData() {
+    public DataVoting getData() {
         return data;
     }
 
-    public void setData(TokenData data) {
+    public void setData(DataVoting data) {
         this.data = data;
     }
 }

@@ -3,7 +3,9 @@ package com.supercasual.fourtop.network.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class VoteResponse {
+import java.util.List;
+
+public class ResponseImages {
 
     @SerializedName("status")
     @Expose
@@ -19,7 +21,7 @@ public class VoteResponse {
     private String errorUcode;
     @SerializedName("data")
     @Expose
-    private VoteData data;
+    private List<DataImages> data;
 
     public int getStatus() {
         return status;
@@ -53,11 +55,11 @@ public class VoteResponse {
         this.errorUcode = errorUcode;
     }
 
-    public VoteData getData() {
+    public List<DataImages> getData() {
         return data;
     }
 
-    public void setData(VoteData data) {
+    public void setData(List<DataImages> data) {
         this.data = data;
     }
 }

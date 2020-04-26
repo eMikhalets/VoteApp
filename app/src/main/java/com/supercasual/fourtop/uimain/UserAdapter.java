@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.adapter;
+package com.supercasual.fourtop.uimain;
 
 import android.content.Context;
 import android.view.LayoutInflater;
