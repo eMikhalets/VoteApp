@@ -1,18 +1,14 @@
 package com.supercasual.fourtop.uimain;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.supercasual.fourtop.network.pojo.AppResponse;
-import com.supercasual.fourtop.utils.Constants;
 
 public class ProfileViewModel extends ViewModel {
 
-    private MediatorLiveData<AppResponse> liveData;
+    private MutableLiveData<AppResponse> liveData;
     private MainRepository repository;
 
     public ProfileViewModel() {
@@ -20,17 +16,15 @@ public class ProfileViewModel extends ViewModel {
         repository = new MainRepository();
     }
 
-    public void deleteUserToken(SharedPreferences sp) {
-        Editor editor = sp.edit();
-        editor.putString(Constants.SHARED_TOKEN, "");
-        editor.apply();
+    public MutableLiveData<AppResponse> getLiveData() {
+        return liveData;
     }
 
-    public LiveData<AppResponse> logout(String token) {
-        liveData.addSource(
-                repository.logoutRequest(token),
-                appResponse -> liveData.setValue(appResponse)
-        );
-        return liveData;
+    public void profile(String token) {
+        liveData = repository.profileRequest(token);
+    }
+
+    public void logout(String token) {
+        liveData = repository.logoutRequest(token);
     }
 }

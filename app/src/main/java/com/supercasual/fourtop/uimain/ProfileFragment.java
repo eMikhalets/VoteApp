@@ -2,6 +2,7 @@ package com.supercasual.fourtop.uimain;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,68 +13,76 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentProfileBinding;
-import com.supercasual.fourtop.network.pojo.AppResponse;
 import com.supercasual.fourtop.utils.Constants;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
     private ProfileViewModel viewModel;
-    private SharedPreferences sharedPreferences;
 
-    private String login;
     private String token;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container,
                 false);
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-        setArguments();
-        initSharedPreferences();
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUserData();
-        binding.btnProfileLogout.setOnClickListener(v -> {
-            LiveData<AppResponse> liveData = viewModel.logout(token);
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        setTokenFromArguments();
+        binding.btnLogout.setOnClickListener(v -> onButtonLogoutClicked());
+        viewIsLoaded();
+    }
 
-            liveData.observe(getViewLifecycleOwner(), appResponse -> {
-                if (appResponse.getDataString().equals(token)) {
-                    viewModel.deleteUserToken(sharedPreferences);
-                    getActivity().finishAffinity();
-                } else {
-                    Toast.makeText(getContext(), "Some Error", Toast.LENGTH_SHORT).show();
-                }
-            });
+    private void viewIsLoaded() {
+        viewModel.profile(token);
+        viewModel.getLiveData().observe(getViewLifecycleOwner(), appResponse -> {
+            if (appResponse.getDataProfile() != null) {
+                binding.setProfile(appResponse.getDataProfile());
+            } else {
+                // Temp
+                Toast.makeText(getContext(), appResponse.getDataString(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    private void setArguments() {
-        Bundle args = this.getArguments();
-
+    private void setTokenFromArguments() {
+        Bundle args = getArguments();
         if (args != null) {
-            login = getArguments().getString(Constants.ARGS_LOGIN);
-            token = getArguments().getString(Constants.ARGS_TOKEN);
+            token = args.getString(Constants.ARGS_TOKEN);
         }
     }
 
-    private void initSharedPreferences() {
-        SharedPreferences sp = getActivity()
-                .getSharedPreferences(Constants.SHARED_FILE, Context.MODE_PRIVATE);
+    private void deleteUserToken() {
+        SharedPreferences sp = requireActivity().getSharedPreferences(
+                Constants.SHARED_FILE, Context.MODE_PRIVATE);
+        Editor editor = sp.edit();
+        editor.putString(Constants.SHARED_TOKEN, "");
+        editor.apply();
     }
 
-    private void setUserData() {
-        binding.textProfileGreeting.setText(getString(R.string.profile_text_greeting, login));
-        binding.textProfileUserToken.setText(getString(R.string.profile_text_user_token, token));
+    private void onButtonLogoutClicked() {
+        viewModel.logout(token);
+        viewModel.getLiveData().observe(getViewLifecycleOwner(), appResponse -> {
+            if (appResponse.getDataString().equals(token)) {
+                deleteUserToken();
+                requireActivity().finishAffinity();
+            } else {
+                // Temp
+                Toast.makeText(getContext(), "Some Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

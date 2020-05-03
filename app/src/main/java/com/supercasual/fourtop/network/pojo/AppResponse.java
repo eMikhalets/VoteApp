@@ -8,7 +8,11 @@ public class AppResponse {
     private List<DataImages> dataImages;
     private DataToken dataToken;
     private DataVoting dataVoting;
+    private DataProfile dataProfile;
 
+    /**
+     * Constructors
+     */
     public AppResponse() {
     }
 
@@ -28,6 +32,13 @@ public class AppResponse {
         this.dataVoting = dataVoting;
     }
 
+    public AppResponse(DataProfile dataProfile) {
+        this.dataProfile = dataProfile;
+    }
+
+    /**
+     * Getters and setters
+     */
     public String getDataString() {
         return dataString;
     }
@@ -58,5 +69,13 @@ public class AppResponse {
 
     public void setDataVoting(DataVoting dataVoting) {
         this.dataVoting = dataVoting;
+    }
+
+    public DataProfile getDataProfile() {
+        return dataProfile;
+    }
+
+    public void setDataProfile(DataProfile dataProfile) {
+        this.dataProfile = dataProfile;
     }
 }

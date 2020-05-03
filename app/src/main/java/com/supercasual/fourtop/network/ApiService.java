@@ -1,6 +1,7 @@
 package com.supercasual.fourtop.network;
 
 import com.supercasual.fourtop.network.pojo.ResponseImages;
+import com.supercasual.fourtop.network.pojo.ResponseProfile;
 import com.supercasual.fourtop.network.pojo.ResponseSimple;
 import com.supercasual.fourtop.network.pojo.ResponseToken;
 import com.supercasual.fourtop.network.pojo.ResponseVoting;
@@ -43,6 +44,10 @@ public interface ApiService {
     @Multipart
     @POST("api/token")
     Call<ResponseSimple> token(@Part("user_token") RequestBody body);
+
+    @Multipart
+    @POST("api/profile")
+    Call<ResponseProfile> profile(@Part("user_token") RequestBody body);
 
 
     @Multipart

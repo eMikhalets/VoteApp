@@ -60,24 +60,17 @@ public class AuthRepository {
         RequestBody loginBody = RequestBody.create(MediaType.parse("text/plain"), login);
         RequestBody passBody = RequestBody.create(MediaType.parse("text/plain"), password);
 
-        Call<ResponseToken> call = ApiFactory.getApiFactory().getApiService().login(loginBody, passBody);
+        Call<ResponseToken> call = ApiFactory.getApiFactory().getApiService()
+                .login(loginBody, passBody);
         call.enqueue(new Callback<ResponseToken>() {
                          @Override
                          public void onResponse(Call<ResponseToken> call, Response<ResponseToken> response) {
-                             int code = response.body().getStatus();
-
-                             switch (code) {
-                                 case 200:
-                                     liveData.setValue(new AppResponse(response.body().getData()));
-                                     break;
-                                 default:
-                                     liveData.setValue(new AppResponse(String.valueOf(code)));
-                                     break;
-                             }
+                             liveData.setValue(new AppResponse(response.body().getData()));
                          }
 
                          @Override
                          public void onFailure(Call<ResponseToken> call, Throwable t) {
+                             liveData.setValue(new AppResponse("Ошибка авторизации"));
                              t.printStackTrace();
                          }
                      }

@@ -1,5 +1,6 @@
 package com.supercasual.fourtop.uiauth;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,8 +36,8 @@ public class LoginFragment extends Fragment {
     private LoginViewModel viewModel;
 
     private boolean isPassVisible = false;
-    private String login;
-    private String password;
+    private String login = "";
+    private String password = "";
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -55,16 +57,15 @@ public class LoginFragment extends Fragment {
 
         binding.btnLogin.setOnClickListener(v -> {
             setUserDataFromFields();
+            hideKeyboard();
 
             if (isFieldsFilled()) {
                 LiveData<AppResponse> liveData = viewModel.login(login, password);
                 liveData.observe(getViewLifecycleOwner(), appResponse -> {
-                    if (appResponse.getDataString().equals("500")) {
+                    if (appResponse.getDataString() != null) {
                         Toast.makeText(getContext(), getString(R.string.login_toast_login_failed),
                                 Toast.LENGTH_SHORT).show();
-                    } else if (appResponse.getDataString().matches("\\d{3}")) {
-                        Toast.makeText(getContext(), appResponse.getDataString(),
-                                Toast.LENGTH_SHORT).show();
+                        viewModel.clearLiveDara();
                     } else {
                         viewModel.saveUserToken(appResponse.getDataToken().getUserToken(),
                                 sharedPreferences);
@@ -80,9 +81,11 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        binding.btnRegistration.setOnClickListener(v ->
-                Navigation.findNavController(binding.getRoot())
-                        .navigate(R.id.action_loginFragment_to_registerFragment));
+        binding.btnRegistration.setOnClickListener(v -> {
+            hideKeyboard();
+            Navigation.findNavController(binding.getRoot())
+                    .navigate(R.id.action_loginFragment_to_registerFragment);
+        });
 
         binding.imageBtnShowPassword.setOnClickListener(v -> {
             if (isPassVisible) {
@@ -97,6 +100,12 @@ public class LoginFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setUserInfo();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
     }
 
     private void setArguments() {
@@ -121,7 +130,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void hidePassword() {
-        binding.etLogin.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        binding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         binding.imageBtnShowPassword.setImageResource(R.drawable.ic_remove_eye_gray_24dp);
         isPassVisible = false;
     }

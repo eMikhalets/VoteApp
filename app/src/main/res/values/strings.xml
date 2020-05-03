@@ -45,8 +45,9 @@
     <string name="register_toast_register_failed">Почта или логин заняты</string>
 
     <!-- PROFILE -->
-    <string name="profile_text_greeting">Привет, %s!</string>
-    <string name="profile_text_user_token">Твой токен: %s!</string>
+    <string name="profile_tester_name_label">Никнейм</string>
+    <string name="profile_login_label">Логин</string>
+    <string name="profile_login_email">Электронная почта</string>
     <string name="profile_btn_logout">Выйти</string>
 
     <!-- USER IMAGES -->

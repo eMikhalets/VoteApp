@@ -38,22 +38,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        showProgressBar();
         String textRating = context.getString(
                 R.string.image_adapter_rating, images.get(position).getRate());
+        binding.textItemImageRate.setText(textRating);
 
-        Picasso.get().load(images.get(position).getLink())
-                .into(binding.imageItem, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        hideProgressBar();
-                        binding.textItemImageRate.setText(textRating);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                    }
-                });
+        Picasso.get().load(images.get(position).getLink()).into(binding.imageItem);
     }
 
     @Override

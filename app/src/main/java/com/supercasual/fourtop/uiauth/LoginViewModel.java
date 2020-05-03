@@ -20,6 +20,10 @@ public class LoginViewModel extends ViewModel {
         repository = new AuthRepository();
     }
 
+    public void clearLiveDara() {
+        liveData = new MediatorLiveData<>();
+    }
+
     public void saveUserToken(String userToken, SharedPreferences sp) {
         Editor editor = sp.edit();
         editor.putString(Constants.SHARED_TOKEN, userToken);

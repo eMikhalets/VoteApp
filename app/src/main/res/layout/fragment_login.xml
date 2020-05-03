@@ -6,14 +6,6 @@
 
     <data>
 
-        <variable
-            name="login"
-            type="String" />
-
-        <variable
-            name="password"
-            type="String" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,73 +13,74 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_auth_label"
-            style="@style/TextLabelStyle"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/login_text_label"
-            android:textColor="@android:color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/et_login"
-            style="@style/EditTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:hint="@string/login_edit_text_hint_login"
-            android:text="@{login}"
-            android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_auth_label" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_password"
-            style="@style/EditTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/login_edit_text_hint_pass"
-            android:text="@{password}"
-            android:inputType="textPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_login" />
+                <TextView
+                    android:id="@+id/text_auth_label"
+                    style="@style/TextLabelStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/login_text_label"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/image_btn_show_password"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_remove_eye_gray_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/et_password"
-            app:layout_constraintEnd_toEndOf="@+id/et_password"
-            app:layout_constraintTop_toBottomOf="@+id/et_login" />
+                <EditText
+                    android:id="@+id/et_login"
+                    style="@style/EditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:hint="@string/login_edit_text_hint_login"
+                    android:inputType="textEmailAddress"
+                    app:layout_constraintTop_toBottomOf="@+id/text_auth_label" />
 
-        <Button
-            android:id="@+id/btn_login"
-            style="@style/ButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/login_btn_btn_login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_password" />
+                <EditText
+                    android:id="@+id/et_password"
+                    style="@style/EditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/login_edit_text_hint_pass"
+                    android:inputType="textPassword"
+                    app:layout_constraintTop_toBottomOf="@+id/et_login" />
 
-        <Button
-            android:id="@+id/btn_registration"
-            style="@style/ButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/login_btn_btn_register"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+                <ImageButton
+                    android:id="@+id/image_btn_show_password"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_remove_eye_gray_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_password"
+                    app:layout_constraintEnd_toEndOf="@+id/et_password"
+                    app:layout_constraintTop_toBottomOf="@+id/et_login" />
+
+                <Button
+                    android:id="@+id/btn_login"
+                    style="@style/ButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/login_btn_btn_login"
+                    app:layout_constraintTop_toBottomOf="@+id/et_password" />
+
+                <Button
+                    android:id="@+id/btn_registration"
+                    style="@style/ButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_btn_btn_register"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

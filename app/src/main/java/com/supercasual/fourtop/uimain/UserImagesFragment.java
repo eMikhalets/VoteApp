@@ -61,6 +61,7 @@ public class UserImagesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
 
         List<DataImages> images = new ArrayList<>();
         binding.recyclerUserImages.setHasFixedSize(true);
@@ -108,10 +109,10 @@ public class UserImagesFragment extends Fragment {
     }
 
     private void setArguments() {
-        Bundle args = this.getArguments();
+        Bundle args = getArguments();
 
         if (args != null) {
-            token = args.getString(Constants.SHARED_TOKEN);
+            token = args.getString(Constants.ARGS_TOKEN);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.supercasual.fourtop.uimain;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class VotingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (viewModel.getLiveData().getValue() != null) {
+        if (viewModel.getLiveData().getValue() == null) {
             startVoting();
         }
 
@@ -62,6 +63,10 @@ public class VotingFragment extends Fragment {
     }
 
     private void startVoting() {
+        if (viewModel.getLiveData().getValue() != null) {
+            viewModel.clearLiveData();
+        }
+
         LiveData<AppResponse> liveData = viewModel.voteCreate(token);
         liveData.observe(getViewLifecycleOwner(), appResponse -> {
             setImages(appResponse.getDataVoting().getImages());
@@ -81,8 +86,8 @@ public class VotingFragment extends Fragment {
         liveData.observe(getViewLifecycleOwner(), appResponse -> {
             Toast.makeText(getContext(), "Голосование за " + imageNumber,
                     Toast.LENGTH_SHORT).show();
-            viewModel.clearLiveData();
-            startVoting();
         });
+
+        startVoting();
     }
 }

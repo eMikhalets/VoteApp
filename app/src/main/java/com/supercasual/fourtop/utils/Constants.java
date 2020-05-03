@@ -8,6 +8,5 @@ public class Constants {
 
     // Bundle
     public static final String ARGS_TOKEN = "bundleUserToken";
-    public static final String ARGS_LOGIN = "bundleLogin";
     public static final String ARGS_PASS = "bundlePassword";
 }

@@ -1,11 +1,13 @@
 package com.supercasual.fourtop.uiauth;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,6 +55,10 @@ public class RegisterFragment extends Fragment {
         binding.btnRegister.setOnClickListener(v -> {
             setUserDataFromFields();
 
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                    Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+
             if (isFieldsFilled()) {
                 if (!isPasswordsMatched()) {
                     Toast.makeText(getContext(), getString(R.string.register_toast_no_match_pass),
@@ -64,7 +70,7 @@ public class RegisterFragment extends Fragment {
                         if (appResponse.getDataString().equals("500")) {
                             Toast.makeText(getContext(), getString(R.string.register_toast_register_failed),
                                     Toast.LENGTH_SHORT).show();
-                        } else if (appResponse.getDataString().matches("\\d{3}")) {
+                        } else if (appResponse.getDataString().matches("\\s{3}")) {
                             Toast.makeText(getContext(), appResponse.getDataString(),
                                     Toast.LENGTH_SHORT).show();
                         } else {

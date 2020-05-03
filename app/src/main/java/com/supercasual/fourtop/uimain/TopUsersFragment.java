@@ -7,36 +7,21 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.supercasual.fourtop.R;
 import com.supercasual.fourtop.databinding.FragmentTopUsersBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
 public class TopUsersFragment extends Fragment {
 
     private FragmentTopUsersBinding binding;
-
-    private UserAdapter userAdapter;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_users, container,
                 false);
-        binding.recyclerTopUsers.setHasFixedSize(true);
-
-        List<User> users = new ArrayList<>();
-        users.add(new User(CurrentUser.get().getLogin()));
-        users.add(new User("Все остальные"));
-
-        binding.recyclerTopUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-        userAdapter = new UserAdapter(getContext(), users);
-        binding.recyclerTopUsers.setAdapter(userAdapter);
-
         return binding.getRoot();
     }
 }
