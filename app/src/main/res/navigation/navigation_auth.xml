@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.supercasual.fourtop.uiauth.LoginFragment"
-        android:label="@string/label_fragment_login"
+        android:label="@string/login_label"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.supercasual.fourtop.uiauth.RegisterFragment"
-        android:label="@string/label_fragment_register"
+        android:label="@string/register_label"
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"

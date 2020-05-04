@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -15,37 +15,10 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="ParentLayout">
-        <item name="android:background">@color/colorBackground</item>
-        <item name="android:padding">@dimen/parent_layout_padding</item>
-    </style>
-
-    <style name="TextStyle">
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-
     <style name="TextNavHeaderStyle">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="TextLabelStyle" parent="TextStyle">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">30sp</item>
-    </style>
-
-    <style name="EditTextStyle" parent="@android:style/Widget.EditText">
-        <item name="android:background">@drawable/edit_text_background</item>
-        <item name="android:padding">12dp</item>
-    </style>
-
-    <style name="ButtonStyle" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/btn_background</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:padding">8sp</item>
-        <item name="android:layout_marginTop">8sp</item>
     </style>
 
 </resources>

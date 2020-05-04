@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Four Top</string>
-    <string name="text_dev">Раздел находится в разработке</string>
+    <string name="section_in_development">Раздел находится в разработке</string>
 
-    <!-- FRAGMENTS LABELS -->
+    <!-- FRAGMENTS LABELS for navigation component -->
     <string name="label_fragment_login">Авторизация</string>
     <string name="label_fragment_register">Регистрация</string>
     <string name="label_fragment_home">Главная</string>
@@ -20,45 +20,48 @@
     <string name="nav_top_users">Топ пользователей</string>
 
     <!-- LOGIN -->
-    <string name="login_text_label">АВТОРИЗАЦИЯ</string>
-    <string name="login_edit_text_hint_login">Логин</string>
-    <string name="login_edit_text_hint_pass">Пароль</string>
-    <string name="login_btn_btn_login">Войти</string>
-    <string name="login_btn_btn_register">Зарегистироваться</string>
-    <string name="login_toast_empty_data">Все поля должны быть заполнены</string>
-    <string name="login_toast_login_failed">Неверно введены логин или пароль</string>
+    <string name="login_label">АВТОРИЗАЦИЯ</string>
+    <string name="login_et_hint_login">Логин</string>
+    <string name="login_et_hint_pass">Пароль</string>
+    <string name="login_btn_auth">Войти</string>
+    <string name="login_btn_register">Зарегистироваться</string>
+    <string name="login_toast_empty_login">Введите логин</string>
+    <string name="login_toast_empty_pass">Введите пароль</string>
+    <string name="login_toast_login_failed">Ошибка авторизации</string>
 
     <!-- REGISTER -->
-    <string name="register_text_label">РЕГИСТРАЦИЯ</string>
-    <string name="register_edit_text_hint_login">Логин</string>
-    <string name="register_edit_text_hint_email">Электронная почта</string>
-    <string name="register_edit_text_hint_pass">Пароль</string>
-    <string name="register_edit_text_hint_confirm_pass">Подтвердите пароль</string>
-    <string name="register_edit_text_hint_name">Никнейм тестера</string>
-    <string name="register_btn_register">Зарегистироваться</string>
-    <string name="register_text_test_app">ВНИМАНИЕ!!! Приложение находится в тестовом режиме, не
+    <string name="register_label">РЕГИСТРАЦИЯ</string>
+    <string name="register_et_hint_login">Логин</string>
+    <string name="register_et_hint_email">Электронная почта</string>
+    <string name="register_et_hint_pass">Пароль</string>
+    <string name="register_et_hint_confirm_pass">Подтвердите пароль</string>
+    <string name="register_et_hint_name">Никнейм тестера</string>
+    <string name="register_btn_registration">Зарегистироваться</string>
+    <string name="register_attention">ВНИМАНИЕ!!! Приложение находится в тестовом режиме, не
         используйте настоящие пароли и электронную почту!!!</string>
+    <string name="register_toast_fail_registration">Ошибка регистрации</string>
+    <string name="register_toast_login_is_busy">Логин занят</string>
+    <string name="register_toast_email_is_busy">Почта занята</string>
+    <string name="register_toast_empty_login">Введите логин</string>
+    <string name="register_toast_empty_email">Введите почту</string>
+    <string name="register_toast_empty_pass">Введите пароль</string>
+    <string name="register_toast_empty_conf_pass">Подтвердите пароль</string>
     <string name="register_toast_no_match_pass">Пароли не совпадают</string>
-    <string name="register_toast_empty_fields">Все поля должны быть заполнены</string>
-    <string name="register_text_loginBusy">Логин занят</string>
-    <string name="register_text_emailBusy">Почта занята</string>
-    <string name="register_toast_register_failed">Почта или логин заняты</string>
+    <string name="register_toast_empty_name">Введите никнейм</string>
 
     <!-- PROFILE -->
-    <string name="profile_tester_name_label">Никнейм</string>
+    <string name="profile_name_label">Никнейм</string>
     <string name="profile_login_label">Логин</string>
-    <string name="profile_login_email">Электронная почта</string>
+    <string name="profile_email_label">Электронная почта</string>
     <string name="profile_btn_logout">Выйти</string>
 
     <!-- USER IMAGES -->
-    <string name="user_images_btn_upload">Добавить фото</string>
     <string name="menu_user_images_add">Добавить</string>
-
-    <!-- VOTING -->
-    <string name="voting_btn_vote">Проголосовать</string>
 
     <!-- IMAGE ADAPTER -->
     <string name="image_adapter_rating">Рейтинг: %d</string>
     <string name="image_item_desc">Image item</string>
     <string name="menu_item_image_delete">Удалить</string>
+
+    <!-- OTHER -->
 </resources>

@@ -6,16 +6,14 @@
     </data>
 
     <FrameLayout
-        style="@style/ParentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            style="@style/TextStyle"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/text_dev" />
+            android:text="@string/section_in_development" />
 
     </FrameLayout>
 </layout>

@@ -7,6 +7,7 @@ public class Constants {
     public static final String SHARED_TOKEN = "sharedUserToken";
 
     // Bundle
-    public static final String ARGS_TOKEN = "bundleUserToken";
-    public static final String ARGS_PASS = "bundlePassword";
+    public static final String ARGS_TOKEN = "args_user_token";
+    public static final String ARGS_LOGIN = "args_login";
+    public static final String ARGS_PASS = "args_password";
 }

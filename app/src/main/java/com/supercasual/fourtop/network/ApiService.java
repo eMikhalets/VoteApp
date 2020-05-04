@@ -25,11 +25,11 @@ public interface ApiService {
 
     @Multipart
     @POST("api/register/email")
-    Call<ResponseSimple> registerEmail(@Part("email") RequestBody email);
+    Call<ResponseSimple> checkEmail(@Part("email") RequestBody email);
 
     @Multipart
     @POST("api/register/login")
-    Call<ResponseSimple> registerLogin(@Part("login") RequestBody login);
+    Call<ResponseSimple> checkLogin(@Part("login") RequestBody login);
 
     @Multipart
     @POST("api/login")

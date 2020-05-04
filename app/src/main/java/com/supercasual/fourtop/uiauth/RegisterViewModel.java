@@ -1,26 +1,46 @@
 package com.supercasual.fourtop.uiauth;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.supercasual.fourtop.network.pojo.AppResponse;
 
 public class RegisterViewModel extends ViewModel {
 
-    private MediatorLiveData<AppResponse> liveData;
+    private MutableLiveData<AppResponse> liveDataLogin;
+    private MutableLiveData<AppResponse> liveDataEmail;
+    private MutableLiveData<AppResponse> liveDataRegister;
     private AuthRepository repository;
 
     public RegisterViewModel() {
-        liveData = new MediatorLiveData<>();
+        liveDataLogin = new MutableLiveData<>();
+        liveDataEmail = new MutableLiveData<>();
+        liveDataRegister = new MutableLiveData<>();
         repository = new AuthRepository();
     }
 
-    public LiveData<AppResponse> register(String email, String login, String password, String name) {
-        liveData.addSource(
-                repository.registerRequest(email, login, password, name),
-                appResponse -> liveData.setValue(appResponse)
-        );
-        return liveData;
+    public LiveData<AppResponse> getLiveDataLogin() {
+        return liveDataLogin;
+    }
+
+    public LiveData<AppResponse> getLiveDataEmail() {
+        return liveDataEmail;
+    }
+
+    public LiveData<AppResponse> getLiveDataRegister() {
+        return liveDataRegister;
+    }
+
+    public void checkLogin(String login) {
+        liveDataLogin = repository.checkLoginRequest(login);
+    }
+
+    public void checkEmail(String email) {
+        liveDataEmail = repository.checkEmailRequest(email);
+    }
+
+    public void register(String email, String login, String password, String name) {
+        liveDataRegister = repository.registerRequest(email, login, password, name);
     }
 }
