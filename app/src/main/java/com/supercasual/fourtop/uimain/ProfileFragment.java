@@ -50,10 +50,10 @@ public class ProfileFragment extends Fragment {
         viewModel.profile(token);
         viewModel.getLiveData().observe(getViewLifecycleOwner(), appResponse -> {
             if (appResponse.getDataProfile() != null) {
-                binding.setProfile(appResponse.getDataProfile());
+                binding.setViewModel(viewModel);
             } else {
-                // Temp
-                Toast.makeText(getContext(), appResponse.getDataString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.loading_error),
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }

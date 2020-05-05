@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         getIntentExtra();
-        setNavHeaderInfo();
 
         navController = Navigation.findNavController(this, R.id.main_nav_host);
         NavigationUI.setupActionBarWithNavController(this, navController, binding.layoutDrawer);
@@ -94,12 +93,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         login = intent.getStringExtra(Constants.ARGS_LOGIN);
         token = intent.getStringExtra(Constants.ARGS_TOKEN);
-    }
-
-    private void setNavHeaderInfo() {
-        // TODO: don't work
-        navHeaderBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.nav_header,
-                binding.navigationView, false);
-        navHeaderBinding.navHeaderTextToken.setText(token);
     }
 }

@@ -28,13 +28,10 @@ public class MainRepository {
                          public void onResponse(Call<ResponseProfile> call, Response<ResponseProfile> response) {
                              int code = response.body().getStatus();
 
-                             switch (code) {
-                                 case 200:
-                                     liveData.setValue(new AppResponse(response.body().getData()));
-                                     break;
-                                 default:
-                                     liveData.setValue(new AppResponse(String.valueOf(code)));
-                                     break;
+                             if (code == 200) {
+                                 liveData.setValue(new AppResponse(response.body().getData()));
+                             } else {
+                                 liveData.setValue(new AppResponse(""));
                              }
                          }
 

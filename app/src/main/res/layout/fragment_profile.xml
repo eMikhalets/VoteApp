@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="profile"
-            type="com.supercasual.fourtop.network.pojo.DataProfile" />
+            name="viewModel"
+            type="com.supercasual.fourtop.uimain.ProfileViewModel" />
     </data>
 
     <LinearLayout
@@ -23,11 +23,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_tester_name"
+            android:id="@+id/text_tester_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16sp"
-            android:text="@{profile.testerName}" />
+            android:text="@{viewModel.liveData.dataProfile.testerName}" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,11 +38,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_login"
+            android:id="@+id/text_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16sp"
-            android:text="@{profile.login}" />
+            android:text="@{viewModel.liveData.dataProfile.login}" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,10 +53,10 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_email"
+            android:id="@+id/text_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{profile.email}" />
+            android:text="@{viewModel.liveData.dataProfile.email}" />
 
         <Button
             android:id="@+id/btn_logout"

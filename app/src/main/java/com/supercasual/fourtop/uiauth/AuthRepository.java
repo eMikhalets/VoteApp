@@ -92,7 +92,7 @@ public class AuthRepository {
                                      liveData.setValue(new AppResponse(response.body().getData()));
                                      break;
                                  default:
-                                     liveData.setValue(new AppResponse(String.valueOf(code)));
+                                     liveData.setValue(new AppResponse(""));
                                      break;
                              }
                          }
@@ -121,7 +121,7 @@ public class AuthRepository {
                                      liveData.setValue(new AppResponse(response.body().getData()));
                                      break;
                                  default:
-                                     liveData.setValue(new AppResponse(String.valueOf(code)));
+                                     liveData.setValue(new AppResponse(""));
                                      break;
                              }
                          }

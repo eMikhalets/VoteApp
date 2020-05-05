@@ -8,17 +8,34 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:background="#404040"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/navHeader_text_token"
+            android:id="@+id/text_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:textColor="@android:color/white"
-            tools:text="879d879879dhssj07d973jb368jhb86jhb38jbh38365vjh836jhvb" />
+            tools:text="Имя" />
+
+        <TextView
+            android:id="@+id/text_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="@android:color/white"
+            tools:text="login" />
+
+        <TextView
+            android:id="@+id/text_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="@android:color/white"
+            tools:text="email" />
 
     </LinearLayout>
 </layout>

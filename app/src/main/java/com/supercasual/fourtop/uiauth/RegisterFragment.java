@@ -64,6 +64,7 @@ public class RegisterFragment extends Fragment {
         if (!login.isEmpty() && !email.isEmpty() && !password.isEmpty() &&
                 !confPassword.isEmpty() && !nickname.isEmpty() &&
                 !isLoginBusy && !isEmailBusy && isPassMatched) {
+            clearFieldsFocus();
             viewModel.register(email, login, password, nickname);
             viewModel.getLiveDataRegister().observe(getViewLifecycleOwner(), appResponse -> {
                 String response = appResponse.getDataString();
@@ -74,6 +75,24 @@ public class RegisterFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void clearFieldsFocus() {
+        if (binding.etLogin.hasFocus()) {
+            binding.etLogin.clearFocus();
+        }
+        if (binding.etEmail.hasFocus()) {
+            binding.etEmail.clearFocus();
+        }
+        if (binding.etPass.hasFocus()) {
+            binding.etPass.clearFocus();
+        }
+        if (binding.etConfirmPass.hasFocus()) {
+            binding.etConfirmPass.clearFocus();
+        }
+        if (binding.etNickname.hasFocus()) {
+            binding.etNickname.clearFocus();
         }
     }
 

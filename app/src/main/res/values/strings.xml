@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Four Top</string>
     <string name="section_in_development">Раздел находится в разработке</string>
+    <string name="loading_error">Ошибка загрузки данных</string>
 
     <!-- FRAGMENTS LABELS for navigation component -->
     <string name="label_fragment_login">Авторизация</string>

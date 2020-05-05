@@ -69,14 +69,11 @@ public class LoginFragment extends Fragment {
     }
 
     private void onBtnLoginClicked() {
-        if (login.isEmpty()) {
-            binding.tilLogin.setError(getString(R.string.login_toast_empty_login));
-        }
-        if (password.isEmpty()) {
-            binding.tilPass.setError(getString(R.string.login_toast_empty_pass));
-        }
+        hideKeyboard();
+        checkFieldsFilling();
 
         if (!login.isEmpty() && !password.isEmpty()) {
+            clearFieldsFocus();
             viewModel.login(login, password);
             viewModel.getLiveData().observe(getViewLifecycleOwner(), appResponse -> {
                 if (appResponse.getDataToken() != null) {
@@ -88,6 +85,24 @@ public class LoginFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void clearFieldsFocus() {
+        if (binding.etLogin.hasFocus()) {
+            binding.etLogin.clearFocus();
+        }
+        if (binding.etPass.hasFocus()) {
+            binding.etPass.clearFocus();
+        }
+    }
+
+    private void checkFieldsFilling() {
+        if (login.isEmpty()) {
+            binding.tilLogin.setError(getString(R.string.login_toast_empty_login));
+        }
+        if (password.isEmpty()) {
+            binding.tilPass.setError(getString(R.string.login_toast_empty_pass));
         }
     }
 
