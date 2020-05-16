@@ -21,7 +21,7 @@ public class ResponseImages {
     private String errorUcode;
     @SerializedName("data")
     @Expose
-    private List<DataImages> data;
+    private List<DataImage> data;
 
     public int getStatus() {
         return status;
@@ -55,11 +55,11 @@ public class ResponseImages {
         this.errorUcode = errorUcode;
     }
 
-    public List<DataImages> getData() {
+    public List<DataImage> getData() {
         return data;
     }
 
-    public void setData(List<DataImages> data) {
+    public void setData(List<DataImage> data) {
         this.data = data;
     }
 }

@@ -2,13 +2,8 @@ package com.supercasual.fourtop.uiauth;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
@@ -22,7 +17,8 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_auth);
+        binding = ActivityAuthBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         navController = Navigation.findNavController(this, R.id.auth_nav_host);
     }
 

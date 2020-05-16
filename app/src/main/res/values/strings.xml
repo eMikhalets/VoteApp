@@ -63,6 +63,7 @@
     <string name="image_adapter_rating">Рейтинг: %d</string>
     <string name="image_item_desc">Image item</string>
     <string name="menu_item_image_delete">Удалить</string>
+    <string name="item_image_error">Ошибка загрузки фотографии</string>
 
     <!-- OTHER -->
 </resources>

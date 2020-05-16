@@ -1,8 +1,8 @@
 package com.supercasual.fourtop.network;
 
+import com.supercasual.fourtop.network.pojo.ResponseBase;
 import com.supercasual.fourtop.network.pojo.ResponseImages;
 import com.supercasual.fourtop.network.pojo.ResponseProfile;
-import com.supercasual.fourtop.network.pojo.ResponseSimple;
 import com.supercasual.fourtop.network.pojo.ResponseToken;
 import com.supercasual.fourtop.network.pojo.ResponseVoting;
 
@@ -17,7 +17,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/register")
-    Call<ResponseSimple> register(
+    Call<ResponseBase> register(
             @Part("email") RequestBody email,
             @Part("login") RequestBody login,
             @Part("password") RequestBody password,
@@ -25,11 +25,11 @@ public interface ApiService {
 
     @Multipart
     @POST("api/register/email")
-    Call<ResponseSimple> checkEmail(@Part("email") RequestBody email);
+    Call<ResponseBase> checkEmail(@Part("email") RequestBody email);
 
     @Multipart
     @POST("api/register/login")
-    Call<ResponseSimple> checkLogin(@Part("login") RequestBody login);
+    Call<ResponseBase> checkLogin(@Part("login") RequestBody login);
 
     @Multipart
     @POST("api/login")
@@ -39,11 +39,11 @@ public interface ApiService {
 
     @Multipart
     @POST("api/logout")
-    Call<ResponseSimple> logout(@Part("user_token") RequestBody userToken);
+    Call<ResponseBase> logout(@Part("user_token") RequestBody userToken);
 
     @Multipart
     @POST("api/token")
-    Call<ResponseSimple> token(@Part("user_token") RequestBody body);
+    Call<ResponseBase> token(@Part("user_token") RequestBody body);
 
     @Multipart
     @POST("api/profile")
@@ -52,9 +52,9 @@ public interface ApiService {
 
     @Multipart
     @POST("api/gallery/add")
-    Call<ResponseSimple> galleryAdd(
+    Call<ResponseBase> galleryAdd(
             @Part("user_token") RequestBody userToken,
-            @Part("file") MultipartBody.Part file);
+            @Part("file\"; filename=\"image.png\"") RequestBody image);
 
     @Multipart
     @POST("api/gallery")
@@ -65,7 +65,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/gallery/remove")
-    Call<ResponseSimple> galleryRemove(
+    Call<ResponseBase> galleryRemove(
             @Part("user_token") RequestBody userToken,
             @Part("id") RequestBody id);
 
@@ -76,7 +76,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/vote")
-    Call<ResponseSimple> vote(
+    Call<ResponseBase> vote(
             @Part("user_token") RequestBody userToken,
             @Part("vote_token") RequestBody voteToken,
             @Part("vote") RequestBody vote);

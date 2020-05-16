@@ -1,4 +1,4 @@
-package com.supercasual.fourtop.uiauth;
+package com.supercasual.fourtop.uiauth.logo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.supercasual.fourtop.R;
@@ -26,60 +25,70 @@ public class LogoFragment extends Fragment {
 
     private FragmentLogoBinding binding;
     private LogoViewModel viewModel;
-    private String token;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_logo, container,
-                false);
+        binding = FragmentLogoBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(LogoViewModel.class);
-        viewIsLoaded();
-    }
+        viewModel = new ViewModelProvider(requireActivity()).get(LogoViewModel.class);
 
-    public void viewIsLoaded() {
-        loadUserToken();
-
-        if (token != null && !token.isEmpty()) {
-            viewModel.checkToken(token);
-        } else {
-            openLoginFragment();
-        }
-
-        viewModel.getLiveData().observe(getViewLifecycleOwner(), appResponse -> {
-            String response = appResponse.getDataString();
-
-            if (response.equals(token)) {
-                openMainActivity(token);
+        viewModel.getApiToken().observe(getViewLifecycleOwner(), s -> {
+            if (s.equals("VALID")) {
+                openMainScreen(viewModel.getUserToken().getValue());
+            } else if (s.equals("INVALID")) {
+                openLoginScreen();
             } else {
-                openLoginFragment();
+                binding.textError.setText(s);
             }
         });
+
+        loadUserToken();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
+
+    /**
+     * Get user token from SharedPreferences and set it in viewModel.
+     */
     private void loadUserToken() {
         SharedPreferences sp = requireActivity().getSharedPreferences(
                 Constants.SHARED_FILE, Context.MODE_PRIVATE);
-
-        if (sp.contains(Constants.SHARED_TOKEN)) {
-            token = sp.getString(Constants.SHARED_TOKEN, "");
+        String token = sp.getString(Constants.SHARED_TOKEN, "");
+        if (!token.isEmpty()) {
+            viewModel.getUserToken().setValue(token);
+            viewModel.tokenRequest(token);
+        } else {
+            openLoginScreen();
         }
     }
 
-    private void openMainActivity(String userToken) {
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.putExtra(Constants.ARGS_TOKEN, userToken);
-        startActivity(intent);
+    /**
+     * Go to MainActivity if token is exist
+     * @param token user identifier string for interacting with the server
+     */
+    private void openMainScreen(String token) {
+        if (token != null && !token.isEmpty()) {
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra(Constants.ARGS_TOKEN, token);
+            startActivity(intent);
+        }
     }
 
-    private void openLoginFragment() {
+    /**
+     * Navigate to LoginFragment
+     */
+    private void openLoginScreen() {
         Navigation.findNavController(binding.getRoot())
                 .navigate(R.id.action_logoFragment_to_loginFragment);
     }

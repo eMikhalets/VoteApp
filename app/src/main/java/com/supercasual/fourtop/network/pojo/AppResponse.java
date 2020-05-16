@@ -5,14 +5,11 @@ import java.util.List;
 public class AppResponse {
 
     private String dataString;
-    private List<DataImages> dataImages;
+    private List<DataImage> dataImages;
     private DataToken dataToken;
     private DataVoting dataVoting;
     private DataProfile dataProfile;
 
-    /**
-     * Constructors
-     */
     public AppResponse() {
     }
 
@@ -20,7 +17,7 @@ public class AppResponse {
         this.dataString = dataString;
     }
 
-    public AppResponse(List<DataImages> dataImages) {
+    public AppResponse(List<DataImage> dataImages) {
         this.dataImages = dataImages;
     }
 
@@ -36,46 +33,23 @@ public class AppResponse {
         this.dataProfile = dataProfile;
     }
 
-    /**
-     * Getters and setters
-     */
     public String getDataString() {
         return dataString;
     }
 
-    public void setDataString(String dataString) {
-        this.dataString = dataString;
-    }
-
-    public List<DataImages> getDataImages() {
+    public List<DataImage> getDataImages() {
         return dataImages;
-    }
-
-    public void setDataImages(List<DataImages> dataImages) {
-        this.dataImages = dataImages;
     }
 
     public DataToken getDataToken() {
         return dataToken;
     }
 
-    public void setDataToken(DataToken dataToken) {
-        this.dataToken = dataToken;
-    }
-
     public DataVoting getDataVoting() {
         return dataVoting;
     }
 
-    public void setDataVoting(DataVoting dataVoting) {
-        this.dataVoting = dataVoting;
-    }
-
     public DataProfile getDataProfile() {
         return dataProfile;
-    }
-
-    public void setDataProfile(DataProfile dataProfile) {
-        this.dataProfile = dataProfile;
     }
 }

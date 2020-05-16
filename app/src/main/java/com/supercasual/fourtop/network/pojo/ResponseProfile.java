@@ -19,7 +19,7 @@ public class ResponseProfile {
     private String errorUcode;
     @SerializedName("data")
     @Expose
-    private DataToken data;
+    private DataProfile data;
 
     public int getStatus() {
         return status;
@@ -53,11 +53,11 @@ public class ResponseProfile {
         this.errorUcode = errorUcode;
     }
 
-    public DataToken getData() {
+    public DataProfile getData() {
         return data;
     }
 
-    public void setData(DataToken data) {
+    public void setData(DataProfile data) {
         this.data = data;
     }
 }

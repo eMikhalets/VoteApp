@@ -9,16 +9,16 @@ public class DataVoting {
 
     @SerializedName("photos")
     @Expose
-    private List<DataImages> images;
+    private List<DataImage> images;
     @SerializedName("vote_token")
     @Expose
     private String voteToken;
 
-    public List<DataImages> getImages() {
+    public List<DataImage> getImages() {
         return images;
     }
 
-    public void setImages(List<DataImages> images) {
+    public void setImages(List<DataImage> images) {
         this.images = images;
     }
 

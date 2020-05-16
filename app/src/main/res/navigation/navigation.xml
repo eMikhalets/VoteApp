@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:label="@string/label_fragment_home"
-        android:name="com.supercasual.fourtop.uimain.HomeFragment"
+        android:name="com.supercasual.fourtop.uimain.home.HomeFragment"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/profileFragment"
         android:label="@string/label_fragment_profile"
-        android:name="com.supercasual.fourtop.uimain.ProfileFragment"
+        android:name="com.supercasual.fourtop.uimain.profile.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profileFragment_to_homeFragment"
@@ -45,7 +45,7 @@
 
     <fragment
         android:id="@+id/userImagesFragment"
-        android:name="com.supercasual.fourtop.uimain.UserImagesFragment"
+        android:name="com.supercasual.fourtop.uimain.userimages.UserImagesFragment"
         android:label="@string/label_fragment_user_images"
         tools:layout="@layout/fragment_user_images" >
         <action
@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/votingFragment"
-        android:name="com.supercasual.fourtop.uimain.VotingFragment"
+        android:name="com.supercasual.fourtop.uimain.voting.VotingFragment"
         android:label="@string/label_fragment_voting"
         tools:layout="@layout/fragment_voting" >
         <action
@@ -68,7 +68,7 @@
     <fragment
         android:id="@+id/topImagesFragment"
         android:label="@string/label_fragment_top_images"
-        android:name="com.supercasual.fourtop.uimain.TopImagesFragment"
+        android:name="com.supercasual.fourtop.uimain.topimages.TopImagesFragment"
         tools:layout="@layout/fragment_top_images" >
         <action
             android:id="@+id/action_topImagesFragment_to_homeFragment"
@@ -79,7 +79,7 @@
     <fragment
         android:id="@+id/topUsersFragment"
         android:label="@string/label_fragment_top_users"
-        android:name="com.supercasual.fourtop.uimain.TopUsersFragment"
+        android:name="com.supercasual.fourtop.uimain.topusers.TopUsersFragment"
         tools:layout="@layout/fragment_top_users" >
         <action
             android:id="@+id/action_topUsersFragment_to_homeFragment"
