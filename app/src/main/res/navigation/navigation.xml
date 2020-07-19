@@ -6,85 +6,92 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
+        android:id="@+id/logoFragment"
+        android:name="com.ntech.fourtop.ui.logo.LogoFragment"
+        android:label="LogoFragment"
+        tools:layout="@layout/fragment_logo">
+        <action
+            android:id="@+id/action_logoFragment_to_loginFragment2"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_logoFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.ntech.fourtop.ui.login.LoginFragment"
+        android:label="@string/login_label"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment2"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.ntech.fourtop.ui.register.RegisterFragment"
+        android:label="@string/register_label"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/loginFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/homeFragment"
         android:label="@string/label_fragment_home"
-        android:name="com.supercasual.fourtop.uimain.home.HomeFragment"
+        android:name="com.ntech.fourtop.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
-            app:enterAnim="@anim/slide_right_in" />
+            android:id="@+id/action_homeFragment_to_profileFragment2"
+            app:destination="@id/profileFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_userImagesFragment"
-            app:destination="@id/userImagesFragment"
-            app:enterAnim="@anim/slide_right_in" />
+            android:id="@+id/action_homeFragment_to_userImagesFragment2"
+            app:destination="@id/userImagesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_votingFragment"
-            app:destination="@id/votingFragment"
-            app:enterAnim="@anim/slide_right_in" />
+            android:id="@+id/action_homeFragment_to_votingFragment2"
+            app:destination="@id/votingFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_topImagesFragment"
-            app:destination="@id/topImagesFragment"
-            app:enterAnim="@anim/slide_right_in" />
+            android:id="@+id/action_homeFragment_to_topImagesFragment2"
+            app:destination="@id/topImagesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_topUsersFragment"
-            app:destination="@id/topUsersFragment"
-            app:enterAnim="@anim/slide_right_in" />
+            android:id="@+id/action_homeFragment_to_topUsersFragment2"
+            app:destination="@id/topUsersFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
         android:label="@string/label_fragment_profile"
-        android:name="com.supercasual.fourtop.uimain.profile.ProfileFragment"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_right_out" />
-    </fragment>
+        android:name="com.ntech.fourtop.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/userImagesFragment"
-        android:name="com.supercasual.fourtop.uimain.userimages.UserImagesFragment"
+        android:name="com.ntech.fourtop.ui.userimages.UserImagesFragment"
         android:label="@string/label_fragment_user_images"
-        tools:layout="@layout/fragment_user_images" >
-        <action
-            android:id="@+id/action_userImagesFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_right_out" />
-    </fragment>
+        tools:layout="@layout/fragment_user_images" />
 
     <fragment
         android:id="@+id/votingFragment"
-        android:name="com.supercasual.fourtop.uimain.voting.VotingFragment"
+        android:name="com.ntech.fourtop.ui.voting.VotingFragment"
         android:label="@string/label_fragment_voting"
-        tools:layout="@layout/fragment_voting" >
-        <action
-            android:id="@+id/action_votingFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_right_out" />
-    </fragment>
+        tools:layout="@layout/fragment_voting" />
 
     <fragment
         android:id="@+id/topImagesFragment"
         android:label="@string/label_fragment_top_images"
-        android:name="com.supercasual.fourtop.uimain.topimages.TopImagesFragment"
-        tools:layout="@layout/fragment_top_images" >
-        <action
-            android:id="@+id/action_topImagesFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_right_out" />
-    </fragment>
+        android:name="com.ntech.fourtop.ui.topimages.TopImagesFragment"
+        tools:layout="@layout/fragment_top_images" />
 
     <fragment
         android:id="@+id/topUsersFragment"
         android:label="@string/label_fragment_top_users"
-        android:name="com.supercasual.fourtop.uimain.topusers.TopUsersFragment"
-        tools:layout="@layout/fragment_top_users" >
-        <action
-            android:id="@+id/action_topUsersFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_right_out" />
-    </fragment>
+        android:name="com.ntech.fourtop.ui.topusers.TopUsersFragment"
+        tools:layout="@layout/fragment_top_users" />
 
 </navigation>
