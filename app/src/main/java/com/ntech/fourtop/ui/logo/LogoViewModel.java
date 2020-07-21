@@ -58,7 +58,7 @@ public class LogoViewModel extends ViewModel {
 
     private void onSuccess(ResponseBase response) {
         int status = response.getStatus();
-        Timber.d("Request status %d", status);
+        Timber.d("Check token request status %d", status);
 
         switch (status) {
             case 200:

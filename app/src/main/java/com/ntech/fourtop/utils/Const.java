@@ -1,6 +1,8 @@
 package com.ntech.fourtop.utils;
 
 import android.Manifest;
+import android.app.Activity;
+import android.view.inputmethod.InputMethodManager;
 
 public class Const {
 
@@ -19,4 +21,9 @@ public class Const {
     public static final int READ_EXTERNAL_REQUEST = 1;
     public static final String[] READ_EXTERNAL_PERMISSION =
             {Manifest.permission.READ_EXTERNAL_STORAGE};
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 }

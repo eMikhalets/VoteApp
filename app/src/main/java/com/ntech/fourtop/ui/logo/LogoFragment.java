@@ -66,7 +66,8 @@ public class LogoFragment extends Fragment {
         navigateToHome();
     }
 
-    // Get user token from SharedPreferences and set it in viewModel.
+    // Get user token from SharedPreferences.
+    // Send token request or navigate to login view
     private void loadUserToken() {
         SharedPreferences sp = requireActivity().getSharedPreferences(
                 Const.SHARED_FILE, Context.MODE_PRIVATE);

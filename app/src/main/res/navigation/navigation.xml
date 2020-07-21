@@ -11,7 +11,7 @@
         android:label="LogoFragment"
         tools:layout="@layout/fragment_logo">
         <action
-            android:id="@+id/action_logoFragment_to_loginFragment2"
+            android:id="@+id/action_logoFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_logoFragment_to_homeFragment"
@@ -24,7 +24,7 @@
         android:label="@string/login_label"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_registerFragment2"
+            android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
@@ -48,19 +48,19 @@
         android:name="com.ntech.fourtop.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment2"
+            android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_userImagesFragment2"
+            android:id="@+id/action_homeFragment_to_userImagesFragment"
             app:destination="@id/userImagesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_votingFragment2"
+            android:id="@+id/action_homeFragment_to_votingFragment"
             app:destination="@id/votingFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_topImagesFragment2"
+            android:id="@+id/action_homeFragment_to_topImagesFragment"
             app:destination="@id/topImagesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_topUsersFragment2"
+            android:id="@+id/action_homeFragment_to_topUsersFragment"
             app:destination="@id/topUsersFragment" />
     </fragment>
 

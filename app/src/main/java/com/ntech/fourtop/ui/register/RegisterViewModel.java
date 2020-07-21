@@ -4,148 +4,144 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.ntech.fourtop.data.AppRepository;
+import com.ntech.fourtop.network.pojo.ResponseBase;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
+
 public class RegisterViewModel extends ViewModel {
 
-    private RegisterRepository registerRepository;
-    private MutableLiveData<String> apiRegister;
-    private MutableLiveData<String> apiLoginCheck;
-    private MutableLiveData<String> apiEmailCheck;
-    private MutableLiveData<String> email;
-    private MutableLiveData<String> login;
-    private MutableLiveData<String> password;
-    private MutableLiveData<String> confPass;
-    private MutableLiveData<String> name;
-    private boolean emailIsFree;
-    private boolean loginIsFree;
-    private boolean passIsMatched;
-    private boolean emailIsValid;
-    private boolean loginIsValid;
-    private boolean passIsValid;
-    private boolean confPassIsValid;
-    private boolean nameIsValid;
+    private AppRepository repository;
+    private CompositeDisposable disposables;
+    private MutableLiveData<String> throwable;
+    private MutableLiveData<String> errorMessage;
+    private MutableLiveData<Integer> liveDataLogin;
+    private MutableLiveData<Integer> liveDataEmail;
+    private MutableLiveData<Integer> liveDataRegister;
 
     public RegisterViewModel() {
-        registerRepository = new RegisterRepository();
-        apiRegister = new MutableLiveData<>();
-        apiLoginCheck = new MutableLiveData<>();
-        apiEmailCheck = new MutableLiveData<>();
-        email = new MutableLiveData<>();
-        login = new MutableLiveData<>();
-        password = new MutableLiveData<>();
-        confPass = new MutableLiveData<>();
-        name = new MutableLiveData<>();
-        emailIsFree = false;
-        loginIsFree = false;
-        passIsMatched = false;
-        emailIsValid = false;
-        loginIsValid = false;
-        passIsValid = false;
-        confPassIsValid = false;
-        nameIsValid = false;
+        repository = AppRepository.get();
+        disposables = new CompositeDisposable();
+        throwable = new MutableLiveData<>();
+        errorMessage = new MutableLiveData<>();
+        liveDataLogin = new MutableLiveData<>();
+        liveDataEmail = new MutableLiveData<>();
+        liveDataRegister = new MutableLiveData<>();
     }
 
-    public LiveData<String> getApiRegister() {
-        return apiRegister;
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposables.clear();
     }
 
-    public LiveData<String> getApiLoginCheck() {
-        return apiLoginCheck;
+    public LiveData<String> getThrowable() {
+        return throwable;
     }
 
-    public LiveData<String> getApiEmailCheck() {
-        return apiEmailCheck;
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
-    public MutableLiveData<String> getEmail() {
-        return email;
+    public LiveData<Integer> getLiveDataLogin() {
+        return liveDataLogin;
     }
 
-    public MutableLiveData<String> getLogin() {
-        return login;
+    public LiveData<Integer> getLiveDataEmail() {
+        return liveDataEmail;
     }
 
-    public MutableLiveData<String> getPassword() {
-        return password;
-    }
-
-    public MutableLiveData<String> getConfPass() {
-        return confPass;
-    }
-
-    public MutableLiveData<String> getName() {
-        return name;
-    }
-
-    public void setEmailIsFree(boolean emailIsFree) {
-        this.emailIsFree = emailIsFree;
-    }
-
-    public void setLoginIsFree(boolean loginIsFree) {
-        this.loginIsFree = loginIsFree;
-    }
-
-    public void setPassIsMatched(boolean passIsMatched) {
-        this.passIsMatched = passIsMatched;
-    }
-
-    public void setEmailIsValid(boolean emailIsValid) {
-        this.emailIsValid = emailIsValid;
-    }
-
-    public void setLoginIsValid(boolean loginIsValid) {
-        this.loginIsValid = loginIsValid;
-    }
-
-    public void setPassIsValid(boolean passIsValid) {
-        this.passIsValid = passIsValid;
-    }
-
-    public void setConfPassIsValid(boolean confPassIsValid) {
-        this.confPassIsValid = confPassIsValid;
-    }
-
-    public void setNameIsValid(boolean nameIsValid) {
-        this.nameIsValid = nameIsValid;
-    }
-
-    public void checkPassMatch() {
-        String passStr = password.getValue();
-        String confPassStr = confPass.getValue();
-
-        if (passStr != null && !passStr.isEmpty() && confPassStr != null && !confPassStr.isEmpty()
-                && passStr.equals(confPassStr)) {
-            passIsMatched = true;
-        } else {
-            passIsMatched = false;
-        }
+    public LiveData<Integer> getLiveDataRegister() {
+        return liveDataRegister;
     }
 
     public void register(String email, String login, String password, String name) {
-        if (loginIsFree && emailIsFree && passIsMatched) {
-            if (emailIsValid && loginIsValid && passIsValid && confPassIsValid && nameIsValid) {
-                registerRepository.registerRequest(email, login, password, name,
-                        result -> apiRegister.setValue(result));
-            }
-        }
+        Timber.d("Send register request");
+        Disposable disposable = repository.registerRequest(email, login, password, name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onRegisterSuccess, this::onError);
+        disposables.add(disposable);
     }
 
     public void checkEmail(String email) {
-        registerRepository.checkEmailRequest(email, result -> {
-            if (result.equals("OK")) {
-                emailIsFree = true;
-            } else {
-                emailIsFree = false;
-            }
-        });
+        Timber.d("Send check email request");
+        Disposable disposable = repository.checkEmailRequest(email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onCheckEmailSuccess, this::onError);
+        disposables.add(disposable);
     }
 
     public void checkLogin(String login) {
-        registerRepository.checkLoginRequest(login, result -> {
-            if (result.equals("OK")) {
-                loginIsFree = true;
-            } else {
-                loginIsFree = false;
-            }
-        });
+        Timber.d("Send check login request");
+        Disposable disposable = repository.checkLoginRequest(login)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onCheckLoginSuccess, this::onError);
+        disposables.add(disposable);
+    }
+
+    private void onRegisterSuccess(ResponseBase response) {
+        int status = response.getStatus();
+        Timber.d("Register request status %d", status);
+
+        switch (status) {
+            case 200:
+                liveDataRegister.setValue(status);
+                break;
+            case 500:
+                errorMessage.setValue(response.getErrorMsg());
+                break;
+        }
+    }
+
+    private void onCheckEmailSuccess(ResponseBase response) {
+        int status = response.getStatus();
+        Timber.d("Check email request status %d", status);
+
+        switch (status) {
+            case 200:
+                liveDataEmail.setValue(status);
+                break;
+            case 404:
+                liveDataEmail.setValue(status);
+                break;
+        }
+    }
+
+    private void onCheckLoginSuccess(ResponseBase response) {
+        int status = response.getStatus();
+        Timber.d("Check login status %d", status);
+
+        switch (status) {
+            case 200:
+                liveDataLogin.setValue(status);
+                break;
+            case 404:
+                liveDataLogin.setValue(status);
+                break;
+        }
+    }
+
+    private void onError(Throwable t) {
+        Timber.d(t);
+        throwable.setValue(t.toString());
+    }
+
+    public void checkPassMatch() {
+//        String passStr = password.getValue();
+//        String confPassStr = confPass.getValue();
+//
+//        if (passStr != null && !passStr.isEmpty() && confPassStr != null && !confPassStr.isEmpty()
+//                && passStr.equals(confPassStr)) {
+//            passIsMatched = true;
+//        } else {
+//            passIsMatched = false;
+//        }
     }
 }
