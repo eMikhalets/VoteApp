@@ -4,79 +4,121 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ntech.fourtop.data.UserImagesRepository;
+import com.ntech.fourtop.data.AppRepository;
 import com.ntech.fourtop.network.pojo.DataImage;
+import com.ntech.fourtop.network.pojo.DataProfile;
+import com.ntech.fourtop.network.pojo.ResponseBase;
+import com.ntech.fourtop.network.pojo.ResponseImages;
 
 import java.io.File;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
+
 public class UserImagesViewModel extends ViewModel {
 
-    private UserImagesRepository userImagesRepository;
-
-    private MutableLiveData<List<DataImage>> apiGallery;
-    private MutableLiveData<String> apiGalleryAdd;
-    private MutableLiveData<String> apiGalleryRemove;
-
-    private MutableLiveData<String> token;
-    private MutableLiveData<File> file;
+    private AppRepository repository;
+    private CompositeDisposable disposables;
+    private MutableLiveData<List<DataImage>> images;
+    private MutableLiveData<String> throwable;
+    private MutableLiveData<DataProfile> profile;
+    private MutableLiveData<String> errorMessage;
 
     public UserImagesViewModel() {
-        userImagesRepository = new UserImagesRepository();
-
-        apiGallery = new MutableLiveData<>();
-        apiGalleryAdd = new MutableLiveData<>();
-        apiGalleryRemove = new MutableLiveData<>();
-
-        token = new MutableLiveData<>();
-        file = new MutableLiveData<>();
+        repository = AppRepository.get();
+        disposables = new CompositeDisposable();
+        images = new MutableLiveData<>();
+        throwable = new MutableLiveData<>();
+        profile = new MutableLiveData<>();
+        errorMessage = new MutableLiveData<>();
     }
 
-    public LiveData<List<DataImage>> getApiGallery() {
-        return apiGallery;
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposables.clear();
     }
 
-    public LiveData<String> getApiGalleryAdd() {
-        return apiGalleryAdd;
+    public LiveData<List<DataImage>> getImages() {
+        return images;
     }
 
-    public LiveData<String> getApiGalleryRemove() {
-        return apiGalleryRemove;
+    public LiveData<String> getThrowable() {
+        return throwable;
     }
 
-    public MutableLiveData<String> getToken() {
-        return token;
+    public LiveData<DataProfile> getProfile() {
+        return profile;
     }
 
-    public MutableLiveData<File> getFile() {
-        return file;
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
     public void galleryRequest() {
-        String token = getToken().getValue();
-        String count = String.valueOf(10);
-        String offset = String.valueOf(0);
-
-        userImagesRepository.galleryRequest(token, count, offset,
-                new UserImagesRepository.GalleryRequestCallback() {
-                    @Override
-                    public void success(List<DataImage> images) {
-                        apiGallery.setValue(images);
-                    }
-
-                    @Override
-                    public void failure(String result) {
-                    }
-                });
+        Timber.d("Send gallery request");
+        Disposable disposable = repository.galleryRequest("", "10", "0")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+        disposables.add(disposable);
     }
 
     public void galleryAddRequest(String token, File file) {
-        userImagesRepository.galleryAddRequest(token, file,
-                result -> apiGalleryAdd.setValue(result));
+        Timber.d("Send gallery add request");
+        Disposable disposable = repository.galleryAddRequest(token, file)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+        disposables.add(disposable);
     }
 
-    public void galleryRemoveRequest(String token, String id) {
-        userImagesRepository.galleryRemoveRequest(token, id, result ->
-                apiGalleryRemove.setValue(result));
+    public void galleryRemoveRequest(String token, int position) {
+        if (images.getValue() != null) {
+            String id = String.valueOf(images.getValue().get(position));
+            Timber.d("Send gallery remove request");
+            Disposable disposable = repository.galleryRemoveRequest(token, id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::onSuccess, this::onError);
+            disposables.add(disposable);
+        }
+    }
+
+    private void onSuccess(ResponseImages response) {
+        int status = response.getStatus();
+        Timber.d("Gallery request status %d", status);
+
+        switch (status) {
+            case 200:
+                images.setValue(response.getData());
+                break;
+            case 500:
+                errorMessage.setValue(response.getErrorMsg());
+                break;
+        }
+    }
+
+    private void onSuccess(ResponseBase response) {
+        int status = response.getStatus();
+        Timber.d("Gallery change request status %d", status);
+
+        switch (status) {
+            case 200:
+                galleryRequest();
+                break;
+            case 500:
+                errorMessage.setValue(response.getErrorMsg());
+                break;
+        }
+    }
+
+    private void onError(Throwable t) {
+        Timber.d(t);
+        throwable.setValue(t.toString());
     }
 }

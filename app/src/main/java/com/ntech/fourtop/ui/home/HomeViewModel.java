@@ -1,22 +1,14 @@
 package com.ntech.fourtop.ui.home;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ntech.fourtop.data.HomeRepository;
+import com.ntech.fourtop.data.AppRepository;
 
 public class HomeViewModel extends ViewModel {
 
-    private HomeRepository homeRepository;
-    private MutableLiveData<String> api;
+    private AppRepository repository;
 
     public HomeViewModel() {
-        homeRepository = new HomeRepository();
-        api = new MutableLiveData<>();
-    }
-
-    public LiveData<String> getApi() {
-        return api;
+        repository = AppRepository.get();
     }
 }

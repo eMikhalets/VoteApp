@@ -4,50 +4,77 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ntech.fourtop.data.TopImagesRepository;
+import com.ntech.fourtop.data.AppRepository;
 import com.ntech.fourtop.network.pojo.DataImage;
+import com.ntech.fourtop.network.pojo.ResponseImages;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
+
 public class TopImagesViewModel extends ViewModel {
 
-    private TopImagesRepository topImagesRepository;
-
-    private MutableLiveData<List<DataImage>> apiTopImages;
-
-    private MutableLiveData<String> token;
+    private AppRepository repository;
+    private CompositeDisposable disposables;
+    private MutableLiveData<String> throwable;
+    private MutableLiveData<String> errorMessage;
+    private MutableLiveData<List<DataImage>> images;
 
     public TopImagesViewModel() {
-        topImagesRepository = new TopImagesRepository();
-
-        apiTopImages = new MutableLiveData<>();
-
-        token = new MutableLiveData<>();
+        repository = AppRepository.get();
+        disposables = new CompositeDisposable();
+        throwable = new MutableLiveData<>();
+        errorMessage = new MutableLiveData<>();
+        images = new MutableLiveData<>();
     }
 
-    public LiveData<List<DataImage>> getApiTopImages() {
-        return apiTopImages;
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposables.clear();
     }
 
-    public MutableLiveData<String> getToken() {
-        return token;
+    public LiveData<String> getThrowable() {
+        return throwable;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
+    public LiveData<List<DataImage>> getImages() {
+        return images;
     }
 
     public void topPhotosRequest() {
-        String token = getToken().getValue();
-        String count = String.valueOf(10);
-        String offset = String.valueOf(0);
+        Timber.d("Send top photos request");
+        Disposable disposable = repository.topPhotosRequest("", "10", "0")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+        disposables.add(disposable);
+    }
 
-        topImagesRepository.topPhotosRequest(token, count, offset,
-                new TopImagesRepository.RequestCallback() {
-                    @Override
-                    public void success(List<DataImage> images) {
-                        apiTopImages.setValue(images);
-                    }
+    private void onSuccess(ResponseImages response) {
+        int status = response.getStatus();
+        Timber.d("Top photos request status %d", status);
 
-                    @Override
-                    public void failure(String result) {
-                    }
-                });
+        switch (status) {
+            case 200:
+                images.setValue(response.getData());
+                break;
+            case 500:
+                errorMessage.setValue(response.getErrorMsg());
+                break;
+        }
+    }
+
+    private void onError(Throwable t) {
+        Timber.d(t);
+        throwable.setValue(t.toString());
     }
 }

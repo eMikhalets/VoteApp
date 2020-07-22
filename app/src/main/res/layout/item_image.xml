@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#50000000"
     android:layout_margin="8dp">
 
@@ -14,7 +15,7 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/image_item_desc"
         android:scaleType="fitXY"
-        android:src="@drawable/image_placeholder" />
+        app:srcCompat="@drawable/image_placeholder" />
 
     <TextView
         android:id="@+id/text_rating"

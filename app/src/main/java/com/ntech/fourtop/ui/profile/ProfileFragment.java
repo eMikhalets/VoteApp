@@ -7,22 +7,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.ntech.fourtop.databinding.FragmentProfileBinding;
+import com.ntech.fourtop.network.pojo.DataProfile;
 import com.ntech.fourtop.utils.Const;
 
 import org.jetbrains.annotations.NotNull;
 
 public class ProfileFragment extends Fragment {
 
-    private FragmentProfileBinding binding;
     private ProfileViewModel viewModel;
+    private FragmentProfileBinding binding;
 
     private String token;
 
@@ -38,33 +39,12 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        viewModel.getLogout().observe(getViewLifecycleOwner(), this::logoutObserver);
+        viewModel.getProfile().observe(getViewLifecycleOwner(), this::profileObserver);
+        viewModel.getThrowable().observe(getViewLifecycleOwner(), this::errorObserver);
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), this::errorObserver);
 
-        viewModel.getApiProfile().observe(getViewLifecycleOwner(), s -> {
-            if (!s.equals("OK")) {
-                Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.getApiLogout().observe(getViewLifecycleOwner(), s -> {
-            if (s.equals("OK")) {
-                deleteUserToken();
-                requireActivity().finishAffinity();
-            }
-        });
-
-        viewModel.getName().observe(getViewLifecycleOwner(),
-                s -> binding.textTesterName.setText(s));
-
-        viewModel.getLogin().observe(getViewLifecycleOwner(),
-                s -> binding.textLogin.setText(s));
-
-        viewModel.getEmail().observe(getViewLifecycleOwner(),
-                s -> binding.textEmail.setText(s));
-
-        binding.btnLogout.setOnClickListener(
-                v -> viewModel.logoutRequest(viewModel.getToken().getValue()));
-
-        setTokenFromArguments();
+        binding.btnLogout.setOnClickListener(v -> onLogoutClick());
     }
 
     @Override
@@ -73,16 +53,23 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
-    private void setTokenFromArguments() {
-        Bundle args = getArguments();
-        if (args != null) {
-            String token = args.getString(Const.ARGS_TOKEN);
-            viewModel.getToken().setValue(token);
+    private void logoutObserver(int status) {
+        deleteUserToken();
+        navigateToLogin();
+    }
 
-            if (token != null && !token.isEmpty()) {
-                viewModel.profileRequest(token);
-            }
-        }
+    private void profileObserver(DataProfile profile) {
+        binding.textTesterName.setText(profile.getTesterName());
+        binding.textLogin.setText(profile.getLogin());
+        binding.textEmail.setText(profile.getEmail());
+    }
+
+    private void errorObserver(String error) {
+        binding.textErrorMessage.setText(error);
+    }
+
+    private void onLogoutClick() {
+        viewModel.logoutRequest("");
     }
 
     private void deleteUserToken() {
@@ -91,5 +78,9 @@ public class ProfileFragment extends Fragment {
         Editor editor = sp.edit();
         editor.putString(Const.SHARED_TOKEN, "");
         editor.apply();
+    }
+
+    private void navigateToLogin() {
+        Navigation.findNavController(binding.getRoot()).popBackStack();
     }
 }

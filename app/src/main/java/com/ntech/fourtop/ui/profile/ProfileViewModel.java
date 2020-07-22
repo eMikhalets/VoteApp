@@ -4,71 +4,105 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ntech.fourtop.data.ProfileRepository;
+import com.ntech.fourtop.data.AppRepository;
 import com.ntech.fourtop.network.pojo.DataProfile;
+import com.ntech.fourtop.network.pojo.ResponseBase;
+import com.ntech.fourtop.network.pojo.ResponseProfile;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class ProfileViewModel extends ViewModel {
 
-    private ProfileRepository profileRepository;
-    private MutableLiveData<String> apiProfile;
-    private MutableLiveData<String> apiLogout;
-    private MutableLiveData<String> token;
-    private MutableLiveData<String> name;
-    private MutableLiveData<String> login;
-    private MutableLiveData<String> email;
+    private AppRepository repository;
+    private CompositeDisposable disposables;
+    private MutableLiveData<Integer> logout;
+    private MutableLiveData<String> throwable;
+    private MutableLiveData<DataProfile> profile;
+    private MutableLiveData<String> errorMessage;
 
     public ProfileViewModel() {
-        profileRepository = new ProfileRepository();
-        apiProfile = new MutableLiveData<>();
-        apiLogout = new MutableLiveData<>();
-        token = new MutableLiveData<>();
-        name = new MutableLiveData<>();
-        login = new MutableLiveData<>();
-        email = new MutableLiveData<>();
+        repository = AppRepository.get();
+        disposables = new CompositeDisposable();
+        logout = new MutableLiveData<>();
+        throwable = new MutableLiveData<>();
+        profile = new MutableLiveData<>();
+        errorMessage = new MutableLiveData<>();
     }
 
-    public LiveData<String> getApiProfile() {
-        return apiProfile;
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposables.clear();
     }
 
-    public LiveData<String> getApiLogout() {
-        return apiLogout;
+    public LiveData<Integer> getLogout() {
+        return logout;
     }
 
-    public MutableLiveData<String> getToken() {
-        return token;
+    public LiveData<String> getThrowable() {
+        return throwable;
     }
 
-    public MutableLiveData<String> getName() {
-        return name;
+    public LiveData<DataProfile> getProfile() {
+        return profile;
     }
 
-    public MutableLiveData<String> getLogin() {
-        return login;
-    }
-
-    public MutableLiveData<String> getEmail() {
-        return email;
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
     public void profileRequest(String token) {
-        profileRepository.profileRequest(token, new ProfileRepository.ProfileRequestCallback() {
-            @Override
-            public void success(DataProfile dataProfile) {
-                apiProfile.setValue("OK");
-                name.setValue(dataProfile.getTesterName());
-                login.setValue(dataProfile.getLogin());
-                email.setValue(dataProfile.getEmail());
-            }
-
-            @Override
-            public void failure(String result) {
-                apiProfile.setValue(result);
-            }
-        });
+        Timber.d("Send profile request");
+        Disposable disposable = repository.profileRequest(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+        disposables.add(disposable);
     }
 
     public void logoutRequest(String token) {
-        profileRepository.logoutRequest(token, result -> apiLogout.setValue(result));
+        Timber.d("Send logout request");
+        Disposable disposable = repository.logoutRequest(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+        disposables.add(disposable);
+    }
+
+    private void onSuccess(ResponseProfile response) {
+        int status = response.getStatus();
+        Timber.d("Profile request status %d", status);
+
+        switch (status) {
+            case 200:
+                profile.setValue(response.getData());
+                break;
+            case 500:
+                errorMessage.setValue(response.getErrorMsg());
+                break;
+        }
+    }
+
+    private void onSuccess(ResponseBase response) {
+        int status = response.getStatus();
+        Timber.d("Logout request status %d", status);
+
+        switch (status) {
+            case 200:
+                logout.setValue(status);
+                break;
+            case 500:
+                errorMessage.setValue(response.getErrorMsg());
+                break;
+        }
+    }
+
+    private void onError(Throwable t) {
+        Timber.d(t);
+        throwable.setValue(t.toString());
     }
 }

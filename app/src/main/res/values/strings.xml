@@ -1,17 +1,8 @@
 <resources>
     <string name="app_name">Four Top</string>
+
     <string name="section_in_development">Раздел находится в разработке</string>
     <string name="loading_error">Ошибка загрузки данных</string>
-
-    <!-- FRAGMENTS LABELS for navigation component -->
-    <string name="label_fragment_login">Авторизация</string>
-    <string name="label_fragment_register">Регистрация</string>
-    <string name="label_fragment_home">Главная</string>
-    <string name="label_fragment_profile">Профиль</string>
-    <string name="label_fragment_user_images">Мои фотографии</string>
-    <string name="label_fragment_voting">Голосование</string>
-    <string name="label_fragment_top_images">Топ фотографий</string>
-    <string name="label_fragment_top_users">Топ пользователей</string>
 
     <!-- NAV -->
     <string name="nav_profile">Профиль</string>

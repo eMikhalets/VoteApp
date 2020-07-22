@@ -12,17 +12,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.ntech.fourtop.databinding.FragmentTopImagesBinding;
 import com.ntech.fourtop.adapters.ImageAdapter;
-import com.ntech.fourtop.utils.Const;
+import com.ntech.fourtop.databinding.FragmentTopImagesBinding;
+import com.ntech.fourtop.network.pojo.DataImage;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class TopImagesFragment extends Fragment {
 
-    private FragmentTopImagesBinding binding;
-    private TopImagesViewModel viewModel;
     private ImageAdapter adapter;
+    private TopImagesViewModel viewModel;
+    private FragmentTopImagesBinding binding;
 
 
     @Override
@@ -37,20 +39,14 @@ public class TopImagesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TopImagesViewModel.class);
+        viewModel.getImages().observe(getViewLifecycleOwner(), this::imagesObserver);
+        viewModel.getThrowable().observe(getViewLifecycleOwner(), this::errorsObserver);
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), this::errorsObserver);
 
-        viewModel.getApiTopImages().observe(getViewLifecycleOwner(), images -> {
-            adapter.setImages(images);
-        });
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
-        binding.recyclerTopImages.setLayoutManager(layoutManager);
         adapter = new ImageAdapter();
+        binding.recyclerTopImages.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerTopImages.setAdapter(adapter);
         binding.recyclerTopImages.setHasFixedSize(true);
-
-        setArguments();
     }
 
     @Override
@@ -59,18 +55,11 @@ public class TopImagesFragment extends Fragment {
         binding = null;
     }
 
-    private void setArguments() {
-        Bundle args = this.getArguments();
+    private void imagesObserver(List<DataImage> images) {
+        adapter.setImages(images);
+    }
 
-        if (args != null) {
-            String token = args.getString(Const.ARGS_TOKEN);
-
-            if (token != null && !token.isEmpty()) {
-                viewModel.getToken().setValue(token);
-                viewModel.topPhotosRequest();
-            } else {
-                Toast.makeText(requireContext(), "Нет токена", Toast.LENGTH_SHORT).show();
-            }
-        }
+    private void errorsObserver(String error) {
+        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
     }
 }

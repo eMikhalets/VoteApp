@@ -4,10 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,26 +23,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ntech.fourtop.R;
-import com.ntech.fourtop.databinding.FragmentUserImagesBinding;
 import com.ntech.fourtop.adapters.ImageAdapter;
+import com.ntech.fourtop.databinding.FragmentUserImagesBinding;
+import com.ntech.fourtop.network.pojo.DataImage;
 import com.ntech.fourtop.utils.Const;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
-import droidninja.filepicker.FilePickerBuilder;
-import droidninja.filepicker.FilePickerConst;
 
 public class UserImagesFragment extends Fragment {
 
     private static final int IMAGE_REQUEST_CODE = 0;
 
-    private FragmentUserImagesBinding binding;
-    private UserImagesViewModel viewModel;
     private ImageAdapter adapter;
+    private UserImagesViewModel viewModel;
+    private ItemTouchHelper itemTouchHelper;
+    private FragmentUserImagesBinding binding;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
@@ -59,58 +53,19 @@ public class UserImagesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(UserImagesViewModel.class);
+        viewModel.getImages().observe(getViewLifecycleOwner(), this::imagesObserver);
+        viewModel.getThrowable().observe(getViewLifecycleOwner(), this::errorObserver);
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), this::errorObserver);
 
-        viewModel.getApiGallery().observe(getViewLifecycleOwner(), images -> {
-            adapter.setImages(images);
-        });
-
-        viewModel.getApiGalleryAdd().observe(getViewLifecycleOwner(), s -> {
-            if (s.equals("OK")) {
-                viewModel.galleryRequest();
-            } else {
-                Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.getApiGalleryRemove().observe(getViewLifecycleOwner(), s -> {
-            if (s.equals("OK")) {
-                viewModel.galleryRequest();
-            } else {
-                Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
-        binding.recyclerUserImages.setLayoutManager(layoutManager);
         adapter = new ImageAdapter();
+        binding.recyclerUserImages.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerUserImages.setAdapter(adapter);
         binding.recyclerUserImages.setHasFixedSize(true);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-                    @Override
-                    public boolean onMove(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder,
-                                          @NonNull RecyclerView.ViewHolder target) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
-                                         int direction) {
-                        int position = viewHolder.getAdapterPosition();
-                        int id = viewModel.getApiGallery().getValue().get(position).getId();
-                        viewModel.galleryRemoveRequest(
-                                viewModel.getToken().getValue(),
-                                String.valueOf(id));
-                    }
-                });
+        itemTouchHelper = getItemTouchHelper();
         itemTouchHelper.attachToRecyclerView(binding.recyclerUserImages);
 
         setHasOptionsMenu(true);
-        setDataFromArguments();
     }
 
     @Override
@@ -130,9 +85,8 @@ public class UserImagesFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_user_images_add:
                 if (isStoragePermission()) {
-                    FilePickerBuilder.getInstance()
-                            .setMaxCount(1)
-                            .pickPhoto(this, IMAGE_REQUEST_CODE);
+                    Toast.makeText(getContext(), "Not implemented...", Toast.LENGTH_SHORT).show();
+                    // TODO: implement adding image
                     return true;
                 } else {
                     Toast.makeText(getContext(), "Permission error", Toast.LENGTH_SHORT).show();
@@ -147,37 +101,49 @@ public class UserImagesFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                List<Uri> list = new ArrayList<>(
-                        data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
-                Cursor cursor = requireContext().getContentResolver()
-                        .query(list.get(0),
-                                null,
-                                null,
-                                null,
-                                null);
-                cursor.moveToFirst();
-                int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                String path = cursor.getString(index);
-                File file = new File(path);
-                viewModel.getFile().setValue(file);
-                viewModel.galleryAddRequest(
-                        viewModel.getToken().getValue(),
-                        viewModel.getFile().getValue());
+//                List<Uri> list = new ArrayList<>(
+//                        data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
+//                Cursor cursor = requireContext().getContentResolver()
+//                        .query(list.get(0),
+//                                null,
+//                                null,
+//                                null,
+//                                null);
+//                cursor.moveToFirst();
+//                int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+//                String path = cursor.getString(index);
+//                File file = new File(path);
+//                viewModel.getFile().setValue(file);
+//                viewModel.galleryAddRequest(
+//                        viewModel.getToken().getValue(),
+//                        viewModel.getFile().getValue());
             }
         }
     }
 
-    private void setDataFromArguments() {
-        Bundle args = getArguments();
-        if (args != null) {
-            String token = args.getString(Const.ARGS_TOKEN);
-            if (token != null && !token.isEmpty()) {
-                viewModel.getToken().setValue(token);
-                viewModel.galleryRequest();
-            } else {
-                Toast.makeText(requireContext(), "Нет токена", Toast.LENGTH_SHORT).show();
+    private void imagesObserver(List<DataImage> images) {
+        adapter.setImages(images);
+    }
+
+    private void errorObserver(String error) {
+        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    private ItemTouchHelper getItemTouchHelper() {
+        return new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
             }
-        }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
+                                 int direction) {
+                viewModel.galleryRemoveRequest("", viewHolder.getAdapterPosition());
+            }
+        });
     }
 
     private boolean isStoragePermission() {

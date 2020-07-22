@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class TopUsersFragment extends Fragment {
 
-    private FragmentTopUsersBinding binding;
     private TopUsersViewModel viewModel;
+    private FragmentTopUsersBinding binding;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
@@ -31,10 +31,6 @@ public class TopUsersFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TopUsersViewModel.class);
-
-        viewModel.getApiTopUsers().observe(getViewLifecycleOwner(), strings -> {
-            // TODO: update users adapter
-        });
     }
 
     @Override

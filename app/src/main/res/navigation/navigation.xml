@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/logoFragment">
 
     <fragment
         android:id="@+id/logoFragment"
@@ -11,17 +11,18 @@
         android:label="LogoFragment"
         tools:layout="@layout/fragment_logo">
         <action
-            android:id="@+id/action_logoFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
             android:id="@+id/action_logoFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_logoFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:launchSingleTop="false" />
     </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.ntech.fourtop.ui.login.LoginFragment"
-        android:label="@string/login_label"
+        android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -34,17 +35,16 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.ntech.fourtop.ui.register.RegisterFragment"
-        android:label="@string/register_label"
+        android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/loginFragment" />
+            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/homeFragment"
-        android:label="@string/label_fragment_home"
+        android:label="HomeFragment"
         android:name="com.ntech.fourtop.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" >
         <action
@@ -66,31 +66,35 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:label="@string/label_fragment_profile"
+        android:label="ProfileFragment"
         android:name="com.ntech.fourtop.ui.profile.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <argument
+            android:name="userToken"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/userImagesFragment"
         android:name="com.ntech.fourtop.ui.userimages.UserImagesFragment"
-        android:label="@string/label_fragment_user_images"
+        android:label="UserImagesFragment"
         tools:layout="@layout/fragment_user_images" />
 
     <fragment
         android:id="@+id/votingFragment"
         android:name="com.ntech.fourtop.ui.voting.VotingFragment"
-        android:label="@string/label_fragment_voting"
+        android:label="VotingFragment"
         tools:layout="@layout/fragment_voting" />
 
     <fragment
         android:id="@+id/topImagesFragment"
-        android:label="@string/label_fragment_top_images"
+        android:label="TopImagesFragment"
         android:name="com.ntech.fourtop.ui.topimages.TopImagesFragment"
         tools:layout="@layout/fragment_top_images" />
 
     <fragment
         android:id="@+id/topUsersFragment"
-        android:label="@string/label_fragment_top_users"
+        android:label="TopUsersFragment"
         android:name="com.ntech.fourtop.ui.topusers.TopUsersFragment"
         tools:layout="@layout/fragment_top_users" />
 
