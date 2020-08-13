@@ -23,6 +23,7 @@ public class ProfileViewModel extends ViewModel {
     private MutableLiveData<String> throwable;
     private MutableLiveData<DataProfile> profile;
     private MutableLiveData<String> errorMessage;
+    private String userToken = "";
 
     public ProfileViewModel() {
         repository = AppRepository.get();
@@ -55,18 +56,22 @@ public class ProfileViewModel extends ViewModel {
         return errorMessage;
     }
 
-    public void profileRequest(String token) {
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    public void profileRequest() {
         Timber.d("Send profile request");
-        Disposable disposable = repository.profileRequest(token)
+        Disposable disposable = repository.profileRequest(userToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onError);
         disposables.add(disposable);
     }
 
-    public void logoutRequest(String token) {
+    public void logoutRequest() {
         Timber.d("Send logout request");
-        Disposable disposable = repository.logoutRequest(token)
+        Disposable disposable = repository.logoutRequest(userToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onError);

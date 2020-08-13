@@ -69,9 +69,6 @@
         android:label="ProfileFragment"
         android:name="com.ntech.fourtop.ui.profile.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
-        <argument
-            android:name="userToken"
-            app:argType="string" />
     </fragment>
 
     <fragment

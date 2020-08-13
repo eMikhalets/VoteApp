@@ -106,7 +106,7 @@ public class RegisterViewModel extends ViewModel {
 
         switch (status) {
             case 200:
-                liveDataEmail.setValue(status);
+                errorMessage.setValue("Email занят");
                 break;
             case 404:
                 liveDataEmail.setValue(status);
@@ -120,7 +120,7 @@ public class RegisterViewModel extends ViewModel {
 
         switch (status) {
             case 200:
-                liveDataLogin.setValue(status);
+                errorMessage.setValue("Login занят");
                 break;
             case 404:
                 liveDataLogin.setValue(status);
@@ -130,18 +130,6 @@ public class RegisterViewModel extends ViewModel {
 
     private void onError(Throwable t) {
         Timber.d(t);
-        throwable.setValue(t.toString());
-    }
-
-    public void checkPassMatch() {
-//        String passStr = password.getValue();
-//        String confPassStr = confPass.getValue();
-//
-//        if (passStr != null && !passStr.isEmpty() && confPassStr != null && !confPassStr.isEmpty()
-//                && passStr.equals(confPassStr)) {
-//            passIsMatched = true;
-//        } else {
-//            passIsMatched = false;
-//        }
+        throwable.setValue(t.getMessage());
     }
 }

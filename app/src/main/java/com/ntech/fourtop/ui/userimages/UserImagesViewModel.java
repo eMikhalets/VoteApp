@@ -27,6 +27,7 @@ public class UserImagesViewModel extends ViewModel {
     private MutableLiveData<String> throwable;
     private MutableLiveData<DataProfile> profile;
     private MutableLiveData<String> errorMessage;
+    private String userToken = "";
 
     public UserImagesViewModel() {
         repository = AppRepository.get();
@@ -59,29 +60,33 @@ public class UserImagesViewModel extends ViewModel {
         return errorMessage;
     }
 
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
     public void galleryRequest() {
         Timber.d("Send gallery request");
-        Disposable disposable = repository.galleryRequest("", "10", "0")
+        Disposable disposable = repository.galleryRequest(userToken, "10", "0")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onError);
         disposables.add(disposable);
     }
 
-    public void galleryAddRequest(String token, File file) {
+    public void galleryAddRequest(File file) {
         Timber.d("Send gallery add request");
-        Disposable disposable = repository.galleryAddRequest(token, file)
+        Disposable disposable = repository.galleryAddRequest(userToken, file)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onError);
         disposables.add(disposable);
     }
 
-    public void galleryRemoveRequest(String token, int position) {
+    public void galleryRemoveRequest(int position) {
         if (images.getValue() != null) {
             String id = String.valueOf(images.getValue().get(position));
             Timber.d("Send gallery remove request");
-            Disposable disposable = repository.galleryRemoveRequest(token, id)
+            Disposable disposable = repository.galleryRemoveRequest(userToken, id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onSuccess, this::onError);

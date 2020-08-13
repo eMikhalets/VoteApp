@@ -1,5 +1,6 @@
 package com.ntech.fourtop.ui.home;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class HomeFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         return binding.getRoot();
     }
 

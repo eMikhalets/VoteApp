@@ -6,7 +6,7 @@ import com.ntech.fourtop.data.AppRepository;
 
 import timber.log.Timber;
 
-class FourTopApplication extends Application {
+public class FourTopApplication extends Application {
 
     private AppRepository repository;
 

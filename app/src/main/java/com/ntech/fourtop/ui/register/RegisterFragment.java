@@ -1,9 +1,14 @@
 package com.ntech.fourtop.ui.register;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.ntech.fourtop.databinding.FragmentRegisterBinding;
-import com.ntech.fourtop.utils.Const;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +31,7 @@ public class RegisterFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         return binding.getRoot();
     }
 
@@ -41,6 +46,12 @@ public class RegisterFragment extends Fragment {
         viewModel.getLiveDataRegister().observe(getViewLifecycleOwner(), this::registerObserver);
 
         binding.btnRegister.setOnClickListener(v -> onRegisterClick());
+
+        binding.etLogin.addTextChangedListener(onLoginTextChanged());
+        binding.etEmail.addTextChangedListener(onEmailTextChanged());
+        binding.etPass.addTextChangedListener(onPassTextChanged());
+        binding.etConfirmPass.addTextChangedListener(onConfPassTextChanged());
+        binding.etNickname.addTextChangedListener(onNameTextChanged());
     }
 
     @Override
@@ -61,12 +72,18 @@ public class RegisterFragment extends Fragment {
         if (status == 200) binding.tilLogin.setError("Почта занята");
     }
 
-    private void errorObserver(String throwable) {
-        binding.textErrorMessage.setText(throwable);
+    private void errorObserver(String message) {
+        if (message.contains("Email")) {
+            binding.tilEmail.setError(message);
+        } else if (message.contains("Login")) {
+            binding.tilLogin.setError(message);
+        } else {
+            binding.textErrorMessage.setText(message);
+        }
     }
 
     private void onRegisterClick() {
-        Const.hideKeyboard(requireActivity());
+        hideKeyboard();
         String email = binding.etEmail.getText().toString().trim();
         String login = binding.etLogin.getText().toString().trim();
         String pass = binding.etPass.getText().toString().trim();
@@ -95,7 +112,102 @@ public class RegisterFragment extends Fragment {
         }
     }
 
+    // Field's text change listeners
+    private TextWatcher onLoginTextChanged() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.tilLogin.setError(null);
+            }
+        };
+    }
+
+    private TextWatcher onEmailTextChanged() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.tilEmail.setError(null);
+            }
+        };
+    }
+
+    private TextWatcher onPassTextChanged() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.tilPass.setError(null);
+            }
+        };
+    }
+
+    private TextWatcher onConfPassTextChanged() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.tilConfirmPass.setError(null);
+            }
+        };
+    }
+
+    private TextWatcher onNameTextChanged() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.tilNickname.setError(null);
+            }
+        };
+    }
+
     private void backToLogin() {
         Navigation.findNavController(binding.getRoot()).popBackStack();
+    }
+
+    public void hideKeyboard() {
+        if (requireActivity().getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) requireActivity()
+                    .getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(requireActivity().getCurrentFocus()
+                    .getWindowToken(), 0);
+        }
     }
 }

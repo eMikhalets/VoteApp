@@ -1,5 +1,7 @@
 package com.ntech.fourtop.ui.topimages;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.ntech.fourtop.adapters.ImageAdapter;
 import com.ntech.fourtop.databinding.FragmentTopImagesBinding;
 import com.ntech.fourtop.network.pojo.DataImage;
+import com.ntech.fourtop.utils.Const;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +50,11 @@ public class TopImagesFragment extends Fragment {
         binding.recyclerTopImages.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerTopImages.setAdapter(adapter);
         binding.recyclerTopImages.setHasFixedSize(true);
+
+        if (savedInstanceState == null) {
+            loadUserToken();
+            viewModel.topPhotosRequest();
+        }
     }
 
     @Override
@@ -61,5 +69,11 @@ public class TopImagesFragment extends Fragment {
 
     private void errorsObserver(String error) {
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadUserToken() {
+        SharedPreferences sp = requireActivity().getSharedPreferences(
+                Const.SHARED_FILE, Context.MODE_PRIVATE);
+        viewModel.setUserToken(sp.getString(Const.SHARED_TOKEN, ""));
     }
 }

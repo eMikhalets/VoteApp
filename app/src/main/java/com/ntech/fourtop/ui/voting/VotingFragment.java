@@ -1,5 +1,7 @@
 package com.ntech.fourtop.ui.voting;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ntech.fourtop.databinding.FragmentVotingBinding;
+import com.ntech.fourtop.utils.Const;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,6 +41,11 @@ public class VotingFragment extends Fragment {
 
         binding.imageVoting0.setOnClickListener(v -> onClickFirstImage());
         binding.imageVoting1.setOnClickListener(v -> onClickSecondImage());
+
+        if (savedInstanceState == null) {
+            loadUserToken();
+            viewModel.voteCreateRequest();
+        }
     }
 
     @Override
@@ -60,5 +68,11 @@ public class VotingFragment extends Fragment {
 
     private void onClickSecondImage() {
         viewModel.voteRequest(1);
+    }
+
+    private void loadUserToken() {
+        SharedPreferences sp = requireActivity().getSharedPreferences(
+                Const.SHARED_FILE, Context.MODE_PRIVATE);
+        viewModel.setUserToken(sp.getString(Const.SHARED_TOKEN, ""));
     }
 }

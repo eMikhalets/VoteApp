@@ -2,6 +2,7 @@ package com.ntech.fourtop.ui.logo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +28,9 @@ public class LogoFragment extends Fragment {
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+                             ViewGroup container,                             Bundle savedInstanceState) {
         binding = FragmentLogoBinding.inflate(inflater, container, false);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         return binding.getRoot();
     }
 

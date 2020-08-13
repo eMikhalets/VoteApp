@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 
 public class Const {
 
-    public static final String BASE_URL = "http://ntech.team:8082";
+    public static final String BASE_URL = "http://s1.ntech.team:8082";
 
     // SharedPreferences
     public static final String SHARED_FILE = "shared_fourtop";
@@ -21,9 +21,4 @@ public class Const {
     public static final int READ_EXTERNAL_REQUEST = 1;
     public static final String[] READ_EXTERNAL_PERMISSION =
             {Manifest.permission.READ_EXTERNAL_STORAGE};
-
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
 }

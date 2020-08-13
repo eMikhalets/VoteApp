@@ -25,8 +25,6 @@ public class ProfileFragment extends Fragment {
     private ProfileViewModel viewModel;
     private FragmentProfileBinding binding;
 
-    private String token;
-
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
                              ViewGroup container,
@@ -45,6 +43,11 @@ public class ProfileFragment extends Fragment {
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), this::errorObserver);
 
         binding.btnLogout.setOnClickListener(v -> onLogoutClick());
+
+        if (savedInstanceState == null) {
+            loadUserToken();
+            viewModel.profileRequest();
+        }
     }
 
     @Override
@@ -69,7 +72,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void onLogoutClick() {
-        viewModel.logoutRequest("");
+        viewModel.logoutRequest();
     }
 
     private void deleteUserToken() {
@@ -82,5 +85,11 @@ public class ProfileFragment extends Fragment {
 
     private void navigateToLogin() {
         Navigation.findNavController(binding.getRoot()).popBackStack();
+    }
+
+    private void loadUserToken() {
+        SharedPreferences sp = requireActivity().getSharedPreferences(
+                Const.SHARED_FILE, Context.MODE_PRIVATE);
+        viewModel.setUserToken(sp.getString(Const.SHARED_TOKEN, ""));
     }
 }

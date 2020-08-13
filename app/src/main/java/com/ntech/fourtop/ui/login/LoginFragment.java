@@ -1,12 +1,17 @@
 package com.ntech.fourtop.ui.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +35,7 @@ public class LoginFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         return binding.getRoot();
     }
 
@@ -43,6 +49,9 @@ public class LoginFragment extends Fragment {
 
         binding.btnLogin.setOnClickListener(v -> onLoginClick());
         binding.btnRegistration.setOnClickListener(v -> onRegisterClick());
+
+        binding.etLogin.addTextChangedListener(onLoginTextChanged());
+        binding.etPass.addTextChangedListener(onPassTextChanged());
     }
 
     @Override
@@ -56,12 +65,12 @@ public class LoginFragment extends Fragment {
         navigateToHome(userToken);
     }
 
-    private void errorObserver(String throwable) {
-        binding.textErrorMessage.setText(throwable);
+    private void errorObserver(String message) {
+        binding.textErrorMessage.setText(message);
     }
 
     private void onLoginClick() {
-        Const.hideKeyboard(requireActivity());
+        hideKeyboard();
         String login = binding.etLogin.getText().toString().trim();
         String pass = binding.etPass.getText().toString().trim();
         if (login.isEmpty()) binding.tilLogin.setError(getString(R.string.login_toast_empty_login));
@@ -70,8 +79,42 @@ public class LoginFragment extends Fragment {
     }
 
     private void onRegisterClick() {
-        Const.hideKeyboard(requireActivity());
+        hideKeyboard();
         navigateToRegister();
+    }
+
+    private TextWatcher onLoginTextChanged() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.tilLogin.setError(null);
+            }
+        };
+    }
+
+    private TextWatcher onPassTextChanged() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.tilPass.setError(null);
+            }
+        };
     }
 
     // Navigate to home (news) view
@@ -95,5 +138,14 @@ public class LoginFragment extends Fragment {
         Editor editor = sp.edit();
         editor.putString(Const.SHARED_TOKEN, token);
         editor.apply();
+    }
+
+    public void hideKeyboard() {
+        if (requireActivity().getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) requireActivity()
+                    .getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(requireActivity().getCurrentFocus()
+                    .getWindowToken(), 0);
+        }
     }
 }

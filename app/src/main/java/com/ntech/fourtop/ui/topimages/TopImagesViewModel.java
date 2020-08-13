@@ -23,6 +23,7 @@ public class TopImagesViewModel extends ViewModel {
     private MutableLiveData<String> throwable;
     private MutableLiveData<String> errorMessage;
     private MutableLiveData<List<DataImage>> images;
+    private String userToken = "";
 
     public TopImagesViewModel() {
         repository = AppRepository.get();
@@ -50,9 +51,13 @@ public class TopImagesViewModel extends ViewModel {
         return images;
     }
 
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
     public void topPhotosRequest() {
         Timber.d("Send top photos request");
-        Disposable disposable = repository.topPhotosRequest("", "10", "0")
+        Disposable disposable = repository.topPhotosRequest(userToken, "10", "0")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onError);

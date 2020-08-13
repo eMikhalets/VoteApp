@@ -2,7 +2,9 @@ package com.ntech.fourtop.ui.userimages;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,7 +40,6 @@ public class UserImagesFragment extends Fragment {
 
     private ImageAdapter adapter;
     private UserImagesViewModel viewModel;
-    private ItemTouchHelper itemTouchHelper;
     private FragmentUserImagesBinding binding;
 
     @Override
@@ -62,10 +63,14 @@ public class UserImagesFragment extends Fragment {
         binding.recyclerUserImages.setAdapter(adapter);
         binding.recyclerUserImages.setHasFixedSize(true);
 
-        itemTouchHelper = getItemTouchHelper();
+        ItemTouchHelper itemTouchHelper = getItemTouchHelper();
         itemTouchHelper.attachToRecyclerView(binding.recyclerUserImages);
 
         setHasOptionsMenu(true);
+        if (savedInstanceState == null) {
+            loadUserToken();
+            viewModel.galleryRequest();
+        }
     }
 
     @Override
@@ -141,7 +146,7 @@ public class UserImagesFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
                                  int direction) {
-                viewModel.galleryRemoveRequest("", viewHolder.getAdapterPosition());
+                viewModel.galleryRemoveRequest(viewHolder.getAdapterPosition());
             }
         });
     }
@@ -155,5 +160,11 @@ public class UserImagesFragment extends Fragment {
         } else {
             return true;
         }
+    }
+
+    private void loadUserToken() {
+        SharedPreferences sp = requireActivity().getSharedPreferences(
+                Const.SHARED_FILE, Context.MODE_PRIVATE);
+        viewModel.setUserToken(sp.getString(Const.SHARED_TOKEN, ""));
     }
 }

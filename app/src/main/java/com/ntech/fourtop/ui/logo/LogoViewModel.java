@@ -72,6 +72,6 @@ public class LogoViewModel extends ViewModel {
 
     private void onError(Throwable t) {
         Timber.d(t);
-        throwable.setValue(t.toString());
+        throwable.setValue(t.getMessage());
     }
 }

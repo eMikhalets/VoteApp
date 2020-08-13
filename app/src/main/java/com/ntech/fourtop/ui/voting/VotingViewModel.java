@@ -21,8 +21,8 @@ public class VotingViewModel extends ViewModel {
     private MutableLiveData<String> throwable;
     private MutableLiveData<Integer> voting;
     private MutableLiveData<String> errorMessage;
-    private String userToken;
-    private String voteToken;
+    private String userToken = "";
+    private String voteToken = "";
 
     public VotingViewModel() {
         repository = AppRepository.get();
@@ -30,8 +30,6 @@ public class VotingViewModel extends ViewModel {
         throwable = new MutableLiveData<>();
         voting = new MutableLiveData<>();
         errorMessage = new MutableLiveData<>();
-        userToken = "";
-        voteToken = "";
     }
 
     @Override
