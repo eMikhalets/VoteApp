@@ -35,6 +35,10 @@ android {
         targetCompatibility = 1.8
         sourceCompatibility = 1.8
     }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
 }
 
 dependencies {
@@ -52,6 +56,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:2.71828"
     implementation "com.mikepenz:materialdrawer:$drawer_version"
     implementation "com.mikepenz:materialdrawer-nav:$drawer_version"
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.4'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

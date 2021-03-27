@@ -36,13 +36,13 @@
         android:label="LoginFragment"
         tools:layout="@layout/fragment_auth_login">
         <action
-            android:id="@+id/action_authLoginFragment_to_authRegisterFragment3"
+            android:id="@+id/action_authLogin_to_authRegister"
             app:destination="@id/authRegisterFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/authRegisterFragment"
-        android:name="com.emikhalets.voteapp.view.register.RegisterFragment"
+        android:name="com.emikhalets.voteapp.view.auth.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_auth_register"/>
 

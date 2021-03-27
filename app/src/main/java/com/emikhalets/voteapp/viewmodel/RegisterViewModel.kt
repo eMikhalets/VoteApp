@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.register
+package com.emikhalets.voteapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,41 +1,36 @@
-package com.emikhalets.voteapp.view.profile
+package com.emikhalets.voteapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.emikhalets.voteapp.data.AppRepository
 import com.emikhalets.voteapp.data.AppRepository.Companion.get
-import com.emikhalets.voteapp.network.pojo.DataProfile
 import com.emikhalets.voteapp.network.pojo.ResponseBase
-import com.emikhalets.voteapp.network.pojo.ResponseProfile
+import com.emikhalets.voteapp.network.pojo.ResponseVoting
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class ProfileViewModel : ViewModel() {
+class VotingViewModel : ViewModel() {
     private val repository: AppRepository?
     private val disposables: CompositeDisposable
-    private val logout: MutableLiveData<Int>
     private val throwable: MutableLiveData<String?>
-    private val profile: MutableLiveData<DataProfile?>
+    private val voting: MutableLiveData<Int>
     private val errorMessage: MutableLiveData<String?>
     private var userToken: String? = ""
+    private var voteToken: String? = ""
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
-    }
-
-    fun getLogout(): LiveData<Int> {
-        return logout
     }
 
     fun getThrowable(): LiveData<String?> {
         return throwable
     }
 
-    fun getProfile(): LiveData<DataProfile?> {
-        return profile
+    fun getVoting(): LiveData<Int> {
+        return voting
     }
 
     fun getErrorMessage(): LiveData<String?> {
@@ -46,29 +41,30 @@ class ProfileViewModel : ViewModel() {
         this.userToken = userToken
     }
 
-    fun profileRequest() {
-        Timber.d("Send profile request")
-        val disposable = repository!!.profileRequest(userToken)
+    fun voteCreateRequest() {
+        Timber.d("Send vote create request")
+        val disposable = repository!!.voteCreateRequest(userToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseProfile -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+                .subscribe({ response: ResponseVoting -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
         disposables.add(disposable)
     }
 
-    fun logoutRequest() {
-        Timber.d("Send logout request")
-        val disposable = repository!!.logoutRequest(userToken)
+    fun voteRequest(voteValue: Int) {
+        val vote = voteValue.toString()
+        Timber.d("Send vote request")
+        val disposable = repository!!.voteRequest(userToken, voteToken, vote)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
         disposables.add(disposable)
     }
 
-    private fun onSuccess(response: ResponseProfile) {
+    private fun onSuccess(response: ResponseVoting) {
         val status = response.status
-        Timber.d("Profile request status %d", status)
+        Timber.d("Vote create request status %d", status)
         when (status) {
-            200 -> profile.setValue(response.data)
+            200 -> voteToken = response.data!!.voteToken
             500 -> errorMessage.setValue(response.errorMsg)
         }
     }
@@ -77,7 +73,7 @@ class ProfileViewModel : ViewModel() {
         val status = response.status
         Timber.d("Logout request status %d", status)
         when (status) {
-            200 -> logout.setValue(status)
+            200 -> voting.setValue(status)
             500 -> errorMessage.setValue(response.errorMsg)
         }
     }
@@ -90,9 +86,8 @@ class ProfileViewModel : ViewModel() {
     init {
         repository = get()
         disposables = CompositeDisposable()
-        logout = MutableLiveData()
         throwable = MutableLiveData()
-        profile = MutableLiveData()
+        voting = MutableLiveData()
         errorMessage = MutableLiveData()
     }
 }

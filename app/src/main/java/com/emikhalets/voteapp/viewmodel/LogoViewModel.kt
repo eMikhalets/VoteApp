@@ -1,24 +1,22 @@
-package com.emikhalets.voteapp.view.topimages
+package com.emikhalets.voteapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.emikhalets.voteapp.data.AppRepository
 import com.emikhalets.voteapp.data.AppRepository.Companion.get
-import com.emikhalets.voteapp.network.pojo.DataImage
-import com.emikhalets.voteapp.network.pojo.ResponseImages
+import com.emikhalets.voteapp.network.pojo.ResponseBase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class TopImagesViewModel : ViewModel() {
+class LogoViewModel : ViewModel() {
     private val repository: AppRepository?
     private val disposables: CompositeDisposable
     private val throwable: MutableLiveData<String?>
     private val errorMessage: MutableLiveData<String?>
-    private val images: MutableLiveData<List<DataImage>?>
-    private var userToken: String? = ""
+    private val liveDataResponse: MutableLiveData<Int>
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
@@ -32,35 +30,31 @@ class TopImagesViewModel : ViewModel() {
         return errorMessage
     }
 
-    fun getImages(): LiveData<List<DataImage>?> {
-        return images
+    fun getLiveDataResponse(): LiveData<Int> {
+        return liveDataResponse
     }
 
-    fun setUserToken(userToken: String?) {
-        this.userToken = userToken
-    }
-
-    fun topPhotosRequest() {
-        Timber.d("Send top photos request")
-        val disposable = repository!!.topPhotosRequest(userToken, "10", "0")
+    fun tokenRequest(token: String?) {
+        Timber.d("Send token request")
+        val disposable = repository!!.tokenRequest(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseImages -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
         disposables.add(disposable)
     }
 
-    private fun onSuccess(response: ResponseImages) {
+    private fun onSuccess(response: ResponseBase) {
         val status = response.status
-        Timber.d("Top photos request status %d", status)
+        Timber.d("Check token request status %d", status)
         when (status) {
-            200 -> images.setValue(response.data)
-            500 -> errorMessage.setValue(response.errorMsg)
+            200 -> liveDataResponse.setValue(status)
+            403 -> errorMessage.setValue(response.errorMsg)
         }
     }
 
     private fun onError(t: Throwable) {
         Timber.d(t)
-        throwable.value = t.toString()
+        throwable.value = t.message
     }
 
     init {
@@ -68,6 +62,6 @@ class TopImagesViewModel : ViewModel() {
         disposables = CompositeDisposable()
         throwable = MutableLiveData()
         errorMessage = MutableLiveData()
-        images = MutableLiveData()
+        liveDataResponse = MutableLiveData()
     }
 }

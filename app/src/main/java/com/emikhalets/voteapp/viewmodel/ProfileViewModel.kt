@@ -1,26 +1,24 @@
-package com.emikhalets.voteapp.view.userimages
+package com.emikhalets.voteapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.emikhalets.voteapp.data.AppRepository
 import com.emikhalets.voteapp.data.AppRepository.Companion.get
-import com.emikhalets.voteapp.network.pojo.DataImage
 import com.emikhalets.voteapp.network.pojo.DataProfile
 import com.emikhalets.voteapp.network.pojo.ResponseBase
-import com.emikhalets.voteapp.network.pojo.ResponseImages
+import com.emikhalets.voteapp.network.pojo.ResponseProfile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import java.io.File
 
-class UserImagesViewModel : ViewModel() {
+class ProfileViewModel : ViewModel() {
     private val repository: AppRepository?
     private val disposables: CompositeDisposable
-    private val images: MutableLiveData<List<DataImage>?>
+    private val logout: MutableLiveData<Int>
     private val throwable: MutableLiveData<String?>
-    private val profile: MutableLiveData<DataProfile>
+    private val profile: MutableLiveData<DataProfile?>
     private val errorMessage: MutableLiveData<String?>
     private var userToken: String? = ""
     override fun onCleared() {
@@ -28,15 +26,15 @@ class UserImagesViewModel : ViewModel() {
         disposables.clear()
     }
 
-    fun getImages(): LiveData<List<DataImage>?> {
-        return images
+    fun getLogout(): LiveData<Int> {
+        return logout
     }
 
     fun getThrowable(): LiveData<String?> {
         return throwable
     }
 
-    fun getProfile(): LiveData<DataProfile> {
+    fun getProfile(): LiveData<DataProfile?> {
         return profile
     }
 
@@ -48,50 +46,38 @@ class UserImagesViewModel : ViewModel() {
         this.userToken = userToken
     }
 
-    fun galleryRequest() {
-        Timber.d("Send gallery request")
-        val disposable = repository!!.galleryRequest(userToken, "10", "0")
+    fun profileRequest() {
+        Timber.d("Send profile request")
+        val disposable = repository!!.profileRequest(userToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseImages -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+                .subscribe({ response: ResponseProfile -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
         disposables.add(disposable)
     }
 
-    fun galleryAddRequest(file: File?) {
-        Timber.d("Send gallery add request")
-        val disposable = repository!!.galleryAddRequest(userToken, file)
+    fun logoutRequest() {
+        Timber.d("Send logout request")
+        val disposable = repository!!.logoutRequest(userToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
         disposables.add(disposable)
     }
 
-    fun galleryRemoveRequest(position: Int) {
-        if (images.value != null) {
-            val id = images.value!![position].toString()
-            Timber.d("Send gallery remove request")
-            val disposable = repository!!.galleryRemoveRequest(userToken, id)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-            disposables.add(disposable)
-        }
-    }
-
-    private fun onSuccess(response: ResponseImages) {
+    private fun onSuccess(response: ResponseProfile) {
         val status = response.status
-        Timber.d("Gallery request status %d", status)
+        Timber.d("Profile request status %d", status)
         when (status) {
-            200 -> images.setValue(response.data)
+            200 -> profile.setValue(response.data)
             500 -> errorMessage.setValue(response.errorMsg)
         }
     }
 
     private fun onSuccess(response: ResponseBase) {
         val status = response.status
-        Timber.d("Gallery change request status %d", status)
+        Timber.d("Logout request status %d", status)
         when (status) {
-            200 -> galleryRequest()
+            200 -> logout.setValue(status)
             500 -> errorMessage.setValue(response.errorMsg)
         }
     }
@@ -104,7 +90,7 @@ class UserImagesViewModel : ViewModel() {
     init {
         repository = get()
         disposables = CompositeDisposable()
-        images = MutableLiveData()
+        logout = MutableLiveData()
         throwable = MutableLiveData()
         profile = MutableLiveData()
         errorMessage = MutableLiveData()
