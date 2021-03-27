@@ -50,31 +50,31 @@ class UserImagesViewModel : ViewModel() {
 
     fun galleryRequest() {
         Timber.d("Send gallery request")
-        val disposable = repository!!.galleryRequest(userToken, "10", "0")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseImages -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.galleryRequest(userToken, "10", "0")
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseImages -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     fun galleryAddRequest(file: File?) {
         Timber.d("Send gallery add request")
-        val disposable = repository!!.galleryAddRequest(userToken, file)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.galleryAddRequest(userToken, file)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     fun galleryRemoveRequest(position: Int) {
         if (images.value != null) {
             val id = images.value!![position].toString()
             Timber.d("Send gallery remove request")
-            val disposable = repository!!.galleryRemoveRequest(userToken, id)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-            disposables.add(disposable)
+//            val disposable = repository!!.galleryRemoveRequest(userToken, id)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//            disposables.add(disposable)
         }
     }
 

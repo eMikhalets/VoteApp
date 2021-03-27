@@ -36,11 +36,11 @@ class LoginViewModel : ViewModel() {
 
     fun loginRequest(login: String?, password: String?) {
         Timber.d("Send login request")
-        val disposable = repository!!.loginRequest(login, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseToken -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.loginRequest(login, password)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseToken -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     private fun onSuccess(response: ResponseToken) {

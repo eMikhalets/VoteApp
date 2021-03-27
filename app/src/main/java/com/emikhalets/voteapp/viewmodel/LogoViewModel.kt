@@ -36,11 +36,11 @@ class LogoViewModel : ViewModel() {
 
     fun tokenRequest(token: String?) {
         Timber.d("Send token request")
-        val disposable = repository!!.tokenRequest(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.tokenRequest(token)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     private fun onSuccess(response: ResponseBase) {

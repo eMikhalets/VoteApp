@@ -46,29 +46,29 @@ class RegisterViewModel : ViewModel() {
 
     fun register(email: String?, login: String?, password: String?, name: String?) {
         Timber.d("Send register request")
-        val disposable = repository!!.registerRequest(email, login, password, name)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseBase -> onRegisterSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.registerRequest(email, login, password, name)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseBase -> onRegisterSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     fun checkEmail(email: String?) {
         Timber.d("Send check email request")
-        val disposable = repository!!.checkEmailRequest(email)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseBase -> onCheckEmailSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.checkEmailRequest(email)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseBase -> onCheckEmailSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     fun checkLogin(login: String?) {
         Timber.d("Send check login request")
-        val disposable = repository!!.checkLoginRequest(login)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseBase -> onCheckLoginSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.checkLoginRequest(login)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseBase -> onCheckLoginSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     private fun onRegisterSuccess(response: ResponseBase) {

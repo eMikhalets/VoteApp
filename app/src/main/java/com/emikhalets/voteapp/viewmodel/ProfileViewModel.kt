@@ -48,20 +48,20 @@ class ProfileViewModel : ViewModel() {
 
     fun profileRequest() {
         Timber.d("Send profile request")
-        val disposable = repository!!.profileRequest(userToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseProfile -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.profileRequest(userToken)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseProfile -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     fun logoutRequest() {
         Timber.d("Send logout request")
-        val disposable = repository!!.logoutRequest(userToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.logoutRequest(userToken)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     private fun onSuccess(response: ResponseProfile) {

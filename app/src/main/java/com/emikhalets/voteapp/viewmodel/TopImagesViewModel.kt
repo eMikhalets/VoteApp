@@ -42,11 +42,11 @@ class TopImagesViewModel : ViewModel() {
 
     fun topPhotosRequest() {
         Timber.d("Send top photos request")
-        val disposable = repository!!.topPhotosRequest(userToken, "10", "0")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseImages -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.topPhotosRequest(userToken, "10", "0")
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseImages -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     private fun onSuccess(response: ResponseImages) {

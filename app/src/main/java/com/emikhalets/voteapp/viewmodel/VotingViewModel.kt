@@ -43,21 +43,21 @@ class VotingViewModel : ViewModel() {
 
     fun voteCreateRequest() {
         Timber.d("Send vote create request")
-        val disposable = repository!!.voteCreateRequest(userToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseVoting -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.voteCreateRequest(userToken)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseVoting -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     fun voteRequest(voteValue: Int) {
         val vote = voteValue.toString()
         Timber.d("Send vote request")
-        val disposable = repository!!.voteRequest(userToken, voteToken, vote)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
-        disposables.add(disposable)
+//        val disposable = repository!!.voteRequest(userToken, voteToken, vote)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ response: ResponseBase -> this.onSuccess(response) }) { t: Throwable -> onError(t) }
+//        disposables.add(disposable)
     }
 
     private fun onSuccess(response: ResponseVoting) {
