@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="app_padding">16dp</dimen>
+    <dimen name="app_padding_mid">12dp</dimen>
+    <dimen name="app_padding_small">8dp</dimen>
+    <dimen name="app_margin">16dp</dimen>
+    <dimen name="app_margin_small">8dp</dimen>
+    <dimen name="app_margin_large">32dp</dimen>
+    <dimen name="app_border_radius">8dp</dimen>
+    <dimen name="app_border_width">2dp</dimen>
+
+
+
     <dimen name="parent_layout_padding">16dp</dimen>
 </resources>

@@ -11,4 +11,45 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="AppToolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="AppTextLabel">
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">@dimen/app_margin</item>
+        <item name="android:layout_marginStart">@dimen/app_margin</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin</item>
+    </style>
+
+    <style name="AppTextInput">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginStart">@dimen/app_margin</item>
+        <item name="android:layout_marginTop">@dimen/app_margin</item>
+    </style>
+
+    <style name="AppEditText">
+        <item name="android:layout_marginStart">@dimen/app_margin</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin</item>
+        <item name="android:background">@drawable/style_edittext</item>
+        <item name="android:inputType">text</item>
+        <item name="android:padding">@dimen/app_padding_mid</item>
+    </style>
+
+    <style name="AppEditTextPassword" parent="AppEditText">
+        <item name="android:inputType">textPassword</item>
+    </style>
+
+    <style name="AppButton">
+        <item name="android:layout_marginStart">@dimen/app_margin</item>
+        <item name="android:layout_marginTop">@dimen/app_margin_large</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin</item>
+    </style>
+
 </resources>

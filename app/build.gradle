@@ -39,14 +39,19 @@ android {
 
 dependencies {
     def nav_version = "2.3.4"
+    def drawer_version = "7.0.0"
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.annotation:annotation:1.1.0"
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     // Third-party
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation "com.squareup.picasso:picasso:2.71828"
+    implementation "com.mikepenz:materialdrawer:$drawer_version"
+    implementation "com.mikepenz:materialdrawer-nav:$drawer_version"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

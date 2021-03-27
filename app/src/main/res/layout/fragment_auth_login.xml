@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_label"
+        style="@style/AppTextLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_text_login_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_login"
+        style="@style/AppTextInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_text_login"
+        app:layout_constraintStart_toStartOf="@id/input_login"
+        app:layout_constraintTop_toBottomOf="@id/text_label" />
+
+    <EditText
+        android:id="@+id/input_login"
+        style="@style/AppEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        app:layout_constraintTop_toBottomOf="@id/text_login"
+        tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/text_pass"
+        style="@style/AppTextInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_text_pass"
+        app:layout_constraintStart_toStartOf="@id/input_pass"
+        app:layout_constraintTop_toBottomOf="@id/input_login" />
+
+    <EditText
+        android:id="@+id/input_pass"
+        style="@style/AppEditTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        app:layout_constraintTop_toBottomOf="@id/text_pass"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/btn_login"
+        style="@style/AppButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_btn_login"
+        app:layout_constraintTop_toBottomOf="@id/input_pass" />
+
+    <Button
+        android:id="@+id/btn_register"
+        style="@style/AppButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_btn_register"
+        app:layout_constraintTop_toBottomOf="@id/btn_login" />
+</androidx.constraintlayout.widget.ConstraintLayout>

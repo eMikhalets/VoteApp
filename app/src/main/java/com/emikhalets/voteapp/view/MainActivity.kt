@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding!!.navigationView.setNavigationItemSelectedListener { item: MenuItem -> navigationListener(item) }
         navController!!.addOnDestinationChangedListener { controller: NavController, destination: NavDestination, arguments: Bundle? -> destinationChanged(controller, destination, arguments!!) }
         when (navController!!.currentDestination!!.id) {
-            R.id.logoFragment, R.id.loginFragment, R.id.registerFragment -> binding!!.toolbar.visibility = View.GONE
+            R.id.logoFragment, R.id.authLoginFragment, R.id.authRegisterFragment -> binding!!.toolbar.visibility = View.GONE
         }
     }
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val currentFragment = navController!!.currentDestination!!.id
         when (currentFragment) {
-            R.id.loginFragment, R.id.homeFragment -> finish()
+            R.id.authLoginFragment, R.id.homeFragment -> finish()
             else -> navController!!.popBackStack()
         }
     }

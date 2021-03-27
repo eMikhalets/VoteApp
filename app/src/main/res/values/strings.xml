@@ -1,18 +1,32 @@
 <resources>
     <string name="app_name">VoteApp</string>
 
-    <string name="section_in_development">Раздел находится в разработке</string>
-    <string name="loading_error">Ошибка загрузки данных</string>
+    <!-- Testing -->
+    <string name="home_label_test">Home Fragment</string>
+
+    <!-- Toolbar Titles -->
+    <string name="home_title">Latest Images</string>
+
+    <!-- Auth Screens -->
+    <string name="auth_text_login_label">Authorization</string>
+    <string name="auth_text_register_label">Registration</string>
+    <string name="auth_text_login">Login</string>
+    <string name="auth_text_pass">Password</string>
+    <string name="auth_text_pass_conf">Confirm password</string>
+    <string name="auth_btn_login">Login</string>
+    <string name="auth_btn_register">Register</string>
+
+
+
 
     <!-- NAV -->
+    <string name="loading_error">Ошибка загрузки данных</string>
     <string name="nav_profile">Профиль</string>
     <string name="nav_user_images">Мои фотографии</string>
     <string name="nav_voting">Голосование</string>
     <string name="nav_top_images">Топ фотографий</string>
     <string name="nav_top_users">Топ пользователей</string>
 
-    <!-- LOGIN -->
-    <string name="login_label">АВТОРИЗАЦИЯ</string>
     <string name="login_et_hint_login">Логин</string>
     <string name="login_et_hint_pass">Пароль</string>
     <string name="login_btn_auth">Войти</string>
