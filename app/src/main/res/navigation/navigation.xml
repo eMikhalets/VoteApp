@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/logoFragment"
-        android:name="com.ntech.fourtop.ui.logo.LogoFragment"
+        android:name="com.emikhalets.voteapp.view.logo.LogoFragment"
         android:label="LogoFragment"
         tools:layout="@layout/fragment_logo">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.ntech.fourtop.ui.login.LoginFragment"
+        android:name="com.emikhalets.voteapp.view.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.ntech.fourtop.ui.register.RegisterFragment"
+        android:name="com.emikhalets.voteapp.view.register.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
         <action
@@ -45,7 +45,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:label="HomeFragment"
-        android:name="com.ntech.fourtop.ui.home.HomeFragment"
+        android:name="com.emikhalets.voteapp.view.home.HomeFragment"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
@@ -67,32 +67,32 @@
     <fragment
         android:id="@+id/profileFragment"
         android:label="ProfileFragment"
-        android:name="com.ntech.fourtop.ui.profile.ProfileFragment"
+        android:name="com.emikhalets.voteapp.view.profile.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
     </fragment>
 
     <fragment
         android:id="@+id/userImagesFragment"
-        android:name="com.ntech.fourtop.ui.userimages.UserImagesFragment"
+        android:name="com.emikhalets.voteapp.view.userimages.UserImagesFragment"
         android:label="UserImagesFragment"
         tools:layout="@layout/fragment_user_images" />
 
     <fragment
         android:id="@+id/votingFragment"
-        android:name="com.ntech.fourtop.ui.voting.VotingFragment"
+        android:name="com.emikhalets.voteapp.view.voting.VotingFragment"
         android:label="VotingFragment"
         tools:layout="@layout/fragment_voting" />
 
     <fragment
         android:id="@+id/topImagesFragment"
         android:label="TopImagesFragment"
-        android:name="com.ntech.fourtop.ui.topimages.TopImagesFragment"
+        android:name="com.emikhalets.voteapp.view.topimages.TopImagesFragment"
         tools:layout="@layout/fragment_top_images" />
 
     <fragment
         android:id="@+id/topUsersFragment"
         android:label="TopUsersFragment"
-        android:name="com.ntech.fourtop.ui.topusers.TopUsersFragment"
+        android:name="com.emikhalets.voteapp.view.topusers.TopUsersFragment"
         tools:layout="@layout/fragment_top_users" />
 
 </navigation>

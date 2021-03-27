@@ -5,8 +5,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
 
-import com.ntech.fourtop.R;
-import com.ntech.fourtop.ui.login.LoginFragment;
+import com.emikhalets.voteapp.R;
+import com.emikhalets.voteapp.view.login.LoginFragment;
 
 import org.junit.Test;
 
