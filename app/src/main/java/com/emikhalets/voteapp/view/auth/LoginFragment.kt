@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.login
+package com.emikhalets.voteapp.view.auth
 
 import android.app.Activity
 import android.content.Context
@@ -16,8 +16,10 @@ import androidx.navigation.Navigation
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentLoginBinding
 import com.emikhalets.voteapp.utils.Const
+import com.emikhalets.voteapp.view.login.LoginViewModel
 
 class LoginFragment : Fragment() {
+
     private var viewModel: LoginViewModel? = null
     private var binding: FragmentLoginBinding? = null
     override fun onCreateView(inflater: LayoutInflater,

@@ -14,25 +14,25 @@
             android:id="@+id/action_homeFragment_to_authLoginFragment"
             app:destination="@id/authLoginFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
+            android:id="@+id/action_home_to_profile"
             app:destination="@id/profileFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_userImagesFragment"
+            android:id="@+id/action_home_to_userImages"
             app:destination="@id/userImagesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_votingFragment"
+            android:id="@+id/action_home_to_voting"
             app:destination="@id/votingFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_topImagesFragment"
+            android:id="@+id/action_home_to_topImages"
             app:destination="@id/topImagesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_topUsersFragment"
+            android:id="@+id/action_home_to_topUsers"
             app:destination="@id/topUsersFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/authLoginFragment"
-        android:name="com.emikhalets.voteapp.view.login.LoginFragment"
+        android:name="com.emikhalets.voteapp.view.auth.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_auth_login">
         <action
@@ -57,7 +57,7 @@
         android:id="@+id/userImagesFragment"
         android:name="com.emikhalets.voteapp.view.userimages.UserImagesFragment"
         android:label="UserImagesFragment"
-        tools:layout="@layout/fragment_user_images" />
+        tools:layout="@layout/fragment_images" />
 
     <fragment
         android:id="@+id/votingFragment"
