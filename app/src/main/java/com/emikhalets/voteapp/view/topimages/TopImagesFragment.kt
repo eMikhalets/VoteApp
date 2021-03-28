@@ -2,12 +2,12 @@ package com.emikhalets.voteapp.view.topimages
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentHomeBinding
+import com.emikhalets.voteapp.view.base.SecondaryFragment
 
-class TopImagesFragment : Fragment(R.layout.fragment_top_images) {
+class TopImagesFragment : SecondaryFragment(R.layout.fragment_top_images) {
 
     private val binding: FragmentHomeBinding by viewBinding()
 

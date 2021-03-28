@@ -2,14 +2,14 @@ package com.emikhalets.voteapp.view.auth
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentAuthRegisterBinding
 import com.emikhalets.voteapp.utils.hideKeyboard
 import com.emikhalets.voteapp.utils.popBackStack
+import com.emikhalets.voteapp.view.base.SecondaryFragment
 
-class RegisterFragment : Fragment(R.layout.fragment_auth_register) {
+class RegisterFragment : SecondaryFragment(R.layout.fragment_auth_register) {
 
     private val binding: FragmentAuthRegisterBinding by viewBinding()
 

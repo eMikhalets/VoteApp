@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(toolbar)
         ACTIVITY = this
         init()
     }
@@ -30,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         drawer = AppDrawer()
         toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
 
         if (true) {
             drawer.create()
