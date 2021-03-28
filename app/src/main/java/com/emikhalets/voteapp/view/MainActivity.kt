@@ -8,6 +8,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ActivityMainBinding
+import com.emikhalets.voteapp.model.firebase.AUTH
+import com.emikhalets.voteapp.model.firebase.initAuth
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.navigate
 import timber.log.Timber
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        navigate(R.id.action_home_to_authLogin)
+        if (AUTH.currentUser == null) navigate(R.id.action_home_to_authLogin)
     }
 
     override fun onBackPressed() {
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        initAuth()
         initLogger()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         navController = navHostFragment.navController

@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">VoteApp</string>
+    <string name="app_login_to_email">%s@roflomail.com</string>
+    <string name="app_toast_fill_fields">Fill all fields</string>
+    <string name="app_toast_pass_not_confirm">Pass not confirm</string>
+    <string name="app_toast_login_not_exist">Login not exist</string>
+    <string name="app_toast_invalid_pass">Invalid password</string>
+    <string name="app_toast_login_busy">Login is busy</string>
 
     <!-- Testing -->
     <string name="test_home_label">Home Fragment</string>

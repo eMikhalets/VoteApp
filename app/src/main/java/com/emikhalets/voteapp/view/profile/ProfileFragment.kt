@@ -5,6 +5,7 @@ import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentProfileBinding
+import com.emikhalets.voteapp.model.firebase.signOut
 import com.emikhalets.voteapp.test.createMockUser
 import com.emikhalets.voteapp.test.loadMock
 import com.emikhalets.voteapp.utils.ACTIVITY
@@ -43,6 +44,6 @@ class ProfileFragment : SecondaryFragment(R.layout.fragment_profile) {
     }
 
     private fun logout() {
-        navigate(R.id.authLoginFragment)
+        signOut { navigate(R.id.authLoginFragment) }
     }
 }

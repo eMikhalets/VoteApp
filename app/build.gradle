@@ -1,12 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.google.gms.google-services'
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
-    viewBinding.enabled true
 
     defaultConfig {
         applicationId 'com.emikhalets.voteapp'
@@ -39,6 +39,10 @@ android {
     kotlinOptions {
         jvmTarget = 1.8
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -62,6 +66,12 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:26.8.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-database'
 
     // Testing
     testImplementation 'junit:junit:4.13.2'

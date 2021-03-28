@@ -7,6 +7,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import coil.load
 import com.emikhalets.voteapp.R
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 fun navigate(action: Int, args: Bundle = Bundle.EMPTY) {
     if (args.isEmpty) ACTIVITY.navController.navigate(action)
@@ -28,8 +31,15 @@ fun toast(message: String) {
 }
 
 fun toastException(exception: Exception?) {
-    exception?.printStackTrace()
-    Toast.makeText(ACTIVITY, exception?.message.toString(), Toast.LENGTH_LONG).show()
+    when (exception) {
+        is FirebaseAuthInvalidUserException -> toast(ACTIVITY.getString(R.string.app_toast_login_not_exist))
+        is FirebaseAuthInvalidCredentialsException -> toast(ACTIVITY.getString(R.string.app_toast_invalid_pass))
+        is FirebaseAuthUserCollisionException -> toast(ACTIVITY.getString(R.string.app_toast_login_busy))
+        else -> {
+            exception?.printStackTrace()
+            Toast.makeText(ACTIVITY, exception?.message.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
 }
 
 fun ImageView.loadImage(
