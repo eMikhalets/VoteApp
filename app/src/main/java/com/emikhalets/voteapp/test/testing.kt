@@ -32,6 +32,10 @@ fun createMockUsers(): List<User> {
     )
 }
 
+fun createMockUser(): User {
+    return User("0", "mikeTyson", "", R.drawable.test_photo_1.toString(), 50)
+}
+
 fun ImageView.loadMock(url: Int) {
     load(url) { placeholder(R.drawable.placeholder_default) }
 }

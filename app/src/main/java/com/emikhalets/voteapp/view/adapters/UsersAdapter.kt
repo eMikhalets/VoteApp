@@ -46,7 +46,7 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
                 textPosition.text = (position + 1).toString()
                 textUsername.text = item.username
                 textRating.text = root.context.getString(
-                        R.string.item_images_text_rating,
+                        R.string.item_users_text_rating,
                         item.rating
                 )
             }

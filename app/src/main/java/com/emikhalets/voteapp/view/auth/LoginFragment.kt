@@ -9,9 +9,9 @@ import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.hideKeyboard
 import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.utils.popBackStack
-import com.emikhalets.voteapp.view.base.SecondaryFragment
+import com.emikhalets.voteapp.view.base.AuthFragment
 
-class LoginFragment : SecondaryFragment(R.layout.fragment_auth_login) {
+class LoginFragment : AuthFragment(R.layout.fragment_auth_login) {
 
     private val binding: FragmentAuthLoginBinding by viewBinding()
 

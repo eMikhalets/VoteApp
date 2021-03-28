@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="AppScreen"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/text_old"
+        style="@style/AppTextInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_margin_small"
+        android:text="@string/profile_text_old_pass"
+        app:layout_constraintStart_toStartOf="@id/input_old"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/input_old"
+        style="@style/AppEditTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        app:layout_constraintTop_toBottomOf="@id/text_old"
+        tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/text_new"
+        style="@style/AppTextInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_margin_small"
+        android:text="@string/profile_text_new_pass"
+        app:layout_constraintStart_toStartOf="@id/input_new"
+        app:layout_constraintTop_toBottomOf="@id/input_old" />
+
+    <EditText
+        android:id="@+id/input_new"
+        style="@style/AppEditTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        app:layout_constraintTop_toBottomOf="@id/text_new"
+        tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/text_new_conf"
+        style="@style/AppTextInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_margin_small"
+        android:text="@string/profile_text_new_pass_conf"
+        app:layout_constraintStart_toStartOf="@id/input_new_conf"
+        app:layout_constraintTop_toBottomOf="@id/input_new" />
+
+    <EditText
+        android:id="@+id/input_new_conf"
+        style="@style/AppEditTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/app_margin_small"
+        android:autofillHints=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_new_conf"
+        tools:ignore="LabelFor" />
+</androidx.constraintlayout.widget.ConstraintLayout>

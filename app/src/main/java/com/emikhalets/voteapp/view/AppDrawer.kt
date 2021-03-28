@@ -56,6 +56,12 @@ class AppDrawer {
         ACTIVITY.toolbar.setNavigationOnClickListener { drawer.openDrawer() }
     }
 
+    fun hideDrawer() {
+        ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
+        layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    }
+
     fun disableDrawer() {
         drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
         ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(true)

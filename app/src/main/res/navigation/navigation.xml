@@ -78,7 +78,11 @@
         android:id="@+id/profileFragment"
         android:name="com.emikhalets.voteapp.view.profile.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_changePass"
+            app:destination="@id/changePassDialog" />
+    </fragment>
 
     <fragment
         android:id="@+id/userImagesFragment"
@@ -103,5 +107,11 @@
         android:name="com.emikhalets.voteapp.view.top_users.TopUsersFragment"
         android:label="TopUsersFragment"
         tools:layout="@layout/fragment_top_users" />
+
+    <dialog
+        android:id="@+id/changePassDialog"
+        android:name="com.emikhalets.voteapp.view.profile.ChangePassDialog"
+        android:label="ChangePassDialog"
+        tools:layout="@layout/dialog_change_pass" />
 
 </navigation>

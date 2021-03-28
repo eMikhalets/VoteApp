@@ -19,6 +19,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ACTIVITY.drawer.enableDrawer()
         ACTIVITY.title = getString(R.string.home_title)
         initRecyclerView()
     }

@@ -8,9 +8,9 @@ import com.emikhalets.voteapp.databinding.FragmentAuthRegisterBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.hideKeyboard
 import com.emikhalets.voteapp.utils.popBackStack
-import com.emikhalets.voteapp.view.base.SecondaryFragment
+import com.emikhalets.voteapp.view.base.AuthFragment
 
-class RegisterFragment : SecondaryFragment(R.layout.fragment_auth_register) {
+class RegisterFragment : AuthFragment(R.layout.fragment_auth_register) {
 
     private val binding: FragmentAuthRegisterBinding by viewBinding()
 
