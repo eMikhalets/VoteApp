@@ -52,6 +52,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     // Third-party
+    implementation "io.coil-kt:coil:1.1.1"
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation "com.squareup.picasso:picasso:2.71828"
     implementation "com.mikepenz:materialdrawer:$drawer_version"

@@ -7,9 +7,9 @@ import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.loadImage
 import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.utils.popBackStack
-import com.emikhalets.voteapp.utils.toast
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -29,7 +29,6 @@ class AppDrawer {
 
     private val itemClickListener = object : Drawer.OnDrawerItemClickListener {
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
-            toast(position.toString())
             when (position) {
                 1 -> navigate(R.id.action_home_to_profile)
                 2 -> navigate(R.id.action_home_to_userImages)
@@ -75,7 +74,7 @@ class AppDrawer {
     private fun initLoader() {
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable) {
-//                imageView.downloadAndSetImage(uri.toString())
+                imageView.loadImage(uri.toString(), R.drawable.placeholder_user)
             }
         })
     }

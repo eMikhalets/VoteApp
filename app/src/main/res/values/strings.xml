@@ -20,6 +20,7 @@
 
     <!-- Toolbar Titles -->
     <string name="home_title">Latest Images</string>
+    <string name="auth_title">Authorization</string>
     <string name="profile_title">Profile</string>
     <string name="images_title">User Images</string>
     <string name="voting_title">Voting</string>
@@ -35,6 +36,9 @@
     <string name="auth_btn_login">Login</string>
     <string name="auth_btn_register">Register</string>
 
+    <!-- Images List Adapter -->
+    <string name="item_images_text_rating">Rating: %d</string>
+    <string name="item_images_text_owner">Owner: %s</string>
 
 
 

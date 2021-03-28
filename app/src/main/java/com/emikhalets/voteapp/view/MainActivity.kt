@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ActivityMainBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.navigate
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +27,11 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onResume() {
+        super.onResume()
+        navigate(R.id.action_home_to_authLogin)
+    }
+
     override fun onBackPressed() {
         when (navController.currentDestination?.id) {
             R.id.authLoginFragment -> finish()
@@ -33,12 +40,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        initLogger()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         navController = navHostFragment.navController
         drawer = AppDrawer()
         toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         drawer.create()
-        navigate(R.id.action_home_to_authLogin)
+    }
+
+    private fun initLogger() {
+        if (BuildConfig.DEBUG) Timber.plant(object : Timber.DebugTree() {
+            override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+                super.log(priority, "___APPLICATION___", message, t)
+            }
+        })
     }
 }
