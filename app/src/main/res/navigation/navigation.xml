@@ -82,7 +82,7 @@
 
     <fragment
         android:id="@+id/userImagesFragment"
-        android:name="com.emikhalets.voteapp.view.userimages.UserImagesFragment"
+        android:name="com.emikhalets.voteapp.view.user_images.UserImagesFragment"
         android:label="UserImagesFragment"
         tools:layout="@layout/fragment_images" />
 
@@ -94,13 +94,13 @@
 
     <fragment
         android:id="@+id/topImagesFragment"
-        android:name="com.emikhalets.voteapp.view.topimages.TopImagesFragment"
+        android:name="com.emikhalets.voteapp.view.top_images.TopImagesFragment"
         android:label="TopImagesFragment"
         tools:layout="@layout/fragment_top_images" />
 
     <fragment
         android:id="@+id/topUsersFragment"
-        android:name="com.emikhalets.voteapp.view.topusers.TopUsersFragment"
+        android:name="com.emikhalets.voteapp.view.top_users.TopUsersFragment"
         android:label="TopUsersFragment"
         tools:layout="@layout/fragment_top_users" />
 

@@ -10,7 +10,6 @@ import com.emikhalets.voteapp.databinding.FragmentHomeBinding
 import com.emikhalets.voteapp.test.createMockImages
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
-import timber.log.Timber
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -26,12 +25,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun initRecyclerView() {
         imagesAdapter = ImagesAdapter(true)
-        Timber.d(imagesAdapter.toString())
         llm = LinearLayoutManager(this.context)
-        binding.listImages.layoutManager = llm
-        binding.listImages.setHasFixedSize(true)
-        binding.listImages.isNestedScrollingEnabled = false
-        binding.listImages.adapter = imagesAdapter
+        binding.apply {
+            listImages.layoutManager = llm
+            listImages.setHasFixedSize(true)
+            listImages.isNestedScrollingEnabled = false
+            listImages.adapter = imagesAdapter
+        }
         imagesAdapter.updateList(createMockImages())
     }
 }

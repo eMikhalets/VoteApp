@@ -10,7 +10,6 @@
     <dimen name="app_border_width">2dp</dimen>
     <dimen name="app_card_corner_radius">8dp</dimen>
 
-
-
-    <dimen name="parent_layout_padding">16dp</dimen>
+    <!-- Top Users Dimensions -->
+    <dimen name="item_user_photo_size">100dp</dimen>
 </resources>
