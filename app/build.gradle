@@ -48,12 +48,16 @@ android {
 dependencies {
     def nav_version = "2.3.4"
     def drawer_version = "7.0.0"
+    def activity_version = "1.2.2"
+    def fragment_version = "1.3.2"
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "androidx.activity:activity-ktx:$activity_version"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     // Third-party
     implementation "io.coil-kt:coil:1.1.1"
@@ -62,6 +66,7 @@ dependencies {
     implementation "com.mikepenz:materialdrawer:$drawer_version"
     implementation "com.mikepenz:materialdrawer-nav:$drawer_version"
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.4'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -77,14 +82,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
-    //delete
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
-    implementation "io.reactivex.rxjava2:rxjava:2.2.9"
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    androidTestImplementation 'androidx.navigation:navigation-testing:2.3.4'
-    debugImplementation 'androidx.fragment:fragment-testing:1.3.1'
 }

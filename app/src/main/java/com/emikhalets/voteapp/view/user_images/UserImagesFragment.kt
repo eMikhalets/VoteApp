@@ -12,6 +12,7 @@ import com.emikhalets.voteapp.databinding.FragmentImagesBinding
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.test.createMockImages
 import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.toast
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.SecondaryFragment
 
@@ -23,11 +24,16 @@ class UserImagesFragment : SecondaryFragment(R.layout.fragment_images) {
     private val imagesList = mutableListOf<Image>()
     private var isDescending = true
 
+    private val takeImageResult = registerForActivityResult(TakeImageContract()) {
+        it?.let { uri -> toast(uri.toString()) }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         ACTIVITY.title = getString(R.string.images_title)
         initRecyclerView()
+        initListeners()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -69,5 +75,13 @@ class UserImagesFragment : SecondaryFragment(R.layout.fragment_images) {
         }
         imagesList.addAll(createMockImages())
         imagesAdapter.updateList(imagesList)
+    }
+
+    private fun initListeners() {
+        binding.btnTakeImage.setOnClickListener { onTakeImageClick() }
+    }
+
+    private fun onTakeImageClick() {
+        takeImageResult.launch(250)
     }
 }

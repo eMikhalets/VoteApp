@@ -12,6 +12,7 @@ private const val CHILD_USERNAME = "username"
 private const val CHILD_PASSWORD = "password"
 private const val CHILD_PHOTO = "photo"
 private const val CHILD_RATING = "rating"
+private const val CHILD_IMAGES = "images"
 
 private val REF_DATABASE = FirebaseDatabase.getInstance().reference
 private val REF_USERS_ID = REF_DATABASE.child(NODE_USERS).child(USER_ID)

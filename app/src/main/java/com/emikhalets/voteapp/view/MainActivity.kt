@@ -1,6 +1,7 @@
 package com.emikhalets.voteapp.view
 
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
@@ -11,6 +12,7 @@ import com.emikhalets.voteapp.databinding.ActivityMainBinding
 import com.emikhalets.voteapp.model.firebase.AUTH
 import com.emikhalets.voteapp.model.firebase.initAuth
 import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.CAMERA
 import com.emikhalets.voteapp.utils.navigate
 import timber.log.Timber
 
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     lateinit var drawer: AppDrawer
     lateinit var toolbar: Toolbar
+
+    private val permissionResult = registerForActivityResult(RequestPermission()) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (AUTH.currentUser == null) navigate(R.id.action_home_to_authLogin)
+        permissionResult.launch(CAMERA)
     }
 
     override fun onBackPressed() {

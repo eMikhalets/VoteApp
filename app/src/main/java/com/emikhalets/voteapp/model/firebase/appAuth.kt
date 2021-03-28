@@ -15,8 +15,8 @@ lateinit var USER: User
 
 fun initAuth() {
     AUTH = Firebase.auth
-    USER_ID = AUTH.currentUser?.uid.toString()
     USER = User()
+    USER_ID = AUTH.currentUser?.uid.toString()
 }
 
 fun sendLoginToFirebase(login: String, pass: String) {
