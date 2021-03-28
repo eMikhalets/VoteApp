@@ -5,5 +5,6 @@ data class Image(
         val url: String,
         val rating: Int,
         val ownerId: String,
-        val ownerName: String
+        val ownerName: String,
+        val date: Long
 )

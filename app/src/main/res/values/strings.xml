@@ -27,6 +27,10 @@
     <string name="top_images_title">Top Images</string>
     <string name="top_users_title">Top Users</string>
 
+    <!-- Images List Adapter -->
+    <string name="item_images_text_rating">Rating: %d</string>
+    <string name="item_images_text_owner">Owner: %s</string>
+
     <!-- Auth Screens -->
     <string name="auth_text_login_label">Authorization</string>
     <string name="auth_text_register_label">Registration</string>
@@ -36,9 +40,10 @@
     <string name="auth_btn_login">Login</string>
     <string name="auth_btn_register">Register</string>
 
-    <!-- Images List Adapter -->
-    <string name="item_images_text_rating">Rating: %d</string>
-    <string name="item_images_text_owner">Owner: %s</string>
+    <!-- User Images Screen -->
+    <string name="images_menu_sort">Sort images</string>
+    <string name="images_menu_sort_date">Sort by upload date</string>
+    <string name="images_menu_sort_rating">Sort by rating</string>
 
 
 

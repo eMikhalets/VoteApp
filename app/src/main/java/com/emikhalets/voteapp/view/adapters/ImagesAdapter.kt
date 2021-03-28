@@ -1,6 +1,7 @@
 package com.emikhalets.voteapp.view.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emikhalets.voteapp.R
@@ -39,7 +40,7 @@ class ImagesAdapter(
         notifyItemInserted(images.size)
     }
 
-    class ImagesViewHolder(private val binding: ItemImageBinding) :
+    inner class ImagesViewHolder(private val binding: ItemImageBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Image) {
@@ -49,10 +50,13 @@ class ImagesAdapter(
                         R.string.item_images_text_rating,
                         item.rating
                 )
-                textOwner.text = root.context.getString(
-                        R.string.item_images_text_owner,
-                        item.ownerName
-                )
+                if (showOwner) {
+                    textOwner.text = root.context.getString(
+                            R.string.item_images_text_owner,
+                            item.ownerName
+                    )
+                    textOwner.visibility = View.VISIBLE
+                } else textOwner.visibility = View.GONE
             }
         }
     }
