@@ -8,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ActivityMainBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.navigate
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,18 +25,20 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onBackPressed() {
+        when (navController.currentDestination?.id) {
+            R.id.authLoginFragment -> finish()
+            else -> super.onBackPressed()
+        }
+    }
+
     private fun init() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         navController = navHostFragment.navController
         drawer = AppDrawer()
         toolbar = binding.toolbar
         setSupportActionBar(toolbar)
-
-        if (true) {
-            drawer.create()
-            //            replaceFragment(ChatsFragment(), false)
-        } else {
-            //            replaceFragment(EnterPhoneFragment(), false)
-        }
+        drawer.create()
+        navigate(R.id.action_home_to_authLogin)
     }
 }

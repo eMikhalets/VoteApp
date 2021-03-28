@@ -7,27 +7,51 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:label="HomeFragment"
         android:name="com.emikhalets.voteapp.view.home.HomeFragment"
-        tools:layout="@layout/fragment_home" >
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_authLoginFragment"
-            app:destination="@id/authLoginFragment" />
+            android:id="@+id/action_home_to_authLogin"
+            app:destination="@id/authLoginFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
         <action
             android:id="@+id/action_home_to_profile"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
         <action
             android:id="@+id/action_home_to_userImages"
-            app:destination="@id/userImagesFragment" />
+            app:destination="@id/userImagesFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
         <action
             android:id="@+id/action_home_to_voting"
-            app:destination="@id/votingFragment" />
+            app:destination="@id/votingFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
         <action
             android:id="@+id/action_home_to_topImages"
-            app:destination="@id/topImagesFragment" />
+            app:destination="@id/topImagesFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
         <action
             android:id="@+id/action_home_to_topUsers"
-            app:destination="@id/topUsersFragment" />
+            app:destination="@id/topUsersFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
     </fragment>
 
     <fragment
@@ -37,21 +61,24 @@
         tools:layout="@layout/fragment_auth_login">
         <action
             android:id="@+id/action_authLogin_to_authRegister"
-            app:destination="@id/authRegisterFragment" />
+            app:destination="@id/authRegisterFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
     </fragment>
 
     <fragment
         android:id="@+id/authRegisterFragment"
         android:name="com.emikhalets.voteapp.view.auth.RegisterFragment"
         android:label="RegisterFragment"
-        tools:layout="@layout/fragment_auth_register"/>
+        tools:layout="@layout/fragment_auth_register" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:label="ProfileFragment"
         android:name="com.emikhalets.voteapp.view.profile.ProfileFragment"
-        tools:layout="@layout/fragment_profile" >
-    </fragment>
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/userImagesFragment"
@@ -67,14 +94,14 @@
 
     <fragment
         android:id="@+id/topImagesFragment"
-        android:label="TopImagesFragment"
         android:name="com.emikhalets.voteapp.view.topimages.TopImagesFragment"
+        android:label="TopImagesFragment"
         tools:layout="@layout/fragment_top_images" />
 
     <fragment
         android:id="@+id/topUsersFragment"
-        android:label="TopUsersFragment"
         android:name="com.emikhalets.voteapp.view.topusers.TopUsersFragment"
+        android:label="TopUsersFragment"
         tools:layout="@layout/fragment_top_users" />
 
 </navigation>

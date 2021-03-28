@@ -10,9 +10,9 @@ fun navigate(action: Int, args: Bundle = Bundle.EMPTY) {
     else ACTIVITY.navController.navigate(action, args)
 }
 
-fun popBackStack(destination: Int? = null) {
+fun popBackStack(destination: Int? = null, inclusive: Boolean = false) {
     if (destination == null) ACTIVITY.navController.popBackStack()
-    else ACTIVITY.navController.popBackStack(destination, false)
+    else ACTIVITY.navController.popBackStack(destination, inclusive)
 }
 
 fun hideKeyboard() {
