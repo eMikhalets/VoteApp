@@ -11,8 +11,8 @@ class RegisterViewModel : ViewModel() {
     fun sendRegisterRequest(login: String, pass: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             AUTH_REPOSITORY.register(login, pass) {
-                DATABASE_REPOSITORY.saveUserToDatabase(login, pass) {
-                    DATABASE_REPOSITORY.fillCurrentUserData { onSuccess() }
+                DATABASE_REPOSITORY.saveUserToDatabase(login) {
+                    onSuccess()
                 }
             }
         }

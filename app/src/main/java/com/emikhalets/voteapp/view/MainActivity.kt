@@ -31,9 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (AUTH.currentUser == null && navController.currentDestination?.id == R.id.homeFragment) {
-            navigate(R.id.action_home_to_authLogin)
-        }
+        checkAuth()
         permissionResult.launch(CAMERA)
     }
 
@@ -55,5 +53,12 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         drawer.create()
+    }
+
+    private fun checkAuth() {
+        val isCurrentHomeScreen = navController.currentDestination?.id == R.id.homeFragment
+        if (USER == null && isCurrentHomeScreen) {
+            navigate(R.id.action_home_to_authLogin)
+        }
     }
 }

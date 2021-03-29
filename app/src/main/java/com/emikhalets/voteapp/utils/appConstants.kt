@@ -2,20 +2,20 @@ package com.emikhalets.voteapp.utils
 
 import android.Manifest
 import com.emikhalets.voteapp.BuildConfig
-import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
-import com.emikhalets.voteapp.model.firebase.fillCurrentUserData
 import com.emikhalets.voteapp.view.MainActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 lateinit var ACTIVITY: MainActivity
 lateinit var AUTH: FirebaseAuth
 lateinit var USER_ID: String
-lateinit var USER: User
+var USER: FirebaseUser? = null
 
 lateinit var AUTH_REPOSITORY: FirebaseAuthRepository
 lateinit var DATABASE_REPOSITORY: FirebaseDatabaseRepository
@@ -30,9 +30,8 @@ fun firstInitializationApp() {
 
 fun initAuthentication() {
     AUTH = Firebase.auth
-    USER_ID = AUTH.currentUser?.uid.toString()
-    USER = User(id = USER_ID)
-    fillCurrentUserData()
+    USER = AUTH.currentUser
+    USER_ID = USER?.uid ?: ""
 }
 
 private fun initRepositories() {

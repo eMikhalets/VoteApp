@@ -1,7 +1,6 @@
 package com.emikhalets.voteapp.model.firebase
 
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.*
 
 class FirebaseAuthRepository {
@@ -11,7 +10,8 @@ class FirebaseAuthRepository {
         AUTH.signInWithEmailAndPassword(email, pass)
                 .addOnFailureListener { toastException(it) }
                 .addOnSuccessListener {
-                    USER_ID = AUTH.currentUser?.uid.toString()
+                    USER = AUTH.currentUser
+                    USER_ID = USER?.uid ?: ""
                     onSuccess()
                 }
     }
@@ -21,14 +21,15 @@ class FirebaseAuthRepository {
         AUTH.createUserWithEmailAndPassword(email, pass)
                 .addOnFailureListener { toastException(it) }
                 .addOnSuccessListener {
-                    USER_ID = AUTH.currentUser?.uid.toString()
+                    USER = AUTH.currentUser
+                    USER_ID = USER?.uid ?: ""
                     onSuccess()
                 }
     }
 
     inline fun logOut(crossinline onComplete: () -> Unit) {
+        USER = null
         USER_ID = ""
-        USER = User()
         AUTH.signOut()
         onComplete()
     }
