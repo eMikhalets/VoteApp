@@ -42,6 +42,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun firstInitializationApp() {
+        initAuthentication()
+        initRepositories()
+        initLogger()
+    }
+
     private fun initNavigation() {
         val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
@@ -56,9 +62,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAuth() {
-        val isCurrentHomeScreen = navController.currentDestination?.id == R.id.homeFragment
-        if (USER == null && isCurrentHomeScreen) {
+        if (USER == null && navController.currentDestination?.id == R.id.homeFragment) {
             navigate(R.id.action_home_to_authLogin)
+//            checkUserExisting { navigate(R.id.action_home_to_authLogin) }
         }
     }
 }

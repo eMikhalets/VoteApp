@@ -3,6 +3,7 @@ package com.emikhalets.voteapp.model.firebase
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.USER_ID
+import com.emikhalets.voteapp.utils.singleDataChange
 import com.emikhalets.voteapp.utils.toastException
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
@@ -11,11 +12,23 @@ class FirebaseDatabaseRepository {
 
     val refDatabase = FirebaseDatabase.getInstance().reference
 
-    fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
+    private fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
 
-    fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
+    private fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
 
-    inline fun saveUserToDatabase(login: String, crossinline onSuccess: () -> Unit) {
+    fun getNewKeyFromImagesNode(): String {
+        return REF_DATABASE.child(NODE_IMAGES).child(USER_ID).push().key.toString()
+    }
+
+    fun loadUserData(onSuccess: (User) -> Unit) {
+        refDatabase.child(NODE_USERS).child(USER_ID).singleDataChange { snapshot ->
+            if (snapshot.exists()) {
+                onSuccess(snapshot.toUser())
+            }
+        }
+    }
+
+    inline fun saveUser(login: String, crossinline onSuccess: () -> Unit) {
         val map = hashMapOf(
                 CHILD_ID to USER_ID,
                 CHILD_USERNAME to login,
@@ -26,6 +39,27 @@ class FirebaseDatabaseRepository {
                 .addOnFailureListener { toastException(it) }
                 .addOnSuccessListener { onSuccess() }
     }
+
+    inline fun updateUserPhoto(url: String, crossinline onSuccess: () -> Unit) {
+        val map = hashMapOf<String, Any>(CHILD_PHOTO to url)
+        refDatabase.child(NODE_USERS).child(USER_ID).updateChildren(map)
+                .addOnFailureListener { toastException(it) }
+                .addOnSuccessListener { onSuccess() }
+    }
+
+//    inline fun saveImage(url: String, crossinline onSuccess: () -> Unit) {
+//        val map = hashMapOf(
+//                CHILD_ID to key,
+//                CHILD_URL to url,
+//                CHILD_RATING to 0,
+//                CHILD_OWNER_ID to USER_ID,
+////            CHILD_OWNER_NAME to USER.username,
+//                CHILD_DATE to ServerValue.TIMESTAMP
+//        )
+//        REF_DATABASE.child(NODE_IMAGES).child(USER_ID).child(key).setValue(map)
+//                .addOnFailureListener { toastException(it) }
+//                .addOnSuccessListener { popBackStack(R.id.homeFragment) }
+//    }
 
     companion object {
         const val NODE_IMAGES = "images"

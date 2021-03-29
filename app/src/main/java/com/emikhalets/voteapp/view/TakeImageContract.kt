@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.user_images
+package com.emikhalets.voteapp.view
 
 import android.app.Activity
 import android.content.Context

@@ -14,6 +14,7 @@ import com.emikhalets.voteapp.model.firebase.loadUserImages
 import com.emikhalets.voteapp.model.firebase.saveImageToDatabase
 import com.emikhalets.voteapp.model.firebase.saveImageToStorage
 import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.view.TakeImageContract
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.SecondaryFragment
 
