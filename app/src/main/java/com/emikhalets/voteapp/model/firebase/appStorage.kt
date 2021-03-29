@@ -1,6 +1,7 @@
 package com.emikhalets.voteapp.model.firebase
 
 import android.net.Uri
+import com.emikhalets.voteapp.utils.USER_ID
 import com.emikhalets.voteapp.utils.toastException
 import com.google.firebase.storage.FirebaseStorage
 

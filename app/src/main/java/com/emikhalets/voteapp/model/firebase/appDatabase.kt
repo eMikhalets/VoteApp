@@ -3,9 +3,7 @@ package com.emikhalets.voteapp.model.firebase
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.popBackStack
-import com.emikhalets.voteapp.utils.singleDataChange
-import com.emikhalets.voteapp.utils.toastException
+import com.emikhalets.voteapp.utils.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
@@ -29,8 +27,11 @@ fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
 
 fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
 
-fun initCurrentUser() {
-    REF_DATABASE.child(NODE_USERS).child(USER_ID).singleDataChange { USER = it.toUser() }
+inline fun fillCurrentUserData(crossinline onComplete: () -> Unit = {}) {
+    REF_DATABASE.child(NODE_USERS).child(USER_ID).singleDataChange {
+        USER = it.toUser()
+        onComplete()
+    }
 }
 
 fun getNewKeyFromImagesNode(): String {
@@ -45,17 +46,20 @@ inline fun loadUserImages(crossinline function: (images: List<Image>) -> Unit) {
     }
 }
 
-fun saveUserToDatabase() {
+fun saveUserToDatabase(login: String, pass: String, onSuccess: () -> Unit) {
     val map = hashMapOf(
             CHILD_ID to USER_ID,
-            CHILD_USERNAME to USER.username,
-            CHILD_PASSWORD to USER.password,
-            CHILD_PHOTO to USER.photo,
+            CHILD_USERNAME to login,
+            CHILD_PASSWORD to pass,
+            CHILD_PHOTO to "",
             CHILD_RATING to 0
     )
     REF_DATABASE.child(NODE_USERS).child(USER_ID).setValue(map)
             .addOnFailureListener { toastException(it) }
-            .addOnSuccessListener { popBackStack(R.id.homeFragment) }
+            .addOnSuccessListener {
+                USER_ID = AUTH.currentUser?.uid.toString()
+                onSuccess()
+            }
 }
 
 fun saveImageToDatabase(url: String, key: String) {

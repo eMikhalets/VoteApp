@@ -7,6 +7,7 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
+    viewBinding.enabled = true
 
     defaultConfig {
         applicationId 'com.emikhalets.voteapp'
@@ -30,18 +31,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         targetCompatibility = 1.8
         sourceCompatibility = 1.8
     }
-
     kotlinOptions {
         jvmTarget = 1.8
-    }
-
-    buildFeatures {
-        viewBinding true
     }
 }
 
@@ -54,15 +49,14 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.annotation:annotation:1.1.0"
-    implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    implementation 'com.google.android.material:material:1.3.0'
 
     // Third-party
     implementation "io.coil-kt:coil:1.1.1"
     implementation "com.jakewharton.timber:timber:4.7.1"
-    implementation "com.squareup.picasso:picasso:2.71828"
     implementation "com.mikepenz:materialdrawer:$drawer_version"
     implementation "com.mikepenz:materialdrawer-nav:$drawer_version"
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.4'

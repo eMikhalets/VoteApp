@@ -2,21 +2,23 @@ package com.emikhalets.voteapp.view.auth
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentAuthRegisterBinding
-import com.emikhalets.voteapp.model.firebase.sendRegisterToFirebase
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.hideKeyboard
+import com.emikhalets.voteapp.utils.popBackStack
 import com.emikhalets.voteapp.utils.toast
 import com.emikhalets.voteapp.view.base.AuthFragment
+import com.emikhalets.voteapp.viewmodel.RegisterViewModel
+import kotlinx.coroutines.launch
 
 class RegisterFragment : AuthFragment(R.layout.fragment_auth_register) {
 
     private val binding: FragmentAuthRegisterBinding by viewBinding()
-    private lateinit var login: String
-    private lateinit var pass: String
-    private lateinit var passConf: String
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,19 +28,22 @@ class RegisterFragment : AuthFragment(R.layout.fragment_auth_register) {
 
     private fun onRegisterClick() {
         hideKeyboard()
-        login = binding.inputLogin.text.toString()
-        pass = binding.inputPass.text.toString()
-        passConf = binding.inputPassConf.text.toString()
-        checkFillFields()
-    }
+        val login = binding.inputLogin.text.toString()
+        val pass = binding.inputPass.text.toString()
+        val passConf = binding.inputPassConf.text.toString()
 
-    private fun checkFillFields() {
-        if (login.isNotEmpty() && pass.isNotEmpty() && passConf.isNotEmpty()) checkPasswords()
-        else toast(getString(R.string.app_toast_fill_fields))
-    }
-
-    private fun checkPasswords() {
-        if (pass == passConf) sendRegisterToFirebase(login, pass)
-        else toast(getString(R.string.app_toast_pass_not_confirm))
+        if (login.isNotEmpty() && pass.isNotEmpty() && passConf.isNotEmpty()) {
+            if (pass == passConf) {
+                viewModel.sendRegisterRequest(login, pass) {
+                    lifecycleScope.launch {
+                        popBackStack(R.id.homeFragment)
+                    }
+                }
+            } else {
+                toast(getString(R.string.app_toast_pass_not_confirm))
+            }
+        } else {
+            toast(getString(R.string.app_toast_fill_fields))
+        }
     }
 }
