@@ -10,9 +10,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentImagesBinding
 import com.emikhalets.voteapp.model.entities.Image
+import com.emikhalets.voteapp.model.firebase.loadUserImages
 import com.emikhalets.voteapp.model.firebase.saveImageToDatabase
 import com.emikhalets.voteapp.model.firebase.saveImageToStorage
-import com.emikhalets.voteapp.test.createMockImages
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.SecondaryFragment
@@ -74,8 +74,7 @@ class UserImagesFragment : SecondaryFragment(R.layout.fragment_images) {
             listImages.isNestedScrollingEnabled = false
             listImages.adapter = imagesAdapter
         }
-        imagesList.addAll(createMockImages())
-        imagesAdapter.updateList(imagesList)
+        loadUserImages { imagesAdapter.updateList(it) }
     }
 
     private fun initListeners() {

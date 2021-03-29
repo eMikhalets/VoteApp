@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ItemImageBinding
 import com.emikhalets.voteapp.model.entities.Image
-import com.emikhalets.voteapp.test.loadMock
+import com.emikhalets.voteapp.utils.loadImage
 import com.emikhalets.voteapp.utils.toast
 
 class ImagesAdapter(
@@ -45,7 +45,7 @@ class ImagesAdapter(
 
         fun bind(item: Image) {
             binding.apply {
-                image.loadMock(item.url.toInt())
+                image.loadImage(item.url)
                 textRating.text = root.context.getString(
                         R.string.item_images_text_rating,
                         item.rating

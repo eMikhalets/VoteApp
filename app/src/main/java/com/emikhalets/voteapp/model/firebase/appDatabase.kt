@@ -1,10 +1,12 @@
 package com.emikhalets.voteapp.model.firebase
 
 import com.emikhalets.voteapp.R
+import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.popBackStack
 import com.emikhalets.voteapp.utils.singleDataChange
 import com.emikhalets.voteapp.utils.toastException
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 
@@ -23,14 +25,24 @@ const val CHILD_DATE = "date"
 
 val REF_DATABASE = FirebaseDatabase.getInstance().reference
 
+fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
+
+fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
+
 fun initCurrentUser() {
-    REF_DATABASE.child(NODE_USERS).child(USER_ID).singleDataChange {
-        USER = it.getValue(User::class.java) ?: User()
-    }
+    REF_DATABASE.child(NODE_USERS).child(USER_ID).singleDataChange { USER = it.toUser() }
 }
 
 fun getNewKeyFromImagesNode(): String {
     return REF_DATABASE.child(NODE_IMAGES).child(USER_ID).push().key.toString()
+}
+
+inline fun loadUserImages(crossinline function: (images: List<Image>) -> Unit) {
+    REF_DATABASE.child(NODE_IMAGES).child(USER_ID).singleDataChange { snapshot ->
+        val images = mutableListOf<Image>()
+        snapshot.children.forEach { images.add(it.toImage()) }
+        function(images)
+    }
 }
 
 fun saveUserToDatabase() {
