@@ -51,6 +51,7 @@ class ProfileFragment : SecondaryFragment(R.layout.fragment_profile) {
         binding.apply {
             image.setOnClickListener { onPhotoClick() }
             btnChangePass.setOnClickListener { onChangePassClick() }
+            btnChangePhoto.setOnClickListener { onChangePhotoClick() }
             btnLogout.setOnClickListener { onLogoutClick() }
         }
     }
@@ -63,7 +64,11 @@ class ProfileFragment : SecondaryFragment(R.layout.fragment_profile) {
         navigate(R.id.action_profile_to_image, args, extras = extras)
     }
 
-    private fun onTakePhotoClick() {
+    private fun onChangePassClick() {
+        navigate(R.id.action_profile_to_changePass)
+    }
+
+    private fun onChangePhotoClick() {
         takeImageResult.launch(100)
     }
 
@@ -73,10 +78,6 @@ class ProfileFragment : SecondaryFragment(R.layout.fragment_profile) {
                 binding.image.loadImage(url)
             }
         }
-    }
-
-    private fun onChangePassClick() {
-        navigate(R.id.action_profile_to_changePass)
     }
 
     private fun onLogoutClick() {

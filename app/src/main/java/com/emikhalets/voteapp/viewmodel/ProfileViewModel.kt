@@ -41,4 +41,10 @@ class ProfileViewModel : ViewModel() {
             }
         }
     }
+
+    fun sendUpdatePassRequest(pass: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            AUTH_REPOSITORY.updateUserPassword(pass) { onSuccess() }
+        }
+    }
 }

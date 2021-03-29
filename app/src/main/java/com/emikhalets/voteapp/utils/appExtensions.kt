@@ -15,6 +15,7 @@ import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import timber.log.Timber
 
@@ -51,9 +52,12 @@ fun hideKeyboard() {
 
 fun toast(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_SHORT).show()
 
+fun toastLong(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_LONG).show()
+
 fun toastException(exception: Exception?) {
     when (exception) {
         is FirebaseAuthInvalidUserException -> toast(ACTIVITY.getString(R.string.app_toast_login_not_exist))
+        is FirebaseAuthRecentLoginRequiredException -> toast(ACTIVITY.getString(R.string.app_toast_need_relog_change_pass))
         is FirebaseAuthInvalidCredentialsException -> toast(ACTIVITY.getString(R.string.app_toast_invalid_pass))
         is FirebaseAuthUserCollisionException -> toast(ACTIVITY.getString(R.string.app_toast_login_busy))
         else -> {

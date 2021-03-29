@@ -7,25 +7,6 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/text_old"
-        style="@style/AppTextInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/app_margin_small"
-        android:text="@string/profile_text_old_pass"
-        app:layout_constraintStart_toStartOf="@id/input_old"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/input_old"
-        style="@style/AppEditTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints=""
-        app:layout_constraintTop_toBottomOf="@id/text_old"
-        tools:ignore="LabelFor" />
-
-    <TextView
         android:id="@+id/text_new"
         style="@style/AppTextInput"
         android:layout_width="wrap_content"
@@ -33,7 +14,7 @@
         android:layout_marginTop="@dimen/app_margin_small"
         android:text="@string/profile_text_new_pass"
         app:layout_constraintStart_toStartOf="@id/input_new"
-        app:layout_constraintTop_toBottomOf="@id/input_old" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/input_new"
@@ -59,9 +40,20 @@
         style="@style/AppEditTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/app_margin_small"
         android:autofillHints=""
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_new_conf"
-        tools:ignore="LabelFor" />
+        tools:ignore="LabelFor"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/btn_apply"
+        style="@style/AppButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_margin"
+        android:layout_marginBottom="@dimen/app_margin_small"
+        android:text="@string/profile_btn_apply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_new_conf"
+        tools:layout_editor_absoluteX="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

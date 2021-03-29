@@ -33,4 +33,10 @@ class FirebaseAuthRepository {
         AUTH.signOut()
         onComplete()
     }
+
+    inline fun updateUserPassword(pass: String, crossinline onSuccess: () -> Unit) {
+        USER?.updatePassword(pass)
+                ?.addOnFailureListener { toastException(it) }
+                ?.addOnSuccessListener { onSuccess() }
+    }
 }

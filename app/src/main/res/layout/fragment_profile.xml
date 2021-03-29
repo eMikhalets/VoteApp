@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/app_margin_small"
+        android:elevation="@dimen/app_card_elevation"
         app:cardBackgroundColor="?attr/colorSecondary"
         app:cardCornerRadius="@dimen/app_corner_radius"
         app:layout_constraintTop_toTopOf="parent">
@@ -65,8 +66,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/app_margin_small"
-        android:text="@string/profile_change_password"
+        android:text="@string/profile_change_pass"
         app:layout_constraintTop_toBottomOf="@id/card_profile" />
+
+    <Button
+        android:id="@+id/btn_change_photo"
+        style="@style/AppButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_margin_small"
+        android:text="@string/profile_change_photo"
+        app:layout_constraintTop_toBottomOf="@id/btn_change_pass" />
 
     <Button
         android:id="@+id/btn_logout"
@@ -75,5 +85,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/app_margin_small"
         android:text="@string/profile_btn_logout"
-        app:layout_constraintTop_toBottomOf="@id/btn_change_pass" />
+        app:layout_constraintTop_toBottomOf="@id/btn_change_photo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
