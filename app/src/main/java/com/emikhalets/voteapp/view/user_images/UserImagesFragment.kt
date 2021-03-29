@@ -10,9 +10,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentImagesBinding
 import com.emikhalets.voteapp.model.entities.Image
+import com.emikhalets.voteapp.model.firebase.saveImageToDatabase
+import com.emikhalets.voteapp.model.firebase.saveImageToStorage
 import com.emikhalets.voteapp.test.createMockImages
 import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.toast
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.SecondaryFragment
 
@@ -25,7 +26,7 @@ class UserImagesFragment : SecondaryFragment(R.layout.fragment_images) {
     private var isDescending = true
 
     private val takeImageResult = registerForActivityResult(TakeImageContract()) {
-        it?.let { uri -> toast(uri.toString()) }
+        it?.let { uri -> saveImageToStorage(uri) { url, key -> saveImageToDatabase(url, key) } }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

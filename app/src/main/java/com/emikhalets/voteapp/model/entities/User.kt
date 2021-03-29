@@ -5,6 +5,5 @@ data class User(
         var username: String = "",
         var password: String = "",
         var photo: String = "",
-        var rating: Int = 0,
-        var images: List<String> = mutableListOf()
+        var rating: Int = 0
 )
