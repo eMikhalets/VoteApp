@@ -62,4 +62,5 @@
     <string name="profile_text_new_pass_conf">Confirm new password</string>
     <string name="profile_text_new_pass">New password</string>
     <string name="profile_text_old_pass">Old password</string>
+    <string name="app_transition_name_image_zoom">image_zoom</string>
 </resources>

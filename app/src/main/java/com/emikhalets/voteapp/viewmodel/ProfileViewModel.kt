@@ -7,10 +7,11 @@ import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.AUTH_REPOSITORY
 import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
 import com.emikhalets.voteapp.utils.STORAGE_REPOSITORY
-import com.emikhalets.voteapp.utils.USER_ID
 import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
+
+    var profile_url = ""
 
     fun sendLogOutRequest(onComplete: () -> Unit) {
         viewModelScope.launch {
@@ -20,7 +21,10 @@ class ProfileViewModel : ViewModel() {
 
     fun sendUserDataRequest(onSuccess: (User) -> Unit) {
         viewModelScope.launch {
-            DATABASE_REPOSITORY.loadUserData { onSuccess(it) }
+            DATABASE_REPOSITORY.loadUserData {
+                profile_url = it.photo
+                onSuccess(it)
+            }
         }
     }
 

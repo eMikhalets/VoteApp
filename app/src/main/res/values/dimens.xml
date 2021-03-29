@@ -6,9 +6,9 @@
     <dimen name="app_margin">16dp</dimen>
     <dimen name="app_margin_small">8dp</dimen>
     <dimen name="app_margin_large">32dp</dimen>
-    <dimen name="app_border_radius">8dp</dimen>
+    <dimen name="app_corner_radius">8dp</dimen>
     <dimen name="app_border_width">2dp</dimen>
-    <dimen name="app_card_corner_radius">8dp</dimen>
+    <dimen name="app_card_elevation">8dp</dimen>
 
     <!-- Top Users Dimensions -->
     <dimen name="item_user_photo_size">100dp</dimen>

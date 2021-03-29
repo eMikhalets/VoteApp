@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/app_margin_small"
+    android:elevation="@dimen/app_card_elevation"
     app:cardBackgroundColor="?attr/colorSecondary"
-    app:cardCornerRadius="@dimen/app_card_corner_radius">
+    app:cardCornerRadius="@dimen/app_corner_radius">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -36,8 +37,8 @@
             android:id="@+id/text_owner"
             style="@style/AppTextImage"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Owner: mikeTyson" />

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigator
 import coil.load
 import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
@@ -30,10 +32,12 @@ fun initLogger() {
     })
 }
 
-fun navigate(action: Int, args: Bundle = Bundle.EMPTY) {
-    if (args.isEmpty) ACTIVITY.navController.navigate(action)
-    else ACTIVITY.navController.navigate(action, args)
-}
+fun navigate(
+        action: Int,
+        args: Bundle? = null,
+        options: NavOptions? = null,
+        extras: Navigator.Extras? = null
+) = ACTIVITY.navController.navigate(action, args, options, extras)
 
 fun popBackStack(destination: Int? = null, inclusive: Boolean = false) {
     if (destination == null) ACTIVITY.navController.popBackStack()
@@ -45,9 +49,7 @@ fun hideKeyboard() {
     imm.hideSoftInputFromWindow(ACTIVITY.window.decorView.windowToken, 0)
 }
 
-fun toast(message: String) {
-    Toast.makeText(ACTIVITY, message, Toast.LENGTH_SHORT).show()
-}
+fun toast(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_SHORT).show()
 
 fun toastException(exception: Exception?) {
     when (exception) {

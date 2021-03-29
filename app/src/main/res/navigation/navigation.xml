@@ -52,6 +52,9 @@
             app:exitAnim="@anim/slide_out"
             app:popEnterAnim="@anim/slide_pop_in"
             app:popExitAnim="@anim/slide_pop_out" />
+        <action
+            android:id="@+id/action_home_to_image"
+            app:destination="@id/imageFragment" />
     </fragment>
 
     <fragment
@@ -82,13 +85,20 @@
         <action
             android:id="@+id/action_profile_to_changePass"
             app:destination="@id/changePassDialog" />
+        <action
+            android:id="@+id/action_profile_to_image"
+            app:destination="@id/imageFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/userImagesFragment"
         android:name="com.emikhalets.voteapp.view.user_images.UserImagesFragment"
         android:label="UserImagesFragment"
-        tools:layout="@layout/fragment_images" />
+        tools:layout="@layout/fragment_user_images">
+        <action
+            android:id="@+id/action_userImages_to_image"
+            app:destination="@id/imageFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/votingFragment"
@@ -100,7 +110,11 @@
         android:id="@+id/topImagesFragment"
         android:name="com.emikhalets.voteapp.view.top_images.TopImagesFragment"
         android:label="TopImagesFragment"
-        tools:layout="@layout/fragment_top_images" />
+        tools:layout="@layout/fragment_top_images">
+        <action
+            android:id="@+id/action_topImages_to_image"
+            app:destination="@id/imageFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/topUsersFragment"
@@ -113,5 +127,11 @@
         android:name="com.emikhalets.voteapp.view.profile.ChangePassDialog"
         android:label="ChangePassDialog"
         tools:layout="@layout/dialog_change_pass" />
+
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.emikhalets.voteapp.view.image.ImageFragment"
+        android:label="ImageFragment"
+        tools:layout="@layout/fragment_image" />
 
 </navigation>

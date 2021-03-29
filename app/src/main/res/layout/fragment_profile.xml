@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/app_margin_small"
         app:cardBackgroundColor="?attr/colorSecondary"
-        app:cardCornerRadius="@dimen/app_card_corner_radius"
+        app:cardCornerRadius="@dimen/app_corner_radius"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +26,7 @@
                 android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:transitionName="@string/app_transition_name_image_zoom"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +35,7 @@
 
             <TextView
                 android:id="@+id/text_username"
-                style="@style/AppTextUser"
+                style="@style/AppTextUserBig"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@id/text_rating"

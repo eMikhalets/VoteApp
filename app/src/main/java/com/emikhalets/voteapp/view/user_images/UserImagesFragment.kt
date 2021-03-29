@@ -8,7 +8,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.databinding.FragmentImagesBinding
+import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.firebase.loadUserImages
 import com.emikhalets.voteapp.model.firebase.saveImageToDatabase
@@ -18,9 +18,9 @@ import com.emikhalets.voteapp.view.TakeImageContract
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.SecondaryFragment
 
-class UserImagesFragment : SecondaryFragment(R.layout.fragment_images) {
+class UserImagesFragment : SecondaryFragment(R.layout.fragment_user_images) {
 
-    private val binding: FragmentImagesBinding by viewBinding()
+    private val binding: FragmentUserImagesBinding by viewBinding()
     private lateinit var imagesAdapter: ImagesAdapter
     private lateinit var llm: LinearLayoutManager
     private val imagesList = mutableListOf<Image>()

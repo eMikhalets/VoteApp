@@ -23,7 +23,7 @@
         android:layout_marginEnd="@dimen/app_margin_small"
         android:layout_marginBottom="@dimen/app_margin_small"
         app:cardBackgroundColor="?attr/colorSecondary"
-        app:cardCornerRadius="@dimen/app_card_corner_radius"
+        app:cardCornerRadius="@dimen/app_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/text_position"
