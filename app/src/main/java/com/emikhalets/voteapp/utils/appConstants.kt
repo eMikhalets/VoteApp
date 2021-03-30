@@ -5,8 +5,11 @@ import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
 import com.emikhalets.voteapp.view.MainActivity
+import com.google.firebase.auth.FirebaseUser
 
 lateinit var ACTIVITY: MainActivity
+lateinit var USER_ID: String
+lateinit var USERNAME: String
 
 lateinit var AUTH_REPOSITORY: FirebaseAuthRepository
 lateinit var STORAGE_REPOSITORY: FirebaseStorageRepository

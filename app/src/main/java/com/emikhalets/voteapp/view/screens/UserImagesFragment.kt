@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.user_images
+package com.emikhalets.voteapp.view.screens
 
 import android.net.Uri
 import android.os.Bundle
@@ -14,12 +14,12 @@ import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.view.TakeImageContract
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
-import com.emikhalets.voteapp.view.base.SecondaryFragment
+import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class UserImagesFragment : SecondaryFragment(R.layout.fragment_user_images) {
+class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private val binding: FragmentUserImagesBinding by viewBinding()
     private val viewModel: UserImagesViewModel by viewModels()

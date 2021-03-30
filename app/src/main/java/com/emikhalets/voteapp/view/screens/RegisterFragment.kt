@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.auth
+package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
@@ -11,11 +11,11 @@ import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.hideKeyboard
 import com.emikhalets.voteapp.utils.popBackStack
 import com.emikhalets.voteapp.utils.toast
-import com.emikhalets.voteapp.view.base.AuthFragment
+import com.emikhalets.voteapp.view.base.NoDrawerFragment
 import com.emikhalets.voteapp.viewmodel.RegisterViewModel
 import kotlinx.coroutines.launch
 
-class RegisterFragment : AuthFragment(R.layout.fragment_auth_register) {
+class RegisterFragment : NoDrawerFragment(R.layout.fragment_auth_register) {
 
     private val binding: FragmentAuthRegisterBinding by viewBinding()
     private val viewModel: RegisterViewModel by viewModels()

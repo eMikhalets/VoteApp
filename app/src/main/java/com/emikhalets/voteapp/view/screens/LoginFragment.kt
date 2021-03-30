@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.auth
+package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
@@ -8,11 +8,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentAuthLoginBinding
 import com.emikhalets.voteapp.utils.*
-import com.emikhalets.voteapp.view.base.AuthFragment
+import com.emikhalets.voteapp.view.base.NoDrawerFragment
 import com.emikhalets.voteapp.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
-class LoginFragment : AuthFragment(R.layout.fragment_auth_login) {
+class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
 
     private val binding: FragmentAuthLoginBinding by viewBinding()
     private val viewModel: LoginViewModel by viewModels()

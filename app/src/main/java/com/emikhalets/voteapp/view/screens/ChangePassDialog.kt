@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.profile
+package com.emikhalets.voteapp.view.screens
 
 import android.app.Dialog
 import android.os.Bundle

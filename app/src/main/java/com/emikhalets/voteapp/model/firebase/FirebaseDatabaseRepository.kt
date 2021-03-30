@@ -2,7 +2,7 @@ package com.emikhalets.voteapp.model.firebase
 
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.USER
+import com.emikhalets.voteapp.utils.USERNAME
 import com.emikhalets.voteapp.utils.USER_ID
 import com.emikhalets.voteapp.utils.singleDataChange
 import com.emikhalets.voteapp.utils.toastException
@@ -18,6 +18,14 @@ class FirebaseDatabaseRepository {
     private fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
 
     private fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
+
+    fun checkUserExisting(onSuccess: (Boolean) -> Unit) {
+        Timber.d("Database request: checkUserExisting: STARTED")
+        refDatabase.child(NODE_USERS).child(USER_ID).singleDataChange {
+            Timber.d("Database request: checkUserExisting: COMPLETE")
+            onSuccess(it.exists())
+        }
+    }
 
     fun loadUserData(onSuccess: (User) -> Unit) {
         Timber.d("Database request: loadUserData: STARTED")
@@ -75,7 +83,7 @@ class FirebaseDatabaseRepository {
                 CHILD_URL to url,
                 CHILD_RATING to 0,
                 CHILD_OWNER_ID to USER_ID,
-                CHILD_OWNER_NAME to USER?.displayName,
+                CHILD_OWNER_NAME to USERNAME,
                 CHILD_TIMESTAMP to ServerValue.TIMESTAMP
         )
         refDatabase.child(NODE_IMAGES).child(USER_ID).child(name).setValue(map)

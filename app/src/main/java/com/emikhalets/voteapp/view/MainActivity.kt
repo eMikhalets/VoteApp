@@ -8,7 +8,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ActivityMainBinding
-import com.emikhalets.voteapp.utils.*
+import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.CAMERA
+import com.emikhalets.voteapp.utils.initLogger
+import com.emikhalets.voteapp.utils.initRepositories
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,19 +34,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkAuth()
         permissionResult.launch(CAMERA)
     }
 
     override fun onBackPressed() {
         when (navController.currentDestination?.id) {
             R.id.authLoginFragment -> finish()
+            R.id.homeFragment -> finish()
             else -> super.onBackPressed()
         }
     }
 
     private fun firstInitializationApp() {
-        initAuthentication()
         initRepositories()
         initLogger()
     }
@@ -59,12 +61,5 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         drawer.create()
-    }
-
-    private fun checkAuth() {
-        if (USER == null && navController.currentDestination?.id == R.id.homeFragment) {
-            navigate(R.id.action_home_to_authLogin)
-//            checkUserExisting { navigate(R.id.action_home_to_authLogin) }
-        }
     }
 }

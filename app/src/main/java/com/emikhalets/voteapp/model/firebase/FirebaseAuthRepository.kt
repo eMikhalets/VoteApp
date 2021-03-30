@@ -1,20 +1,33 @@
 package com.emikhalets.voteapp.model.firebase
 
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.utils.*
+import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.USERNAME
+import com.emikhalets.voteapp.utils.USER_ID
+import com.emikhalets.voteapp.utils.toastException
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class FirebaseAuthRepository {
 
+    private val auth = Firebase.auth
+    private var user = auth.currentUser
+
+    init {
+        USER_ID = user?.uid ?: ""
+        USERNAME = user?.displayName ?: ""
+    }
+
     fun login(login: String, pass: String, onSuccess: () -> Unit) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
-        AUTH.signInWithEmailAndPassword(email, pass)
+        auth.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
                     Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
-                    USER = AUTH.currentUser
-                    USER_ID = USER?.uid ?: ""
+                    user = auth.currentUser
+                    USER_ID = user?.uid ?: ""
                     onSuccess()
                 }
                 .addOnFailureListener {
@@ -26,11 +39,11 @@ class FirebaseAuthRepository {
     fun register(login: String, pass: String, onSuccess: () -> Unit) {
         Timber.d("Authentication request: createUserWithEmailAndPassword: STARTED")
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
-        AUTH.createUserWithEmailAndPassword(email, pass)
+        auth.createUserWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
                     Timber.d("Authentication request: createUserWithEmailAndPassword: SUCCESS")
-                    USER = AUTH.currentUser
-                    USER_ID = USER?.uid ?: ""
+                    user = auth.currentUser
+                    USER_ID = user?.uid ?: ""
                     updateUsername(login) {
                         onSuccess()
                     }
@@ -43,16 +56,16 @@ class FirebaseAuthRepository {
 
     fun logOut(onComplete: () -> Unit) {
         Timber.d("Authentication request: signOut: STARTED")
-        USER = null
+        user = null
         USER_ID = ""
-        AUTH.signOut()
+        auth.signOut()
         Timber.d("Authentication request: signOut: COMPLETE")
         onComplete()
     }
 
     fun updateUserPassword(pass: String, onSuccess: () -> Unit) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
-        USER?.updatePassword(pass)
+        user?.updatePassword(pass)
                 ?.addOnSuccessListener {
                     Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
                     onSuccess()
@@ -68,9 +81,10 @@ class FirebaseAuthRepository {
         val profile = UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build()
-        USER?.updateProfile(profile)
+        user?.updateProfile(profile)
                 ?.addOnSuccessListener {
                     Timber.d("Authentication request: updateProfile: SUCCESS")
+                    USERNAME = name
                     onSuccess(name)
                 }
                 ?.addOnFailureListener {

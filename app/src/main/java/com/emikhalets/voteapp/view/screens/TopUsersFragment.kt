@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.top_users
+package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
@@ -9,9 +9,9 @@ import com.emikhalets.voteapp.databinding.FragmentTopUsersBinding
 import com.emikhalets.voteapp.test.createMockUsers
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.view.adapters.UsersAdapter
-import com.emikhalets.voteapp.view.base.SecondaryFragment
+import com.emikhalets.voteapp.view.base.WithDrawerFragment
 
-class TopUsersFragment : SecondaryFragment(R.layout.fragment_top_users) {
+class TopUsersFragment : WithDrawerFragment(R.layout.fragment_top_users) {
 
     private val binding: FragmentTopUsersBinding by viewBinding()
     private lateinit var usersAdapter: UsersAdapter

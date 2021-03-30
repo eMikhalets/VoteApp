@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.home
+package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentHomeBinding
-import com.emikhalets.voteapp.test.createMockImages
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 

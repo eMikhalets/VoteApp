@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.view.profile
+package com.emikhalets.voteapp.view.screens
 
 import android.net.Uri
 import android.os.Bundle
@@ -15,11 +15,11 @@ import com.emikhalets.voteapp.utils.ARGS_PHOTO
 import com.emikhalets.voteapp.utils.loadImage
 import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.view.TakeImageContract
-import com.emikhalets.voteapp.view.base.SecondaryFragment
+import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 
-class ProfileFragment : SecondaryFragment(R.layout.fragment_profile) {
+class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
 
     private val binding: FragmentProfileBinding by viewBinding()
     private val viewModel: ProfileViewModel by viewModels()

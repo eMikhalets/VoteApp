@@ -3,20 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/startFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.emikhalets.voteapp.view.home.HomeFragment"
-        android:label="HomeFragment"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/startFragment"
+        android:name="com.emikhalets.voteapp.view.screens.StartFragment"
+        android:label="StartFragment"
+        tools:layout="@layout/fragment_start">
         <action
-            android:id="@+id/action_home_to_authLogin"
+            android:id="@+id/action_start_to_home"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_pop_in"
+            app:popExitAnim="@anim/slide_pop_out" />
+        <action
+            android:id="@+id/action_start_to_authLogin"
             app:destination="@id/authLoginFragment"
             app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/slide_out"
             app:popEnterAnim="@anim/slide_pop_in"
             app:popExitAnim="@anim/slide_pop_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.emikhalets.voteapp.view.screens.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_profile"
             app:destination="@id/profileFragment"
@@ -59,7 +73,7 @@
 
     <fragment
         android:id="@+id/authLoginFragment"
-        android:name="com.emikhalets.voteapp.view.auth.LoginFragment"
+        android:name="com.emikhalets.voteapp.view.screens.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_auth_login">
         <action
@@ -73,13 +87,13 @@
 
     <fragment
         android:id="@+id/authRegisterFragment"
-        android:name="com.emikhalets.voteapp.view.auth.RegisterFragment"
+        android:name="com.emikhalets.voteapp.view.screens.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_auth_register" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.emikhalets.voteapp.view.profile.ProfileFragment"
+        android:name="com.emikhalets.voteapp.view.screens.ProfileFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile">
         <action
@@ -92,7 +106,7 @@
 
     <fragment
         android:id="@+id/userImagesFragment"
-        android:name="com.emikhalets.voteapp.view.user_images.UserImagesFragment"
+        android:name="com.emikhalets.voteapp.view.screens.UserImagesFragment"
         android:label="UserImagesFragment"
         tools:layout="@layout/fragment_user_images">
         <action
@@ -102,13 +116,13 @@
 
     <fragment
         android:id="@+id/votingFragment"
-        android:name="com.emikhalets.voteapp.view.voting.VotingFragment"
+        android:name="com.emikhalets.voteapp.view.screens.VotingFragment"
         android:label="VotingFragment"
         tools:layout="@layout/fragment_voting" />
 
     <fragment
         android:id="@+id/topImagesFragment"
-        android:name="com.emikhalets.voteapp.view.top_images.TopImagesFragment"
+        android:name="com.emikhalets.voteapp.view.screens.TopImagesFragment"
         android:label="TopImagesFragment"
         tools:layout="@layout/fragment_top_images">
         <action
@@ -118,19 +132,19 @@
 
     <fragment
         android:id="@+id/topUsersFragment"
-        android:name="com.emikhalets.voteapp.view.top_users.TopUsersFragment"
+        android:name="com.emikhalets.voteapp.view.screens.TopUsersFragment"
         android:label="TopUsersFragment"
         tools:layout="@layout/fragment_top_users" />
 
     <dialog
         android:id="@+id/changePassDialog"
-        android:name="com.emikhalets.voteapp.view.profile.ChangePassDialog"
+        android:name="com.emikhalets.voteapp.view.screens.ChangePassDialog"
         android:label="ChangePassDialog"
         tools:layout="@layout/dialog_change_pass" />
 
     <fragment
         android:id="@+id/imageFragment"
-        android:name="com.emikhalets.voteapp.view.image.ImageFragment"
+        android:name="com.emikhalets.voteapp.view.screens.ImageFragment"
         android:label="ImageFragment"
         tools:layout="@layout/fragment_image" />
 
