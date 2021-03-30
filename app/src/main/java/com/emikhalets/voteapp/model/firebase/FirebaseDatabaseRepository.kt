@@ -2,11 +2,7 @@ package com.emikhalets.voteapp.model.firebase
 
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.USERNAME
-import com.emikhalets.voteapp.utils.USER_ID
-import com.emikhalets.voteapp.utils.singleDataChange
-import com.emikhalets.voteapp.utils.toastException
-import com.google.firebase.database.DataSnapshot
+import com.emikhalets.voteapp.utils.*
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import timber.log.Timber
@@ -14,10 +10,6 @@ import timber.log.Timber
 class FirebaseDatabaseRepository {
 
     private val refDatabase = FirebaseDatabase.getInstance().reference
-
-    private fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
-
-    private fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
 
     fun checkUserExisting(onSuccess: (Boolean) -> Unit) {
         Timber.d("Database request: checkUserExisting: STARTED")
@@ -41,20 +33,32 @@ class FirebaseDatabaseRepository {
 
     fun loadUserImages(onComplete: (List<Image>) -> Unit) {
         Timber.d("Database request: loadUserImages: STARTED")
-        refDatabase.child(NODE_IMAGES).child(USER_ID).singleDataChange { snapshot ->
-            Timber.d("Database request: loadUserImages: COMPLETE")
-            val list = mutableListOf<Image>()
-            snapshot.children.forEach { list.add(it.toImage()) }
-            onComplete(list)
-        }
+        refDatabase.child(NODE_IMAGES).orderByChild(CHILD_OWNER_ID).equalTo(USER_ID)
+                .singleDataChange { snapshot ->
+                    Timber.d("Database request: loadUserImages: COMPLETE")
+                    val list = mutableListOf<Image>()
+                    snapshot.children.forEach { list.add(it.toImage()) }
+                    onComplete(list)
+                }
     }
 
     fun loadAddedUserImage(name: String, onComplete: (Image) -> Unit) {
         Timber.d("Database request: loadAddedUserImage: STARTED")
-        refDatabase.child(NODE_IMAGES).child(USER_ID).child(name).singleDataChange { snapshot ->
+        refDatabase.child(NODE_IMAGES).child(name).singleDataChange { snapshot ->
             Timber.d("Database request: loadAddedUserImage: COMPLETE")
             onComplete(snapshot.toImage())
         }
+    }
+
+    fun loadLatestImages(onComplete: (List<Image>) -> Unit) {
+        Timber.d("Database request: loadLatestImages: STARTED")
+        refDatabase.child(NODE_IMAGES).orderByChild(CHILD_TIMESTAMP).limitToLast(30)
+                .singleDataChange { snapshot ->
+                    Timber.d("Database request: loadLatestImages: COMPLETE")
+                    val list = mutableListOf<Image>()
+                    snapshot.children.forEach { list.add(it.toImage()) }
+                    onComplete(list)
+                }
     }
 
     fun saveUser(login: String, onSuccess: () -> Unit) {
@@ -86,7 +90,7 @@ class FirebaseDatabaseRepository {
                 CHILD_OWNER_NAME to USERNAME,
                 CHILD_TIMESTAMP to ServerValue.TIMESTAMP
         )
-        refDatabase.child(NODE_IMAGES).child(USER_ID).child(name).setValue(map)
+        refDatabase.child(NODE_IMAGES).child(name).setValue(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: saveImage: SUCCESS")
                     onSuccess()

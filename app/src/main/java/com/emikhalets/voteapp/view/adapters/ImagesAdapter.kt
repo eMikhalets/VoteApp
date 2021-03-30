@@ -26,7 +26,7 @@ class ImagesAdapter(
     override fun onViewAttachedToWindow(holder: ImagesViewHolder) {
         super.onViewAttachedToWindow(holder)
         holder.itemView.setOnClickListener {
-            click.invoke(getItem(holder.adapterPosition).url, holder.itemView)
+            click.invoke(getItem(holder.adapterPosition).url, holder.itemView.findViewById(R.id.image))
         }
     }
 
@@ -36,7 +36,6 @@ class ImagesAdapter(
     }
 
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
-        ViewCompat.setTransitionName(holder.itemView, holder.itemView.context.getString(R.string.app_transition_name_image_zoom))
         holder.bind(getItem(position))
     }
 

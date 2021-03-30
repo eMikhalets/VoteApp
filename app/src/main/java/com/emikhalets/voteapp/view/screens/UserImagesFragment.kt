@@ -9,7 +9,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
@@ -29,6 +29,7 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     private val viewModel: UserImagesViewModel by viewModels()
 
     private val imagesAdapter = ImagesAdapter(false) { url, v -> onImageClick(url, v) }
+    private val llm = LinearLayoutManager(context)
 
     private val takeImageResult = registerForActivityResult(TakeImageContract()) {
         onTakeImageResult(it)
@@ -39,6 +40,7 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
         setHasOptionsMenu(true)
         ACTIVITY.title = getString(R.string.images_title)
         initRecyclerView()
+        initListeners()
         onViewLoaded()
     }
 
@@ -56,10 +58,21 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     }
 
     private fun initRecyclerView() {
-        binding.apply {
-            listImages.setHasFixedSize(true)
-            listImages.isNestedScrollingEnabled = false
-            listImages.adapter = imagesAdapter
+        binding.listImages.apply {
+            layoutManager = llm
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = false
+            adapter = imagesAdapter
+        }
+    }
+
+    private fun initListeners() {
+        viewModel.images.observe(viewLifecycleOwner) {
+            lifecycleScope.launch {
+                imagesAdapter.submitList(it)
+                delay(100)
+                binding.listImages.smoothScrollToPosition(0)
+            }
         }
     }
 
@@ -70,24 +83,12 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     }
 
     private fun onSortByRatingClick(): Boolean {
-        viewModel.sortImagesByRating {
-            imagesAdapter.submitList(it)
-            lifecycleScope.launch {
-                delay(100)
-                binding.listImages.smoothScrollToPosition(0)
-            }
-        }
+        viewModel.sortImagesByRating()
         return true
     }
 
     private fun onSortByDateClick(): Boolean {
-        viewModel.sortImagesByDate {
-            imagesAdapter.submitList(it)
-            lifecycleScope.launch {
-                delay(100)
-                binding.listImages.smoothScrollToPosition(0)
-            }
-        }
+        viewModel.sortImagesByDate()
         return true
     }
 
@@ -109,9 +110,6 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
-        val extras = FragmentNavigatorExtras(
-                view to getString(R.string.app_transition_name_image_zoom)
-        )
-        navigate(R.id.action_userImages_to_image, args, extras = extras)
+        navigate(R.id.action_userImages_to_image, args)
     }
 }

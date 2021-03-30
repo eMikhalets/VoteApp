@@ -1,6 +1,8 @@
 package com.emikhalets.voteapp.viewmodel
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.Image
@@ -11,17 +13,23 @@ import kotlinx.coroutines.launch
 
 class UserImagesViewModel : ViewModel() {
 
-    private var images = mutableListOf<Image>()
+    private val _images = MutableLiveData<List<Image>>()
+    val images get():LiveData<List<Image>> = _images
+
+    private var imagesList = mutableListOf<Image>()
     private var sortState = DATE_DEC
     private var isSortedByDate = true
 
     fun sendLoadUserImagesRequest(onComplete: (List<Image>) -> Unit) {
-        viewModelScope.launch {
-            DATABASE_REPOSITORY.loadUserImages {
-                if (it.isNotEmpty()) {
-                    images = it.toMutableList()
-                    sortImagesByDateWhenAddImage()
-                    onComplete(images)
+        if (_images.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+                DATABASE_REPOSITORY.loadUserImages {
+                    if (it.isNotEmpty()) {
+                        imagesList = it.toMutableList()
+                        sortImagesByDateWhenAddImage()
+                        _images.postValue(imagesList)
+                        onComplete(imagesList)
+                    }
                 }
             }
         }
@@ -34,10 +42,11 @@ class UserImagesViewModel : ViewModel() {
                     STORAGE_REPOSITORY.loadImageUrl(imageName) { url ->
                         DATABASE_REPOSITORY.saveImage(imageName, url) {
                             DATABASE_REPOSITORY.loadAddedUserImage(imageName) { image ->
-                                images.add(image)
+                                imagesList.add(image)
                                 if (isSortedByDate) sortImagesByDateWhenAddImage()
                                 else sortImagesByRatingWhenAddImage()
-                                onSuccess(images)
+                                _images.postValue(imagesList)
+                                onSuccess(imagesList)
                             }
                         }
                     }
@@ -47,61 +56,61 @@ class UserImagesViewModel : ViewModel() {
     }
 
     // TODO как вынести определение состояния сортировки в отдельную функцию?
-    fun sortImagesByDate(onComplete: (List<Image>) -> Unit) {
+    fun sortImagesByDate() {
         viewModelScope.launch {
-            when (sortState) {
+            imagesList = when (sortState) {
                 RATING_DEC -> {
-                    images = images.sortedByDescending { it.timestamp }.toMutableList()
                     sortState = DATE_DEC
+                    imagesList.sortedByDescending { it.timestamp }.toMutableList()
                 }
                 RATING_ASC -> {
-                    images = images.sortedByDescending { it.timestamp }.toMutableList()
                     sortState = DATE_DEC
+                    imagesList.sortedByDescending { it.timestamp }.toMutableList()
                 }
                 DATE_DEC -> {
-                    images = images.sortedBy { it.timestamp }.toMutableList()
                     sortState = DATE_ASC
+                    imagesList.sortedBy { it.timestamp }.toMutableList()
                 }
                 DATE_ASC -> {
-                    images = images.sortedByDescending { it.timestamp }.toMutableList()
                     sortState = DATE_DEC
+                    imagesList.sortedByDescending { it.timestamp }.toMutableList()
                 }
             }
             isSortedByDate = true
-            onComplete(images)
+            _images.postValue(imagesList)
         }
     }
 
-    fun sortImagesByRating(onComplete: (List<Image>) -> Unit) {
+    fun sortImagesByRating() {
         viewModelScope.launch {
-            when (sortState) {
+            imagesList = when (sortState) {
                 RATING_DEC -> {
-                    images = images.sortedBy { it.rating }.toMutableList()
                     sortState = RATING_ASC
+                    imagesList.sortedBy { it.rating }.toMutableList()
                 }
                 RATING_ASC -> {
-                    images = images.sortedByDescending { it.rating }.toMutableList()
                     sortState = RATING_DEC
+                    imagesList.sortedByDescending { it.rating }.toMutableList()
                 }
                 DATE_DEC -> {
-                    images = images.sortedByDescending { it.rating }.toMutableList()
                     sortState = RATING_DEC
+                    imagesList.sortedByDescending { it.rating }.toMutableList()
                 }
                 DATE_ASC -> {
-                    images = images.sortedByDescending { it.rating }.toMutableList()
                     sortState = RATING_DEC
+                    imagesList.sortedByDescending { it.rating }.toMutableList()
                 }
             }
             isSortedByDate = false
-            onComplete(images)
+            _images.postValue(imagesList)
         }
     }
 
     private fun sortImagesByDateWhenAddImage() {
-        if (images.size > 1) {
+        if (imagesList.size > 1) {
             when (sortState) {
-                DATE_DEC -> images = images.sortedByDescending { it.timestamp }.toMutableList()
-                DATE_ASC -> images = images.sortedBy { it.timestamp }.toMutableList()
+                DATE_DEC -> imagesList = imagesList.sortedByDescending { it.timestamp }.toMutableList()
+                DATE_ASC -> imagesList = imagesList.sortedBy { it.timestamp }.toMutableList()
                 else -> {
                 }
             }
@@ -109,10 +118,10 @@ class UserImagesViewModel : ViewModel() {
     }
 
     private fun sortImagesByRatingWhenAddImage() {
-        if (images.size > 1) {
+        if (imagesList.size > 1) {
             when (sortState) {
-                RATING_DEC -> images = images.sortedByDescending { it.rating }.toMutableList()
-                RATING_ASC -> images = images.sortedBy { it.rating }.toMutableList()
+                RATING_DEC -> imagesList = imagesList.sortedByDescending { it.rating }.toMutableList()
+                RATING_ASC -> imagesList = imagesList.sortedBy { it.rating }.toMutableList()
                 else -> {
                 }
             }

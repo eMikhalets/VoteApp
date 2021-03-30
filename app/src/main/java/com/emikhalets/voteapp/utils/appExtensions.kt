@@ -10,6 +10,8 @@ import androidx.navigation.Navigator
 import coil.load
 import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
+import com.emikhalets.voteapp.model.entities.Image
+import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
@@ -17,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.database.DataSnapshot
 import timber.log.Timber
 
 fun initRepositories() {
@@ -37,7 +40,7 @@ fun navigate(
         action: Int,
         args: Bundle? = null,
         options: NavOptions? = null,
-        extras: Navigator.Extras? = null
+        extras: Navigator.Extras? = null,
 ) = ACTIVITY.navController.navigate(action, args, options, extras)
 
 fun popBackStack(destination: Int? = null, inclusive: Boolean = false) {
@@ -70,7 +73,7 @@ fun toastException(exception: Exception?) {
 fun ImageView.loadImage(
         url: String,
         placeholder: Int = R.drawable.placeholder_default,
-        crossfade: Int = 0
+        crossfade: Int = 0,
 ) {
     load(url) {
         crossfade(crossfade)
@@ -79,3 +82,7 @@ fun ImageView.loadImage(
         error(placeholder)
     }
 }
+
+fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
+
+fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()

@@ -16,14 +16,13 @@ class ImageFragment : WithDrawerFragment(R.layout.fragment_image) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onViewLoaded()
-    }
 
-    private fun onViewLoaded() {
         sharedElementEnterTransition =
                 TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        sharedElementReturnTransition =
-                TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        binding.image.load(arguments?.getString(ARGS_PHOTO))
+
+        arguments?.let {
+            val url = it.getString(ARGS_PHOTO)
+            binding.image.load(url)
+        }
     }
 }

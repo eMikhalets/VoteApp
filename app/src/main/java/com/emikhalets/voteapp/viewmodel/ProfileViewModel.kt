@@ -1,6 +1,8 @@
 package com.emikhalets.voteapp.viewmodel
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.User
@@ -11,20 +13,29 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
 
+    private val _user = MutableLiveData<User>()
+    val user get():LiveData<User> = _user
+
     var profileUrl = ""
         private set
 
     fun sendLogOutRequest(onComplete: () -> Unit) {
         viewModelScope.launch {
-            AUTH_REPOSITORY.logOut { onComplete() }
+            AUTH_REPOSITORY.logOut {
+                _user.postValue(User())
+                onComplete()
+            }
         }
     }
 
     fun sendUserDataRequest(onSuccess: (User) -> Unit) {
-        viewModelScope.launch {
-            DATABASE_REPOSITORY.loadUserData {
-                profileUrl = it.photo
-                onSuccess(it)
+        if (_user.value == null || _user.value?.id == "") {
+            viewModelScope.launch {
+                DATABASE_REPOSITORY.loadUserData {
+                    profileUrl = it.photo
+                    _user.postValue(it)
+                    onSuccess(it)
+                }
             }
         }
     }
@@ -35,7 +46,10 @@ class ProfileViewModel : ViewModel() {
                 STORAGE_REPOSITORY.saveProfileImage(it) {
                     STORAGE_REPOSITORY.loadProfileImageUrl { url ->
                         DATABASE_REPOSITORY.updateUserPhoto(url) {
+                            val newUser = _user.value ?: User()
+                            newUser.photo = url
                             profileUrl = url
+                            _user.postValue(newUser)
                             onSuccess(url)
                         }
                     }
