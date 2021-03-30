@@ -6,12 +6,16 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.ARGS_PHOTO
+import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.view.TakeImageContract
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
@@ -24,7 +28,7 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     private val binding: FragmentUserImagesBinding by viewBinding()
     private val viewModel: UserImagesViewModel by viewModels()
 
-    private val imagesAdapter = ImagesAdapter(false) { onImageClick(it) }
+    private val imagesAdapter = ImagesAdapter(false) { url, v -> onImageClick(url, v) }
 
     private val takeImageResult = registerForActivityResult(TakeImageContract()) {
         onTakeImageResult(it)
@@ -35,7 +39,6 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
         setHasOptionsMenu(true)
         ACTIVITY.title = getString(R.string.images_title)
         initRecyclerView()
-        initListeners()
         onViewLoaded()
     }
 
@@ -45,6 +48,7 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_action_add_image -> onTakeImageClick()
             R.id.menu_action_sort_date -> onSortByDateClick()
             R.id.menu_action_sort_rating -> onSortByRatingClick()
             else -> super.onOptionsItemSelected(item)
@@ -57,10 +61,6 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
             listImages.isNestedScrollingEnabled = false
             listImages.adapter = imagesAdapter
         }
-    }
-
-    private fun initListeners() {
-        binding.btnTakeImage.setOnClickListener { onTakeImageClick() }
     }
 
     private fun onViewLoaded() {
@@ -91,8 +91,9 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
         return true
     }
 
-    private fun onTakeImageClick() {
+    private fun onTakeImageClick(): Boolean {
         takeImageResult.launch(500)
+        return true
     }
 
     private fun onTakeImageResult(uri: Uri?) {
@@ -106,6 +107,11 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
         }
     }
 
-    private fun onImageClick(url: String) {
+    private fun onImageClick(url: String, view: View) {
+        val args = bundleOf(ARGS_PHOTO to url)
+        val extras = FragmentNavigatorExtras(
+                view to getString(R.string.app_transition_name_image_zoom)
+        )
+        navigate(R.id.action_userImages_to_image, args, extras = extras)
     }
 }

@@ -23,7 +23,7 @@ class TopImagesFragment : WithDrawerFragment(R.layout.fragment_top_images) {
     }
 
     private fun initRecyclerView() {
-        imagesAdapter = ImagesAdapter(true) {}
+        imagesAdapter = ImagesAdapter(true) { _, _ ->}
         llm = LinearLayoutManager(this.context)
         binding.apply {
             listImages.layoutManager = llm

@@ -24,7 +24,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initRecyclerView() {
-        imagesAdapter = ImagesAdapter(true) {}
+        imagesAdapter = ImagesAdapter(true) { _, _ ->}
         llm = LinearLayoutManager(this.context)
         binding.apply {
             listImages.layoutManager = llm

@@ -5,7 +5,6 @@ import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
 import com.emikhalets.voteapp.view.MainActivity
-import com.google.firebase.auth.FirebaseUser
 
 lateinit var ACTIVITY: MainActivity
 lateinit var USER_ID: String
@@ -18,4 +17,3 @@ lateinit var DATABASE_REPOSITORY: FirebaseDatabaseRepository
 const val CAMERA = Manifest.permission.CAMERA
 
 const val ARGS_PHOTO = "arguments_photo"
-

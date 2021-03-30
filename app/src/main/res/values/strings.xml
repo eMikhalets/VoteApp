@@ -50,6 +50,7 @@
 
     <!-- User Images Screen -->
     <string name="images_menu_sort">Sort images</string>
+    <string name="images_menu_add">Add image</string>
     <string name="images_menu_sort_date">Sort by upload date</string>
     <string name="images_menu_sort_rating">Sort by rating</string>
 

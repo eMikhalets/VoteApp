@@ -3,6 +3,7 @@ package com.emikhalets.voteapp.view.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import com.emikhalets.voteapp.utils.loadImage
 
 class ImagesAdapter(
         private val showOwner: Boolean = false,
-        private val click: (String) -> Unit,
+        private val click: (String, View) -> Unit,
 ) : ListAdapter<Image, ImagesAdapter.ImagesViewHolder>(ImagesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {
@@ -24,7 +25,9 @@ class ImagesAdapter(
 
     override fun onViewAttachedToWindow(holder: ImagesViewHolder) {
         super.onViewAttachedToWindow(holder)
-        holder.itemView.setOnClickListener { click.invoke(getItem(holder.adapterPosition).url) }
+        holder.itemView.setOnClickListener {
+            click.invoke(getItem(holder.adapterPosition).url, holder.itemView)
+        }
     }
 
     override fun onViewDetachedFromWindow(holder: ImagesViewHolder) {
@@ -33,6 +36,7 @@ class ImagesAdapter(
     }
 
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
+        ViewCompat.setTransitionName(holder.itemView, holder.itemView.context.getString(R.string.app_transition_name_image_zoom))
         holder.bind(getItem(position))
     }
 
