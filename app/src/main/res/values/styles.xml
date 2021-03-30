@@ -75,4 +75,11 @@
     <style name="AppTextUserBig" parent="AppTextUser">
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="AppFloatingButton">
+        <item name="android:layout_margin">@dimen/app_margin</item>
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
 </resources>

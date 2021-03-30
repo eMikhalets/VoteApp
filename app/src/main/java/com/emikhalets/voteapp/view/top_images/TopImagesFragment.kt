@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopImagesBinding
-import com.emikhalets.voteapp.test.createMockImages
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.SecondaryFragment
@@ -24,7 +23,7 @@ class TopImagesFragment : SecondaryFragment(R.layout.fragment_top_images) {
     }
 
     private fun initRecyclerView() {
-        imagesAdapter = ImagesAdapter(true)
+        imagesAdapter = ImagesAdapter(true) {}
         llm = LinearLayoutManager(this.context)
         binding.apply {
             listImages.layoutManager = llm
@@ -32,6 +31,6 @@ class TopImagesFragment : SecondaryFragment(R.layout.fragment_top_images) {
             listImages.isNestedScrollingEnabled = false
             listImages.adapter = imagesAdapter
         }
-        imagesAdapter.updateList(createMockImages().sortedByDescending { it.rating })
+//        imagesAdapter.updateList(createMockImages().sortedByDescending { it.rating })
     }
 }

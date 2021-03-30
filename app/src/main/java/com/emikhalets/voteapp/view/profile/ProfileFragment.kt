@@ -57,7 +57,7 @@ class ProfileFragment : SecondaryFragment(R.layout.fragment_profile) {
     }
 
     private fun onPhotoClick() {
-        val args = bundleOf(ARGS_PHOTO to viewModel.profile_url)
+        val args = bundleOf(ARGS_PHOTO to viewModel.profileUrl)
         val extras = FragmentNavigatorExtras(
                 binding.image to getString(R.string.app_transition_name_image_zoom)
         )
@@ -73,7 +73,7 @@ class ProfileFragment : SecondaryFragment(R.layout.fragment_profile) {
     }
 
     private fun onTakePhotoResult(uri: Uri?) {
-        viewModel.sendUpdateImageRequest(uri) { url ->
+        viewModel.sendUpdateProfileImageRequest(uri) { url ->
             lifecycleScope.launch {
                 binding.image.loadImage(url)
             }

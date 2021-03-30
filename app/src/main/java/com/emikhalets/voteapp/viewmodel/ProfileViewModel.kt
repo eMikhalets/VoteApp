@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
 
-    var profile_url = ""
+    var profileUrl = ""
+        private set
 
     fun sendLogOutRequest(onComplete: () -> Unit) {
         viewModelScope.launch {
@@ -22,17 +23,17 @@ class ProfileViewModel : ViewModel() {
     fun sendUserDataRequest(onSuccess: (User) -> Unit) {
         viewModelScope.launch {
             DATABASE_REPOSITORY.loadUserData {
-                profile_url = it.photo
+                profileUrl = it.photo
                 onSuccess(it)
             }
         }
     }
 
-    fun sendUpdateImageRequest(uri: Uri?, onSuccess: (String) -> Unit) {
-        viewModelScope.launch {
-            uri?.let {
+    fun sendUpdateProfileImageRequest(uri: Uri?, onSuccess: (String) -> Unit) {
+        uri?.let {
+            viewModelScope.launch {
                 STORAGE_REPOSITORY.saveProfileImage(it) {
-                    STORAGE_REPOSITORY.getProfileImageUrl { url ->
+                    STORAGE_REPOSITORY.loadProfileImageUrl { url ->
                         DATABASE_REPOSITORY.updateUserPhoto(url) {
                             onSuccess(url)
                         }

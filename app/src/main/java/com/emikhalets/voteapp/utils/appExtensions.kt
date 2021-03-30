@@ -57,7 +57,7 @@ fun toastLong(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_
 fun toastException(exception: Exception?) {
     when (exception) {
         is FirebaseAuthInvalidUserException -> toast(ACTIVITY.getString(R.string.app_toast_login_not_exist))
-        is FirebaseAuthRecentLoginRequiredException -> toast(ACTIVITY.getString(R.string.app_toast_need_relog_change_pass))
+        is FirebaseAuthRecentLoginRequiredException -> toastLong(ACTIVITY.getString(R.string.app_toast_need_relog_change_pass))
         is FirebaseAuthInvalidCredentialsException -> toast(ACTIVITY.getString(R.string.app_toast_invalid_pass))
         is FirebaseAuthUserCollisionException -> toast(ACTIVITY.getString(R.string.app_toast_login_busy))
         else -> {

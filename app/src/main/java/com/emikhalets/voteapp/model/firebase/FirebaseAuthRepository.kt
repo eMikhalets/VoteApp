@@ -2,41 +2,80 @@ package com.emikhalets.voteapp.model.firebase
 
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.utils.*
+import com.google.firebase.auth.UserProfileChangeRequest
+import timber.log.Timber
 
 class FirebaseAuthRepository {
 
-    inline fun login(login: String, pass: String, crossinline onSuccess: () -> Unit) {
+    fun login(login: String, pass: String, onSuccess: () -> Unit) {
+        Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
         AUTH.signInWithEmailAndPassword(email, pass)
-                .addOnFailureListener { toastException(it) }
                 .addOnSuccessListener {
+                    Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
                     USER = AUTH.currentUser
                     USER_ID = USER?.uid ?: ""
                     onSuccess()
                 }
+                .addOnFailureListener {
+                    Timber.d("Authentication request: signInWithEmailAndPassword: FAILURE")
+                    toastException(it)
+                }
     }
 
-    inline fun register(login: String, pass: String, crossinline onSuccess: () -> Unit) {
+    fun register(login: String, pass: String, onSuccess: () -> Unit) {
+        Timber.d("Authentication request: createUserWithEmailAndPassword: STARTED")
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
         AUTH.createUserWithEmailAndPassword(email, pass)
-                .addOnFailureListener { toastException(it) }
                 .addOnSuccessListener {
+                    Timber.d("Authentication request: createUserWithEmailAndPassword: SUCCESS")
                     USER = AUTH.currentUser
                     USER_ID = USER?.uid ?: ""
-                    onSuccess()
+                    updateUsername(login) {
+                        onSuccess()
+                    }
+                }
+                .addOnFailureListener {
+                    Timber.d("Authentication request: createUserWithEmailAndPassword: FAILURE")
+                    toastException(it)
                 }
     }
 
-    inline fun logOut(crossinline onComplete: () -> Unit) {
+    fun logOut(onComplete: () -> Unit) {
+        Timber.d("Authentication request: signOut: STARTED")
         USER = null
         USER_ID = ""
         AUTH.signOut()
+        Timber.d("Authentication request: signOut: COMPLETE")
         onComplete()
     }
 
-    inline fun updateUserPassword(pass: String, crossinline onSuccess: () -> Unit) {
+    fun updateUserPassword(pass: String, onSuccess: () -> Unit) {
+        Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         USER?.updatePassword(pass)
-                ?.addOnFailureListener { toastException(it) }
-                ?.addOnSuccessListener { onSuccess() }
+                ?.addOnSuccessListener {
+                    Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
+                    onSuccess()
+                }
+                ?.addOnFailureListener {
+                    Timber.d("Authentication request: signInWithEmailAndPassword: FAILURE")
+                    toastException(it)
+                }
+    }
+
+    fun updateUsername(name: String, onSuccess: (String) -> Unit) {
+        Timber.d("Authentication request: updateProfile: STARTED")
+        val profile = UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build()
+        USER?.updateProfile(profile)
+                ?.addOnSuccessListener {
+                    Timber.d("Authentication request: updateProfile: SUCCESS")
+                    onSuccess(name)
+                }
+                ?.addOnFailureListener {
+                    Timber.d("Authentication request: updateProfile: FAILURE")
+                    toastException(it)
+                }
     }
 }

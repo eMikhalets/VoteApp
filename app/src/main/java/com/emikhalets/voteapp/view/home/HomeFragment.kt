@@ -25,7 +25,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initRecyclerView() {
-        imagesAdapter = ImagesAdapter(true)
+        imagesAdapter = ImagesAdapter(true) {}
         llm = LinearLayoutManager(this.context)
         binding.apply {
             listImages.layoutManager = llm
@@ -33,6 +33,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             listImages.isNestedScrollingEnabled = false
             listImages.adapter = imagesAdapter
         }
-        imagesAdapter.updateList(createMockImages())
+//        imagesAdapter.updateList(createMockImages())
     }
 }
