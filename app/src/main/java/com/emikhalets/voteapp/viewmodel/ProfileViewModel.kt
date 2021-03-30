@@ -35,6 +35,7 @@ class ProfileViewModel : ViewModel() {
                 STORAGE_REPOSITORY.saveProfileImage(it) {
                     STORAGE_REPOSITORY.loadProfileImageUrl { url ->
                         DATABASE_REPOSITORY.updateUserPhoto(url) {
+                            profileUrl = url
                             onSuccess(url)
                         }
                     }

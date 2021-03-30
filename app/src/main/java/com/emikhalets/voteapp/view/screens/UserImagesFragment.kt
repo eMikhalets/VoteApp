@@ -97,6 +97,7 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private fun onTakeImageResult(uri: Uri?) {
         viewModel.sendSaveImageRequest(uri) { images ->
+            if (imagesAdapter.currentList.isEmpty()) imagesAdapter.submitList(null)
             imagesAdapter.submitList(images)
             lifecycleScope.launch {
                 delay(100)

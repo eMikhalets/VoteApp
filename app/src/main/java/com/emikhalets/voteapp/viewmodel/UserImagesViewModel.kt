@@ -18,9 +18,11 @@ class UserImagesViewModel : ViewModel() {
     fun sendLoadUserImagesRequest(onComplete: (List<Image>) -> Unit) {
         viewModelScope.launch {
             DATABASE_REPOSITORY.loadUserImages {
-                images = it.toMutableList()
-                sortImagesByDateWhenAddImage()
-                onComplete(images)
+                if (it.isNotEmpty()) {
+                    images = it.toMutableList()
+                    sortImagesByDateWhenAddImage()
+                    onComplete(images)
+                }
             }
         }
     }
@@ -96,19 +98,23 @@ class UserImagesViewModel : ViewModel() {
     }
 
     private fun sortImagesByDateWhenAddImage() {
-        when (sortState) {
-            DATE_DEC -> images = images.sortedByDescending { it.timestamp }.toMutableList()
-            DATE_ASC -> images = images.sortedBy { it.timestamp }.toMutableList()
-            else -> {
+        if (images.size > 1) {
+            when (sortState) {
+                DATE_DEC -> images = images.sortedByDescending { it.timestamp }.toMutableList()
+                DATE_ASC -> images = images.sortedBy { it.timestamp }.toMutableList()
+                else -> {
+                }
             }
         }
     }
 
     private fun sortImagesByRatingWhenAddImage() {
-        when (sortState) {
-            RATING_DEC -> images = images.sortedByDescending { it.rating }.toMutableList()
-            RATING_ASC -> images = images.sortedBy { it.rating }.toMutableList()
-            else -> {
+        if (images.size > 1) {
+            when (sortState) {
+                RATING_DEC -> images = images.sortedByDescending { it.rating }.toMutableList()
+                RATING_ASC -> images = images.sortedBy { it.rating }.toMutableList()
+                else -> {
+                }
             }
         }
     }

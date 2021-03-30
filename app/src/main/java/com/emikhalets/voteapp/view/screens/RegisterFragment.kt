@@ -9,7 +9,7 @@ import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentAuthRegisterBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.hideKeyboard
-import com.emikhalets.voteapp.utils.popBackStack
+import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.utils.toast
 import com.emikhalets.voteapp.view.base.NoDrawerFragment
 import com.emikhalets.voteapp.viewmodel.RegisterViewModel
@@ -36,7 +36,7 @@ class RegisterFragment : NoDrawerFragment(R.layout.fragment_auth_register) {
             if (pass == passConf) {
                 viewModel.sendRegisterRequest(login, pass) {
                     lifecycleScope.launch {
-                        popBackStack(R.id.homeFragment)
+                        navigate(R.id.homeFragment)
                     }
                 }
             } else {

@@ -49,7 +49,7 @@ class ImagesAdapter(
                 if (showOwner) {
                     textOwner.text = root.context.getString(
                             R.string.item_images_text_owner,
-                            item.ownerName
+                            item.owner_name
                     )
                     textOwner.visibility = View.VISIBLE
                 } else textOwner.visibility = View.GONE
