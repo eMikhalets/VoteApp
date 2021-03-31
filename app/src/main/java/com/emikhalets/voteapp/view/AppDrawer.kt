@@ -90,6 +90,7 @@ class AppDrawer {
                 .withIdentifier(0)
         header = AccountHeaderBuilder()
                 .withActivity(ACTIVITY)
+                .withSelectionListEnabled(false)
                 .withHeaderBackground(R.drawable.background_drawer_header)
                 .addProfiles(profile)
                 .build()

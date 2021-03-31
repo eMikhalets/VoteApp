@@ -115,6 +115,9 @@
         <action
             android:id="@+id/action_userImages_to_image"
             app:destination="@id/imageFragment" />
+        <action
+            android:id="@+id/action_userImages_to_deleteImage"
+            app:destination="@id/deleteImageDialog" />
     </fragment>
 
     <fragment
@@ -139,6 +142,12 @@
         android:label="TopUsersFragment"
         tools:layout="@layout/fragment_top_users" />
 
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.emikhalets.voteapp.view.screens.ImageFragment"
+        android:label="ImageFragment"
+        tools:layout="@layout/fragment_image" />
+
     <dialog
         android:id="@+id/changePassDialog"
         android:name="com.emikhalets.voteapp.view.screens.ChangePassDialog"
@@ -151,10 +160,10 @@
         android:label="ChangeNameDialog"
         tools:layout="@layout/dialog_change_name" />
 
-    <fragment
-        android:id="@+id/imageFragment"
-        android:name="com.emikhalets.voteapp.view.screens.ImageFragment"
-        android:label="ImageFragment"
-        tools:layout="@layout/fragment_image" />
+    <dialog
+        android:id="@+id/deleteImageDialog"
+        android:name="com.emikhalets.voteapp.view.screens.DeleteImageDialog"
+        android:label="DeleteImageDialog"
+        tools:layout="@layout/dialog_delete_image" />
 
 </navigation>

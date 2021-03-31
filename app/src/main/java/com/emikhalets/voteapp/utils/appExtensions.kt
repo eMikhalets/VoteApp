@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import androidx.recyclerview.widget.RecyclerView
 import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.model.entities.Image
@@ -20,6 +21,10 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.database.DataSnapshot
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 fun initRepositories() {
@@ -81,3 +86,11 @@ fun ImageView.loadImage(
 fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
 
 fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
+
+// TODO Is this approach right? (moved the recyclerView scroll into extensions)
+fun RecyclerView.scrollToTop() {
+    CoroutineScope(Dispatchers.Main).launch {
+        delay(100)
+        this@scrollToTop.smoothScrollToPosition(0)
+    }
+}

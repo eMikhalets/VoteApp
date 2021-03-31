@@ -19,7 +19,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding: FragmentHomeBinding by viewBinding()
     private val viewModel: HomeViewModel by viewModels()
 
-    private val imagesAdapter = ImagesAdapter(true) { url, v -> onImageClick(url, v) }
+    private val imagesAdapter = ImagesAdapter(true, { url, v -> onImageClick(url, v) })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

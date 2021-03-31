@@ -7,29 +7,28 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
-import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.ARGS_PHOTO
-import com.emikhalets.voteapp.utils.navigate
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.TakeImageContract
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private val binding: FragmentUserImagesBinding by viewBinding()
-    private val viewModel: UserImagesViewModel by viewModels()
-
-    private val imagesAdapter = ImagesAdapter(false) { url, v -> onImageClick(url, v) }
+    private val viewModel: UserImagesViewModel by activityViewModels()
     private val llm = LinearLayoutManager(context)
+
+    private val imagesAdapter = ImagesAdapter(
+            false,
+            { url, v -> onImageClick(url, v) },
+            { name, pos -> onDeleteImageClick(name, pos) }
+    )
 
     private val takeImageResult = registerForActivityResult(TakeImageContract()) {
         onTakeImageResult(it)
@@ -66,13 +65,14 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
         }
     }
 
+    // Use notifyDataSetChanged because it gives an exception when deleting a image
+    // Exception: IndexOutOfBoundsException: Inconsistency detected. Invalid view holder adapter
+    //            positionViewHolder (positions of holders not updated)
     private fun initListeners() {
         viewModel.images.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                imagesAdapter.submitList(it)
-                delay(100)
-                binding.listImages.smoothScrollToPosition(0)
-            }
+            imagesAdapter.submitList(it)
+            imagesAdapter.notifyDataSetChanged()
+            binding.listImages.scrollToTop()
         }
     }
 
@@ -101,15 +101,18 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
         viewModel.sendSaveImageRequest(uri) { images ->
             if (imagesAdapter.currentList.isEmpty()) imagesAdapter.submitList(null)
             imagesAdapter.submitList(images)
-            lifecycleScope.launch {
-                delay(100)
-                binding.listImages.smoothScrollToPosition(0)
-            }
+//            binding.listImages.scrollToTop()
         }
     }
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
         navigate(R.id.action_userImages_to_image, args)
+    }
+
+    private fun onDeleteImageClick(name: String, pos: Int): Boolean {
+        val args = bundleOf(ARGS_NAME to name, ARGS_POS to pos)
+        navigate(R.id.action_userImages_to_deleteImage, args)
+        return true
     }
 }

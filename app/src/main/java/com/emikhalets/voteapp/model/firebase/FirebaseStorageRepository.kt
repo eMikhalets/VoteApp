@@ -64,6 +64,19 @@ class FirebaseStorageRepository {
                 }
     }
 
+    fun deleteImage(name: String, onSuccess: () -> Unit) {
+        Timber.d("Storage request: deleteImage: STARTED")
+        refStorage.child(FOLDER_IMAGES).child(name).delete()
+                .addOnSuccessListener {
+                    Timber.d("Storage request: deleteImage: SUCCESS")
+                    onSuccess()
+                }
+                .addOnFailureListener {
+                    Timber.d("Storage request: deleteImage: FAILURE")
+                    toastException(it)
+                }
+    }
+
     companion object {
         private const val FOLDER_IMAGES = "images"
         private const val FOLDER_PROFILES = "profile_images"

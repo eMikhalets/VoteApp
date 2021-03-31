@@ -18,7 +18,6 @@ class UserImagesViewModel : ViewModel() {
 
     private var imagesList = mutableListOf<Image>()
     private var sortState = DATE_DEC
-    private var isSortedByDate = true
 
     fun sendLoadUserImagesRequest(onComplete: (List<Image>) -> Unit) {
         if (_images.value.isNullOrEmpty()) {
@@ -26,7 +25,7 @@ class UserImagesViewModel : ViewModel() {
                 DATABASE_REPOSITORY.loadUserImages {
                     if (it.isNotEmpty()) {
                         imagesList = it.toMutableList()
-                        sortImagesByDateWhenAddImage()
+                        sortImagesWhenAdding()
                         _images.postValue(imagesList)
                         onComplete(imagesList)
                     }
@@ -43,8 +42,7 @@ class UserImagesViewModel : ViewModel() {
                         DATABASE_REPOSITORY.saveImage(imageName, url) {
                             DATABASE_REPOSITORY.loadAddedUserImage(imageName) { image ->
                                 imagesList.add(image)
-                                if (isSortedByDate) sortImagesByDateWhenAddImage()
-                                else sortImagesByRatingWhenAddImage()
+                                sortImagesWhenAdding()
                                 _images.postValue(imagesList)
                                 onSuccess(imagesList)
                             }
@@ -55,76 +53,52 @@ class UserImagesViewModel : ViewModel() {
         }
     }
 
+    fun sendDeleteImageRequest(name: String, position: Int, onSuccess: () -> Unit) {
+        if (name.isEmpty()) onSuccess()
+        else viewModelScope.launch {
+            STORAGE_REPOSITORY.deleteImage(name) {
+                DATABASE_REPOSITORY.deleteImage(name) {
+                    imagesList.removeAt(position)
+                    _images.postValue(imagesList)
+                    onSuccess()
+                }
+            }
+        }
+    }
+
     // TODO как вынести определение состояния сортировки в отдельную функцию?
     fun sortImagesByDate() {
         viewModelScope.launch {
-            imagesList = when (sortState) {
-                RATING_DEC -> {
-                    sortState = DATE_DEC
-                    imagesList.sortedByDescending { it.timestamp }.toMutableList()
-                }
-                RATING_ASC -> {
-                    sortState = DATE_DEC
-                    imagesList.sortedByDescending { it.timestamp }.toMutableList()
-                }
-                DATE_DEC -> {
-                    sortState = DATE_ASC
-                    imagesList.sortedBy { it.timestamp }.toMutableList()
-                }
-                DATE_ASC -> {
-                    sortState = DATE_DEC
-                    imagesList.sortedByDescending { it.timestamp }.toMutableList()
-                }
+            imagesList = if (sortState == DATE_DEC) {
+                sortState = DATE_ASC
+                imagesList.sortedBy { it.timestamp }.toMutableList()
+            } else {
+                sortState = DATE_DEC
+                imagesList.sortedByDescending { it.timestamp }.toMutableList()
             }
-            isSortedByDate = true
             _images.postValue(imagesList)
         }
     }
 
     fun sortImagesByRating() {
         viewModelScope.launch {
-            imagesList = when (sortState) {
-                RATING_DEC -> {
-                    sortState = RATING_ASC
-                    imagesList.sortedBy { it.rating }.toMutableList()
-                }
-                RATING_ASC -> {
-                    sortState = RATING_DEC
-                    imagesList.sortedByDescending { it.rating }.toMutableList()
-                }
-                DATE_DEC -> {
-                    sortState = RATING_DEC
-                    imagesList.sortedByDescending { it.rating }.toMutableList()
-                }
-                DATE_ASC -> {
-                    sortState = RATING_DEC
-                    imagesList.sortedByDescending { it.rating }.toMutableList()
-                }
+            imagesList = if (sortState == RATING_DEC) {
+                sortState = RATING_ASC
+                imagesList.sortedBy { it.rating }.toMutableList()
+            } else {
+                sortState = RATING_DEC
+                imagesList.sortedByDescending { it.rating }.toMutableList()
             }
-            isSortedByDate = false
             _images.postValue(imagesList)
         }
     }
 
-    private fun sortImagesByDateWhenAddImage() {
-        if (imagesList.size > 1) {
-            when (sortState) {
-                DATE_DEC -> imagesList = imagesList.sortedByDescending { it.timestamp }.toMutableList()
-                DATE_ASC -> imagesList = imagesList.sortedBy { it.timestamp }.toMutableList()
-                else -> {
-                }
-            }
-        }
-    }
-
-    private fun sortImagesByRatingWhenAddImage() {
-        if (imagesList.size > 1) {
-            when (sortState) {
-                RATING_DEC -> imagesList = imagesList.sortedByDescending { it.rating }.toMutableList()
-                RATING_ASC -> imagesList = imagesList.sortedBy { it.rating }.toMutableList()
-                else -> {
-                }
-            }
+    private fun sortImagesWhenAdding() {
+        imagesList = when (sortState) {
+            DATE_DEC -> imagesList.sortedByDescending { it.timestamp }.toMutableList()
+            DATE_ASC -> imagesList.sortedBy { it.timestamp }.toMutableList()
+            RATING_DEC -> imagesList.sortedByDescending { it.rating }.toMutableList()
+            RATING_ASC -> imagesList.sortedBy { it.rating }.toMutableList()
         }
     }
 

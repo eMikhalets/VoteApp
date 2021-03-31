@@ -129,6 +129,19 @@ class FirebaseDatabaseRepository {
                 }
     }
 
+    fun deleteImage(name: String, onSuccess: () -> Unit) {
+        Timber.d("Database request: deleteImage: STARTED")
+        refDatabase.child(NODE_IMAGES).child(name).setValue(null)
+                .addOnSuccessListener {
+                    Timber.d("Database request: deleteImage: SUCCESS")
+                    onSuccess()
+                }
+                .addOnFailureListener {
+                    Timber.d("Database request: deleteImage: FAILURE")
+                    toastException(it)
+                }
+    }
+
     companion object {
         private const val NODE_IMAGES = "images"
         private const val NODE_USERS = "users"

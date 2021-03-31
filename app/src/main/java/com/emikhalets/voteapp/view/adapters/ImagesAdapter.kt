@@ -3,7 +3,6 @@ package com.emikhalets.voteapp.view.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +13,8 @@ import com.emikhalets.voteapp.utils.loadImage
 
 class ImagesAdapter(
         private val showOwner: Boolean = false,
-        private val click: (String, View) -> Unit,
+        private val click: (String, View) -> Unit = { _, _ -> },
+        private val longClick: (String, Int) -> Unit = { _, _ -> },
 ) : ListAdapter<Image, ImagesAdapter.ImagesViewHolder>(ImagesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {
@@ -25,14 +25,20 @@ class ImagesAdapter(
 
     override fun onViewAttachedToWindow(holder: ImagesViewHolder) {
         super.onViewAttachedToWindow(holder)
+        val item = getItem(holder.adapterPosition)
         holder.itemView.setOnClickListener {
-            click.invoke(getItem(holder.adapterPosition).url, holder.itemView.findViewById(R.id.image))
+            click.invoke(item.url, holder.itemView.findViewById(R.id.image))
+        }
+        holder.itemView.setOnLongClickListener {
+            longClick.invoke(item.name, holder.adapterPosition)
+            true
         }
     }
 
     override fun onViewDetachedFromWindow(holder: ImagesViewHolder) {
         super.onViewDetachedFromWindow(holder)
         holder.itemView.setOnClickListener(null)
+        holder.itemView.setOnLongClickListener(null)
     }
 
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {

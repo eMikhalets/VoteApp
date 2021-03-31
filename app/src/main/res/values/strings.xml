@@ -24,7 +24,6 @@
     <string name="drawer_voting">Voting</string>
     <string name="drawer_top_images">Top Images</string>
     <string name="drawer_top_users">Top Users</string>
-    <string name="drawer_current_rating">Current rating: %d</string>
 
     <!-- Toolbar Titles -->
     <string name="home_title">Latest Images</string>
@@ -51,8 +50,12 @@
     <!-- User Images Screen -->
     <string name="images_menu_sort">Sort images</string>
     <string name="images_menu_add">Add image</string>
+    <string name="images_menu_delete">Delete image</string>
     <string name="images_menu_sort_date">Sort by upload date</string>
     <string name="images_menu_sort_rating">Sort by rating</string>
+    <string name="images_text_delete_image">Delete this image?</string>
+    <string name="images_btn_no">No</string>
+    <string name="images_btn_yes">Yes</string>
 
     <!-- Top Users Screen -->
     <string name="item_users_text_rating">Rating: %d</string>

@@ -13,7 +13,7 @@ import com.emikhalets.voteapp.view.base.WithDrawerFragment
 class TopImagesFragment : WithDrawerFragment(R.layout.fragment_top_images) {
 
     private val binding: FragmentTopImagesBinding by viewBinding()
-    private lateinit var imagesAdapter: ImagesAdapter
+    private val imagesAdapter = ImagesAdapter(true)
     private lateinit var llm: LinearLayoutManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -23,7 +23,6 @@ class TopImagesFragment : WithDrawerFragment(R.layout.fragment_top_images) {
     }
 
     private fun initRecyclerView() {
-        imagesAdapter = ImagesAdapter(true) { _, _ ->}
         llm = LinearLayoutManager(this.context)
         binding.apply {
             listImages.layoutManager = llm

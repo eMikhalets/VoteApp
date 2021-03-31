@@ -35,6 +35,13 @@
         <item name="android:layout_marginTop">@dimen/app_margin</item>
     </style>
 
+    <style name="AppTextDialog">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginStart">@dimen/app_margin</item>
+        <item name="android:layout_marginTop">@dimen/app_margin</item>
+    </style>
+
     <style name="AppScreen">
         <item name="android:background">?attr/colorOnPrimary</item>
     </style>
