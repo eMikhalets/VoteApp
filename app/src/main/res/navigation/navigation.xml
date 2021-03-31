@@ -102,6 +102,9 @@
         <action
             android:id="@+id/action_profile_to_image"
             app:destination="@id/imageFragment" />
+        <action
+            android:id="@+id/action_profile_to_changeName"
+            app:destination="@id/changeNameDialog" />
     </fragment>
 
     <fragment
@@ -141,6 +144,12 @@
         android:name="com.emikhalets.voteapp.view.screens.ChangePassDialog"
         android:label="ChangePassDialog"
         tools:layout="@layout/dialog_change_pass" />
+
+    <dialog
+        android:id="@+id/changeNameDialog"
+        android:name="com.emikhalets.voteapp.view.screens.ChangeNameDialog"
+        android:label="ChangeNameDialog"
+        tools:layout="@layout/dialog_change_name" />
 
     <fragment
         android:id="@+id/imageFragment"

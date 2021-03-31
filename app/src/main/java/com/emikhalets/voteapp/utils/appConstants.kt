@@ -9,6 +9,7 @@ import com.emikhalets.voteapp.view.MainActivity
 lateinit var ACTIVITY: MainActivity
 lateinit var USER_ID: String
 lateinit var USERNAME: String
+lateinit var USER_PHOTO: String
 
 lateinit var AUTH_REPOSITORY: FirebaseAuthRepository
 lateinit var STORAGE_REPOSITORY: FirebaseStorageRepository

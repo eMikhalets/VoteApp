@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ItemUserBinding
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.test.loadMock
 import com.emikhalets.voteapp.utils.toast
 
 class UsersAdapter : RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
@@ -42,7 +41,7 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
 
         fun bind(item: User, position: Int) {
             binding.apply {
-                image.loadMock(item.photo.toInt())
+//                image.loadMock(item.photo.toInt())
                 textPosition.text = (position + 1).toString()
                 textUsername.text = item.username
                 textRating.text = root.context.getString(

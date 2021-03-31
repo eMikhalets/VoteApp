@@ -6,10 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.loadImage
-import com.emikhalets.voteapp.utils.navigate
-import com.emikhalets.voteapp.utils.popBackStack
+import com.emikhalets.voteapp.utils.*
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -69,25 +66,26 @@ class AppDrawer {
         ACTIVITY.toolbar.setNavigationOnClickListener { popBackStack() }
     }
 
-//    fun updateHeader() {
-//        profile.withName(USER.fullname)
-//                .withEmail(USER.phone)
-//                .withIcon(USER.photo_url)
-//                .withIdentifier(200)
-//        header.updateProfile(profile)
-//    }
+    fun updateHeader() {
+        profile.withName(USERNAME).withIdentifier(0)
+        if (USER_PHOTO.isNotEmpty() && USER_PHOTO != "null") profile.withIcon(USER_PHOTO)
+        else profile.withIcon(R.drawable.placeholder_user)
+        header.updateProfile(profile)
+    }
 
     private fun initLoader() {
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable) {
-                imageView.loadImage(uri.toString(), R.drawable.placeholder_user)
+                if (uri.toString().isNotEmpty() && uri.toString() != "null") {
+                    imageView.loadImage(uri.toString(), R.drawable.placeholder_user)
+                }
             }
         })
     }
 
     private fun createHeader() {
         profile = ProfileDrawerItem()
-                .withName(R.string.test_user_name)
+                .withName(USERNAME)
                 .withIcon(R.drawable.placeholder_user)
                 .withIdentifier(0)
         header = AccountHeaderBuilder()
@@ -120,6 +118,6 @@ class AppDrawer {
                 .withIdentifier(identifier)
                 .withName(nameRes)
                 .withIcon(iconRes)
-                .withSelectable(true)
+                .withSelectable(false)
     }
 }

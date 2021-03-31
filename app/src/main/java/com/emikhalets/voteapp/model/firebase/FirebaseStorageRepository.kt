@@ -24,15 +24,15 @@ class FirebaseStorageRepository {
                 }
     }
 
-    fun loadProfileImageUrl(onSuccess: (url: String) -> Unit) {
-        Timber.d("Storage request: loadProfileImageUrl: STARTED")
+    fun loadUserPhotoUrl(onSuccess: (url: String) -> Unit) {
+        Timber.d("Storage request: loadUserPhotoUrl: STARTED")
         refStorage.child(FOLDER_PROFILES).child(USER_ID).downloadUrl
                 .addOnSuccessListener {
-                    Timber.d("Storage request: loadProfileImageUrl: SUCCESS")
+                    Timber.d("Storage request: loadUserPhotoUrl: SUCCESS")
                     onSuccess(it.toString())
                 }
                 .addOnFailureListener {
-                    Timber.d("Storage request: loadProfileImageUrl: FAILURE")
+                    Timber.d("Storage request: loadUserPhotoUrl: FAILURE")
                     toastException(it)
                 }
     }
@@ -51,15 +51,15 @@ class FirebaseStorageRepository {
                 }
     }
 
-    fun saveProfileImage(uri: Uri, onSuccess: () -> Unit) {
-        Timber.d("Storage request: saveProfileImage: STARTED")
+    fun saveUserPhoto(uri: Uri, onSuccess: () -> Unit) {
+        Timber.d("Storage request: saveUserPhoto: STARTED")
         refStorage.child(FOLDER_PROFILES).child(USER_ID).putFile(uri)
                 .addOnSuccessListener {
-                    Timber.d("Storage request: saveProfileImage: SUCCESS")
+                    Timber.d("Storage request: saveUserPhoto: SUCCESS")
                     onSuccess()
                 }
                 .addOnFailureListener {
-                    Timber.d("Storage request: saveProfileImage: FAILURE")
+                    Timber.d("Storage request: saveUserPhoto: FAILURE")
                     toastException(it)
                 }
     }

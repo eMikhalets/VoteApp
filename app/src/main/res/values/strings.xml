@@ -59,11 +59,13 @@
 
     <!-- Profile Screen -->
     <string name="profile_text_rating">Rating: %d</string>
+    <string name="profile_btn_change_photo">Change Photo</string>
+    <string name="profile_btn_change_name">Change Username</string>
+    <string name="profile_btn_change_pass">Change Password</string>
     <string name="profile_btn_logout">LogOut</string>
-    <string name="profile_change_pass">Change Password</string>
-    <string name="profile_change_photo">Change Photo</string>
     <string name="profile_text_new_pass">New password</string>
     <string name="profile_text_new_pass_conf">Confirm new password</string>
+    <string name="profile_text_change_name">New username</string>
     <string name="profile_btn_apply">Apply</string>
     <string name="app_transition_name_image_zoom">image_zoom</string>
 </resources>

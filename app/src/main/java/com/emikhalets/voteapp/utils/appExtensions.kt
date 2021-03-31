@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
-import coil.load
 import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.model.entities.Image
@@ -20,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.database.DataSnapshot
+import com.squareup.picasso.Picasso
 import timber.log.Timber
 
 fun initRepositories() {
@@ -73,14 +73,9 @@ fun toastException(exception: Exception?) {
 fun ImageView.loadImage(
         url: String,
         placeholder: Int = R.drawable.placeholder_default,
-        crossfade: Int = 0,
 ) {
-    load(url) {
-        crossfade(crossfade)
-        placeholder(placeholder)
-        fallback(placeholder)
-        error(placeholder)
-    }
+    val image = if (url.isEmpty()) "no image" else url
+    Picasso.get().load(image).placeholder(placeholder).error(placeholder).into(this)
 }
 
 fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()

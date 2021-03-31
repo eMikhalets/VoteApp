@@ -36,6 +36,7 @@ class RegisterFragment : NoDrawerFragment(R.layout.fragment_auth_register) {
             if (pass == passConf) {
                 viewModel.sendRegisterRequest(login, pass) {
                     lifecycleScope.launch {
+                        ACTIVITY.drawer.updateHeader()
                         navigate(R.id.homeFragment)
                     }
                 }

@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        drawer.updateHeader()
         permissionResult.launch(CAMERA)
     }
 

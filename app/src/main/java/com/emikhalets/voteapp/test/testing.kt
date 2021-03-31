@@ -1,7 +1,5 @@
 package com.emikhalets.voteapp.test
 
-import android.widget.ImageView
-import coil.load
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.model.entities.User
 
@@ -18,8 +16,4 @@ fun createMockUsers(): List<User> {
             User("8", "superman", R.drawable.test_photo_9.toString(), 65),
             User("9", "batman", R.drawable.test_photo_10.toString(), 27),
     )
-}
-
-fun ImageView.loadMock(url: Int) {
-    load(url) { placeholder(R.drawable.placeholder_default) }
 }

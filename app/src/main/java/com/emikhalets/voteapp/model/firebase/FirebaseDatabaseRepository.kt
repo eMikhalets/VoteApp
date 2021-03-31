@@ -115,6 +115,20 @@ class FirebaseDatabaseRepository {
                 }
     }
 
+    fun updateUsername(name: String, onSuccess: () -> Unit) {
+        Timber.d("Database request: updateUsername: STARTED")
+        val map = hashMapOf<String, Any>(CHILD_USERNAME to name)
+        refDatabase.child(NODE_USERS).child(USER_ID).updateChildren(map)
+                .addOnSuccessListener {
+                    Timber.d("Database request: updateUsername: SUCCESS")
+                    onSuccess()
+                }
+                .addOnFailureListener {
+                    Timber.d("Database request: updateUsername: FAILURE")
+                    toastException(it)
+                }
+    }
+
     companion object {
         private const val NODE_IMAGES = "images"
         private const val NODE_USERS = "users"

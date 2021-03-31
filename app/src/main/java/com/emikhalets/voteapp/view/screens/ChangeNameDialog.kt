@@ -4,10 +4,10 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.databinding.DialogChangePassBinding
+import com.emikhalets.voteapp.databinding.DialogChangeNameBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.popBackStack
 import com.emikhalets.voteapp.utils.toast
@@ -17,17 +17,17 @@ import kotlinx.coroutines.launch
 
 /**
  * With viewBinding delegate throws exception:
- * IllegalStateException: Fragment ChangePassDialog did not return a View from onCreateView()
+ * IllegalStateException: Fragment ChangeNameDialog did not return a View from onCreateView()
  * or this was called before onCreateView().
  */
-class ChangePassDialog : DialogFragment() {
+class ChangeNameDialog : DialogFragment() {
 
-    private var _binding: DialogChangePassBinding? = null
+    private var _binding: DialogChangeNameBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = DialogChangePassBinding.inflate(LayoutInflater.from(context))
+        _binding = DialogChangeNameBinding.inflate(LayoutInflater.from(context))
         binding.btnApply.setOnClickListener { onApplyClick() }
         return MaterialAlertDialogBuilder(ACTIVITY)
                 .setView(binding.root)
@@ -40,20 +40,12 @@ class ChangePassDialog : DialogFragment() {
     }
 
     private fun onApplyClick() {
-        val newPass = binding.inputNew.text.toString()
-        val newConf = binding.inputNewConf.text.toString()
-        if (newPass.isNotEmpty() && newConf.isNotEmpty()) {
-            if (newPass == newConf) {
-                viewModel.sendUpdatePassRequest(newPass) {
-                    lifecycleScope.launch {
-                        popBackStack()
-                    }
-                }
-            } else {
-                toast(getString(R.string.app_toast_pass_not_confirm))
+        val name = binding.inputName.text.toString()
+        if (name.isNotEmpty()) viewModel.sendUpdateUsernameRequest(name) {
+            lifecycleScope.launch {
+                popBackStack()
             }
-        } else {
-            toast(getString(R.string.app_toast_fill_fields))
         }
+        else toast(getString(R.string.app_toast_fill_fields))
     }
 }

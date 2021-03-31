@@ -1,5 +1,12 @@
 <resources>
 
+    <style name="BezelImageView">
+        <item name="biv_maskDrawable">@drawable/material_drawer_rectangle_mask</item>
+        <item name="biv_drawCircularShadow">false</item>
+        <item name="biv_selectorOnPress">@color/material_drawer_primary</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
     <style name="AppToolbar">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>

@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
-import coil.load
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentImageBinding
 import com.emikhalets.voteapp.utils.ARGS_PHOTO
+import com.emikhalets.voteapp.utils.loadImage
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
 
 class ImageFragment : WithDrawerFragment(R.layout.fragment_image) {
@@ -22,7 +22,7 @@ class ImageFragment : WithDrawerFragment(R.layout.fragment_image) {
 
         arguments?.let {
             val url = it.getString(ARGS_PHOTO)
-            binding.image.load(url)
+            binding.image.loadImage(url ?: "no image")
         }
     }
 }
