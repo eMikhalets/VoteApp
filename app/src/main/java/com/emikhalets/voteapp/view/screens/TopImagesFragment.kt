@@ -2,12 +2,14 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopImagesBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.scrollToTop
+import com.emikhalets.voteapp.utils.ARGS_PHOTO
+import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.TopImagesViewModel
@@ -17,7 +19,7 @@ class TopImagesFragment : WithDrawerFragment(R.layout.fragment_top_images) {
     private val binding: FragmentTopImagesBinding by viewBinding()
     private val viewModel: TopImagesViewModel by viewModels()
 
-    private val imagesAdapter = ImagesAdapter(true)
+    private val imagesAdapter = ImagesAdapter(true, { url, v -> onImageClick(url, v) })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +44,11 @@ class TopImagesFragment : WithDrawerFragment(R.layout.fragment_top_images) {
     }
 
     private fun onViewLoaded() {
-        viewModel.sendLoadTopImages()
+        viewModel.sendLoadTopImagesRequest()
+    }
+
+    private fun onImageClick(url: String, view: View) {
+        val args = bundleOf(ARGS_PHOTO to url)
+        navigate(R.id.action_topImages_to_image, args)
     }
 }

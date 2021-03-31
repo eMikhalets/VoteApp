@@ -4,22 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.voteapp.model.entities.Image
+import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
 import kotlinx.coroutines.launch
 
-class TopImagesViewModel : ViewModel() {
+class TopUsersViewModel : ViewModel() {
 
-    private val _images = MutableLiveData<List<Image>>()
-    val images get():LiveData<List<Image>> = _images
+    private val _users = MutableLiveData<List<User>>()
+    val users get():LiveData<List<User>> = _users
 
-    fun sendLoadTopImagesRequest() {
-        if (_images.value.isNullOrEmpty()) {
+    fun sendLoadTopUsersRequest() {
+        if (_users.value.isNullOrEmpty()) {
             viewModelScope.launch {
-                DATABASE_REPOSITORY.loadTopImages {
+                DATABASE_REPOSITORY.loadTopUsers {
                     if (it.isNotEmpty()) {
                         val images = it.sortedByDescending { item -> item.rating }
-                        _images.postValue(images)
+                        _users.postValue(images)
                     }
                 }
             }
