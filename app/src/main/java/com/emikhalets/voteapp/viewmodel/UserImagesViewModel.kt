@@ -19,7 +19,7 @@ class UserImagesViewModel : ViewModel() {
     private var imagesList = mutableListOf<Image>()
     private var sortState = DATE_DEC
 
-    fun sendLoadUserImagesRequest(onComplete: (List<Image>) -> Unit) {
+    fun sendLoadUserImagesRequest() {
         if (_images.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 DATABASE_REPOSITORY.loadUserImages {
@@ -27,7 +27,6 @@ class UserImagesViewModel : ViewModel() {
                         imagesList = it.toMutableList()
                         sortImagesWhenAdding()
                         _images.postValue(imagesList)
-                        onComplete(imagesList)
                     }
                 }
             }

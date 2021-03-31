@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
@@ -22,7 +21,6 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private val binding: FragmentUserImagesBinding by viewBinding()
     private val viewModel: UserImagesViewModel by activityViewModels()
-    private val llm = LinearLayoutManager(context)
 
     private val imagesAdapter = ImagesAdapter(
             false,
@@ -58,7 +56,6 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private fun initRecyclerView() {
         binding.listImages.apply {
-            layoutManager = llm
             setHasFixedSize(true)
             isNestedScrollingEnabled = false
             adapter = imagesAdapter
@@ -77,9 +74,7 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     }
 
     private fun onViewLoaded() {
-        viewModel.sendLoadUserImagesRequest {
-            imagesAdapter.submitList(it)
-        }
+        viewModel.sendLoadUserImagesRequest()
     }
 
     private fun onSortByRatingClick(): Boolean {

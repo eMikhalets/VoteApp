@@ -61,6 +61,16 @@ class FirebaseDatabaseRepository {
                 }
     }
 
+    fun loadTopImages(onComplete: (List<Image>) -> Unit) {
+        Timber.d("Database request: loadTopImages: STARTED")
+        refDatabase.child(NODE_IMAGES).orderByChild(CHILD_RATING).singleDataChange { snapshot ->
+            Timber.d("Database request: loadTopImages: COMPLETE")
+            val list = mutableListOf<Image>()
+            snapshot.children.forEach { list.add(it.toImage()) }
+            onComplete(list)
+        }
+    }
+
     fun saveUser(login: String, onSuccess: () -> Unit) {
         Timber.d("Database request: saveUser: STARTED")
         val map = hashMapOf(
