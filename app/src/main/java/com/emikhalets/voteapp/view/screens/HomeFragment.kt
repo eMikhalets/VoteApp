@@ -41,12 +41,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.images.observe(viewLifecycleOwner) {
             imagesAdapter.submitList(it)
             binding.apply {
-                layoutSwipe.isRefreshing = false
+                root.isRefreshing = false
                 progress.visibility = View.GONE
                 listImages.visibility = View.VISIBLE
             }
         }
-        binding.layoutSwipe.setOnRefreshListener { onRefreshInvoke() }
+        binding.root.setOnRefreshListener { onRefreshInvoke() }
     }
 
     private fun onViewLoaded() {
