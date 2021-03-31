@@ -13,13 +13,12 @@ class HomeViewModel : ViewModel() {
     private val _images = MutableLiveData<List<Image>>()
     val images get():LiveData<List<Image>> = _images
 
-    fun sendLatestImagesRequest(onComplete: (List<Image>) -> Unit) {
-        if (_images.value.isNullOrEmpty()) {
+    fun sendLatestImagesRequest(isRefresh: Boolean = false) {
+        if (_images.value.isNullOrEmpty() || isRefresh) {
             viewModelScope.launch {
                 DATABASE_REPOSITORY.loadLatestImages { images ->
                     val list = images.sortedByDescending { it.timestamp }
                     _images.postValue(list)
-                    onComplete(list)
                 }
             }
         }

@@ -33,19 +33,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun initRecyclerView() {
         binding.apply {
             listImages.setHasFixedSize(true)
-            listImages.isNestedScrollingEnabled = false
             listImages.adapter = imagesAdapter
         }
     }
 
     private fun initListeners() {
-        viewModel.images.observe(viewLifecycleOwner) { imagesAdapter.submitList(it) }
+        viewModel.images.observe(viewLifecycleOwner) {
+            imagesAdapter.submitList(it)
+            binding.apply {
+                layoutSwipe.isRefreshing = false
+                progress.visibility = View.GONE
+                listImages.visibility = View.VISIBLE
+            }
+        }
+        binding.layoutSwipe.setOnRefreshListener { onRefreshInvoke() }
     }
 
     private fun onViewLoaded() {
-        viewModel.sendLatestImagesRequest {
-            imagesAdapter.submitList(it)
-        }
+        viewModel.sendLatestImagesRequest()
+    }
+
+    private fun onRefreshInvoke() {
+        viewModel.sendLatestImagesRequest(true)
     }
 
     private fun onImageClick(url: String, view: View) {
