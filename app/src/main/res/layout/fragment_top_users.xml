@@ -13,4 +13,5 @@
         android:layout_margin="@dimen/app_margin_small"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_user" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,4 +35,5 @@
         android:text="@string/profile_btn_apply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/input_name" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

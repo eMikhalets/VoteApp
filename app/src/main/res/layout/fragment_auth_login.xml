@@ -66,4 +66,5 @@
         android:layout_marginTop="@dimen/app_margin_small"
         android:text="@string/auth_btn_register"
         app:layout_constraintTop_toBottomOf="@id/btn_login" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
