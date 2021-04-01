@@ -35,15 +35,21 @@ class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
         val pass = binding.inputPass.text.toString()
 
         if (login.isNotEmpty() && pass.isNotEmpty()) {
-            viewModel.sendLoginRequest(login, pass) {
-                lifecycleScope.launch {
-                    ACTIVITY.drawer.updateHeader()
-                    navigate(R.id.homeFragment)
-                }
-            }
+            viewModel.sendLoginRequest(login, pass, { onUserExist() }, { onUserNotExist() })
         } else {
             toast(getString(R.string.app_toast_fill_fields))
         }
+    }
+
+    private fun onUserExist() {
+        lifecycleScope.launch {
+            ACTIVITY.drawer.updateHeader()
+            navigate(R.id.homeFragment)
+        }
+    }
+
+    private fun onUserNotExist() {
+        toast(getString(R.string.app_toast_user_not_exist_db))
     }
 
     private fun onRegisterClick() {

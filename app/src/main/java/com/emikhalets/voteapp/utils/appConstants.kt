@@ -1,19 +1,18 @@
 package com.emikhalets.voteapp.utils
 
 import android.Manifest
+import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
 import com.emikhalets.voteapp.view.MainActivity
 
 lateinit var ACTIVITY: MainActivity
-lateinit var USER_ID: String
-lateinit var USERNAME: String
-lateinit var USER_PHOTO: String
+var USER: User = User()
 
-lateinit var AUTH_REPOSITORY: FirebaseAuthRepository
-lateinit var STORAGE_REPOSITORY: FirebaseStorageRepository
-lateinit var DATABASE_REPOSITORY: FirebaseDatabaseRepository
+val AUTH_REPOSITORY = FirebaseAuthRepository()
+val STORAGE_REPOSITORY = FirebaseStorageRepository()
+val DATABASE_REPOSITORY = FirebaseDatabaseRepository()
 
 const val CAMERA = Manifest.permission.CAMERA
 

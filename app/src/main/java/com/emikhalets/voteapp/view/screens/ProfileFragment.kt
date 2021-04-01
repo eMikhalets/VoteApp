@@ -57,16 +57,17 @@ class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
     }
 
     private fun onViewLoaded() {
-        viewModel.sendLoadUserDataRequest { data ->
+        viewModel.sendLoadUserDataRequest {
             lifecycleScope.launch {
-                setData(data)
+                toast(getString(R.string.app_toast_user_not_exist_db))
+                navigate(R.id.authLoginFragment)
             }
         }
     }
 
     private fun onPhotoClick() {
-        if (USER_PHOTO.isNotEmpty() && USER_PHOTO != "null") {
-            val args = bundleOf(ARGS_PHOTO to viewModel.profileUrl)
+        if (USER.photo.isNotEmpty() && USER.photo != "null") {
+            val args = bundleOf(ARGS_PHOTO to USER.photo)
             val extras = FragmentNavigatorExtras(
                     binding.image to getString(R.string.app_transition_name_image_zoom)
             )

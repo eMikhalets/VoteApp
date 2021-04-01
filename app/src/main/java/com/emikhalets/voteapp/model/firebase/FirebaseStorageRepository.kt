@@ -1,7 +1,7 @@
 package com.emikhalets.voteapp.model.firebase
 
 import android.net.Uri
-import com.emikhalets.voteapp.utils.USER_ID
+import com.emikhalets.voteapp.utils.USER
 import com.emikhalets.voteapp.utils.toastException
 import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
@@ -26,7 +26,7 @@ class FirebaseStorageRepository {
 
     fun loadUserPhotoUrl(onSuccess: (url: String) -> Unit) {
         Timber.d("Storage request: loadUserPhotoUrl: STARTED")
-        refStorage.child(FOLDER_PROFILES).child(USER_ID).downloadUrl
+        refStorage.child(FOLDER_PROFILES).child(USER.id).downloadUrl
                 .addOnSuccessListener {
                     Timber.d("Storage request: loadUserPhotoUrl: SUCCESS")
                     onSuccess(it.toString())
@@ -53,7 +53,7 @@ class FirebaseStorageRepository {
 
     fun saveUserPhoto(uri: Uri, onSuccess: () -> Unit) {
         Timber.d("Storage request: saveUserPhoto: STARTED")
-        refStorage.child(FOLDER_PROFILES).child(USER_ID).putFile(uri)
+        refStorage.child(FOLDER_PROFILES).child(USER.id).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveUserPhoto: SUCCESS")
                     onSuccess()

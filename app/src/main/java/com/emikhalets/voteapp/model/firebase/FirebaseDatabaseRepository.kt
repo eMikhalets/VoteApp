@@ -11,29 +11,23 @@ class FirebaseDatabaseRepository {
 
     private val refDatabase = FirebaseDatabase.getInstance().reference
 
-    fun checkUserExisting(onSuccess: (Boolean) -> Unit) {
-        Timber.d("Database request: checkUserExisting: STARTED")
-        refDatabase.child(NODE_USERS).child(USER_ID).singleDataChange {
-            Timber.d("Database request: checkUserExisting: COMPLETE")
-            onSuccess(it.exists())
-        }
-    }
-
-    fun loadUserData(onSuccess: (User) -> Unit) {
+    fun loadUserData(onSuccess: (User?) -> Unit) {
         Timber.d("Database request: loadUserData: STARTED")
-        refDatabase.child(NODE_USERS).child(USER_ID).singleDataChange { snapshot ->
+        refDatabase.child(NODE_USERS).child(USER.id).singleDataChange { snapshot ->
             if (snapshot.exists()) {
-                Timber.d("Database request: loadUserData: SUCCESS")
-                onSuccess(snapshot.toUser())
+                Timber.d("Database request: loadUserData: COMPLETE (User exist)")
+                USER = snapshot.toUser()
+                onSuccess(USER)
             } else {
-                Timber.d("Database request: loadUserData: FAILURE")
+                Timber.d("Database request: loadUserData: COMPLETE (User not exist)")
+                onSuccess(null)
             }
         }
     }
 
     fun loadUserImages(onComplete: (List<Image>) -> Unit) {
         Timber.d("Database request: loadUserImages: STARTED")
-        refDatabase.child(NODE_IMAGES).orderByChild(CHILD_OWNER_ID).equalTo(USER_ID)
+        refDatabase.child(NODE_IMAGES).orderByChild(CHILD_OWNER_ID).equalTo(USER.id)
                 .singleDataChange { snapshot ->
                     val list = mutableListOf<Image>()
                     snapshot.children.forEach { list.add(it.toImage()) }
@@ -91,15 +85,16 @@ class FirebaseDatabaseRepository {
         }
     }
 
-    fun saveUser(login: String, onSuccess: () -> Unit) {
+    fun saveUser(onSuccess: () -> Unit) {
         Timber.d("Database request: saveUser: STARTED")
         val map = hashMapOf(
-                CHILD_ID to USER_ID,
-                CHILD_USERNAME to login,
+                CHILD_ID to USER.id,
+                CHILD_LOGIN to USER.login,
+                CHILD_USERNAME to USER.username,
                 CHILD_PHOTO to "",
                 CHILD_RATING to 0
         )
-        refDatabase.child(NODE_USERS).child(USER_ID).setValue(map)
+        refDatabase.child(NODE_USERS).child(USER.id).setValue(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: saveUser: SUCCESS")
                     onSuccess()
@@ -116,8 +111,8 @@ class FirebaseDatabaseRepository {
                 CHILD_NAME to name,
                 CHILD_URL to url,
                 CHILD_RATING to 0,
-                CHILD_OWNER_ID to USER_ID,
-                CHILD_OWNER_NAME to USERNAME,
+                CHILD_OWNER_ID to USER.id,
+                CHILD_OWNER_NAME to USER.username,
                 CHILD_TIMESTAMP to ServerValue.TIMESTAMP
         )
         refDatabase.child(NODE_IMAGES).child(name).setValue(map)
@@ -134,8 +129,9 @@ class FirebaseDatabaseRepository {
     fun updateUserPhoto(url: String, onSuccess: () -> Unit) {
         Timber.d("Database request: updateUserPhoto: STARTED")
         val map = hashMapOf<String, Any>(CHILD_PHOTO to url)
-        refDatabase.child(NODE_USERS).child(USER_ID).updateChildren(map)
+        refDatabase.child(NODE_USERS).child(USER.id).updateChildren(map)
                 .addOnSuccessListener {
+                    USER.photo = url
                     Timber.d("Database request: updateUserPhoto: SUCCESS")
                     onSuccess()
                 }
@@ -148,8 +144,9 @@ class FirebaseDatabaseRepository {
     fun updateUsername(name: String, onSuccess: () -> Unit) {
         Timber.d("Database request: updateUsername: STARTED")
         val map = hashMapOf<String, Any>(CHILD_USERNAME to name)
-        refDatabase.child(NODE_USERS).child(USER_ID).updateChildren(map)
+        refDatabase.child(NODE_USERS).child(USER.id).updateChildren(map)
                 .addOnSuccessListener {
+                    USER.username = name
                     Timber.d("Database request: updateUsername: SUCCESS")
                     onSuccess()
                 }
@@ -170,6 +167,10 @@ class FirebaseDatabaseRepository {
         }
     }
 
+    /**
+     * Updates the rating of the user whose image was voted for
+     * @param id image owner user id
+     */
     fun updateUserRating(id: String, onComplete: () -> Unit) {
         Timber.d("Database request: updateUserRating: STARTED")
         refDatabase.child(NODE_USERS).child(id).singleDataChange { snapshot ->
@@ -203,6 +204,7 @@ class FirebaseDatabaseRepository {
         const val CHILD_OWNER_ID = "owner_id"
         const val CHILD_USERNAME = "username"
         const val CHILD_RATING = "rating"
+        const val CHILD_LOGIN = "login"
         const val CHILD_PHOTO = "photo"
         const val CHILD_NAME = "name"
         const val CHILD_URL = "url"

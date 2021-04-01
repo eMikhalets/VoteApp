@@ -1,9 +1,10 @@
 package com.emikhalets.voteapp.model.firebase
 
-import android.net.Uri
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.utils.*
-import com.google.firebase.auth.UserProfileChangeRequest
+import com.emikhalets.voteapp.model.entities.User
+import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.USER
+import com.emikhalets.voteapp.utils.toastException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
@@ -11,12 +12,9 @@ import timber.log.Timber
 class FirebaseAuthRepository {
 
     private val auth = Firebase.auth
-    private var user = auth.currentUser
 
     init {
-        USER_ID = user?.uid ?: ""
-        USERNAME = user?.displayName ?: ""
-        USER_PHOTO = user?.photoUrl.toString()
+        USER.id = auth.currentUser?.uid ?: ""
     }
 
     fun login(login: String, pass: String, onSuccess: () -> Unit) {
@@ -24,11 +22,8 @@ class FirebaseAuthRepository {
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
         auth.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
+                    USER = User(id = auth.currentUser?.uid ?: "")
                     Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
-                    user = auth.currentUser
-                    USER_ID = user?.uid ?: ""
-                    USERNAME = user?.displayName ?: ""
-                    USER_PHOTO = user?.photoUrl.toString()
                     onSuccess()
                 }
                 .addOnFailureListener {
@@ -42,10 +37,13 @@ class FirebaseAuthRepository {
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
         auth.createUserWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
+                    USER = User(
+                            id = auth.currentUser?.uid ?: "",
+                            username = login,
+                            login = login,
+                            photo = "null"
+                    )
                     Timber.d("Authentication request: createUserWithEmailAndPassword: SUCCESS")
-                    user = auth.currentUser
-                    USER_ID = user?.uid ?: ""
-                    USER_PHOTO = ""
                     onSuccess()
                 }
                 .addOnFailureListener {
@@ -56,8 +54,7 @@ class FirebaseAuthRepository {
 
     fun logOut(onComplete: () -> Unit) {
         Timber.d("Authentication request: signOut: STARTED")
-        user = null
-        USER_ID = ""
+        USER = User()
         auth.signOut()
         Timber.d("Authentication request: signOut: COMPLETE")
         onComplete()
@@ -65,48 +62,13 @@ class FirebaseAuthRepository {
 
     fun updateUserPassword(pass: String, onSuccess: () -> Unit) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
-        user?.updatePassword(pass)
+        auth.currentUser?.updatePassword(pass)
                 ?.addOnSuccessListener {
                     Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
                     onSuccess()
                 }
                 ?.addOnFailureListener {
                     Timber.d("Authentication request: signInWithEmailAndPassword: FAILURE")
-                    toastException(it)
-                }
-    }
-
-    fun updateUsername(name: String, onSuccess: () -> Unit) {
-        Timber.d("Authentication request: updateProfile: STARTED")
-        val profile = UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .build()
-        user?.updateProfile(profile)
-                ?.addOnSuccessListener {
-                    Timber.d("Authentication request: updateProfile: SUCCESS")
-                    USERNAME = name
-                    onSuccess()
-                }
-                ?.addOnFailureListener {
-                    Timber.d("Authentication request: updateProfile: FAILURE")
-                    toastException(it)
-                }
-    }
-
-    fun updateUserPhoto(url: String, onSuccess: () -> Unit) {
-        Timber.d("Authentication request: updateProfile: STARTED")
-        val uri = Uri.parse(url)
-        val profile = UserProfileChangeRequest.Builder()
-                .setPhotoUri(uri)
-                .build()
-        user?.updateProfile(profile)
-                ?.addOnSuccessListener {
-                    Timber.d("Authentication request: updateProfile: SUCCESS")
-                    USER_PHOTO = uri.toString()
-                    onSuccess()
-                }
-                ?.addOnFailureListener {
-                    Timber.d("Authentication request: updateProfile: FAILURE")
                     toastException(it)
                 }
     }

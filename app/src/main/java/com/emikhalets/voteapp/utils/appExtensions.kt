@@ -12,9 +12,6 @@ import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
-import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
-import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
@@ -26,12 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
-fun initRepositories() {
-    AUTH_REPOSITORY = FirebaseAuthRepository()
-    STORAGE_REPOSITORY = FirebaseStorageRepository()
-    DATABASE_REPOSITORY = FirebaseDatabaseRepository()
-}
 
 fun initLogger() {
     if (BuildConfig.DEBUG) Timber.plant(object : Timber.DebugTree() {

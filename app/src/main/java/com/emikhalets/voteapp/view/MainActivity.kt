@@ -11,7 +11,6 @@ import com.emikhalets.voteapp.databinding.ActivityMainBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.CAMERA
 import com.emikhalets.voteapp.utils.initLogger
-import com.emikhalets.voteapp.utils.initRepositories
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,14 +26,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ACTIVITY = this
-        firstInitializationApp()
+        initLogger()
         initNavigation()
         initViews()
     }
 
     override fun onResume() {
         super.onResume()
-        drawer.updateHeader()
         permissionResult.launch(CAMERA)
     }
 
@@ -44,11 +42,6 @@ class MainActivity : AppCompatActivity() {
             R.id.homeFragment -> finish()
             else -> super.onBackPressed()
         }
-    }
-
-    private fun firstInitializationApp() {
-        initRepositories()
-        initLogger()
     }
 
     private fun initNavigation() {

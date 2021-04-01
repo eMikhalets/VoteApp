@@ -14,7 +14,7 @@ class HomeViewModel : ViewModel() {
     val images get():LiveData<List<Image>> = _images
 
     fun sendLatestImagesRequest(isRefresh: Boolean = false) {
-        if (_images.value.isNullOrEmpty() || isRefresh) {
+        if (_images.value == null || isRefresh) {
             viewModelScope.launch {
                 DATABASE_REPOSITORY.loadLatestImages { images ->
                     val list = images.sortedByDescending { it.timestamp }

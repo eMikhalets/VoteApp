@@ -7,10 +7,11 @@ import kotlinx.coroutines.launch
 
 class StartViewModel : ViewModel() {
 
-    fun sendCheckUserExistRequest(onSuccess: (Boolean) -> Unit) {
+    fun sendLoadUserDataRequest(onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            DATABASE_REPOSITORY.checkUserExisting {
-                onSuccess(it)
+            DATABASE_REPOSITORY.loadUserData {
+                if (it != null) onSuccess()
+                else onFailure()
             }
         }
     }
