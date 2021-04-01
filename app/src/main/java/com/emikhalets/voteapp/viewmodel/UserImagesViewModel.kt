@@ -65,7 +65,6 @@ class UserImagesViewModel : ViewModel() {
         }
     }
 
-    // TODO как вынести определение состояния сортировки в отдельную функцию?
     fun sortImagesByDate() {
         viewModelScope.launch {
             imagesList = if (sortState == DATE_DEC) {
