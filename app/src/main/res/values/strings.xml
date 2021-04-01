@@ -1,4 +1,5 @@
 <resources>
+    <!-- Application -->
     <string name="app_name">VoteApp</string>
     <string name="app_login_to_email">%s@roflomail.com</string>
     <string name="app_toast_fill_fields">Fill all fields</string>
@@ -9,16 +10,6 @@
     <string name="app_toast_need_relog_change_pass">Your user session is too long, you are required to log in again to change your password</string>
     <string name="temp_to_rus">Ваша пользовательская сессия длится слишком долго, вам терубется снова войти в систему, чтобы изменить свой пароль</string>
 
-    <!-- Testing -->
-    <string name="test_voting_label">Voting Fragment</string>
-
-    <!-- Drawer -->
-    <string name="drawer_profile">Profile</string>
-    <string name="drawer_user_images">My Images</string>
-    <string name="drawer_voting">Voting</string>
-    <string name="drawer_top_images">Top Images</string>
-    <string name="drawer_top_users">Top Users</string>
-
     <!-- Toolbar Titles -->
     <string name="home_title">Latest Images</string>
     <string name="auth_title">Authorization</string>
@@ -28,9 +19,12 @@
     <string name="top_images_title">Top Images</string>
     <string name="top_users_title">Top Users</string>
 
-    <!-- Images List Adapter -->
-    <string name="item_images_text_rating">Rating: %d</string>
-    <string name="item_images_text_owner">Owner: %s</string>
+    <!-- Drawer -->
+    <string name="drawer_profile">Profile</string>
+    <string name="drawer_user_images">My Images</string>
+    <string name="drawer_voting">Voting</string>
+    <string name="drawer_top_images">Top Images</string>
+    <string name="drawer_top_users">Top Users</string>
 
     <!-- Auth Screens -->
     <string name="auth_text_login_label">Authorization</string>
@@ -40,18 +34,6 @@
     <string name="auth_text_pass_conf">Confirm password</string>
     <string name="auth_btn_login">Login</string>
     <string name="auth_btn_register">Register</string>
-
-    <!-- User Images Screen -->
-    <string name="images_menu_sort">Sort images</string>
-    <string name="images_menu_add">Add image</string>
-    <string name="images_menu_sort_date">Sort by upload date</string>
-    <string name="images_menu_sort_rating">Sort by rating</string>
-    <string name="images_text_delete_image">Delete this image?</string>
-    <string name="images_btn_no">No</string>
-    <string name="images_btn_yes">Yes</string>
-
-    <!-- Top Users Screen -->
-    <string name="item_users_text_rating">Rating: %d</string>
 
     <!-- Profile Screen -->
     <string name="profile_text_rating">Rating: %d</string>
@@ -64,4 +46,23 @@
     <string name="profile_text_change_name">New username</string>
     <string name="profile_btn_apply">Apply</string>
     <string name="app_transition_name_image_zoom">image_zoom</string>
+
+    <!-- User Images Screen -->
+    <string name="images_menu_sort">Sort images</string>
+    <string name="images_menu_add">Add image</string>
+    <string name="images_menu_sort_date">Sort by upload date</string>
+    <string name="images_menu_sort_rating">Sort by rating</string>
+    <string name="images_text_delete_image">Delete this image?</string>
+    <string name="images_btn_no">No</string>
+    <string name="images_btn_yes">Yes</string>
+
+    <!-- Voting Screen -->
+    <string name="voting_btn_vote">Vote</string>
+
+    <!-- Users List Adapter -->
+    <string name="item_users_text_rating">Rating: %d</string>
+
+    <!-- Images List Adapter -->
+    <string name="item_images_text_rating">Rating: %d</string>
+    <string name="item_images_text_owner">Owner: %s</string>
 </resources>

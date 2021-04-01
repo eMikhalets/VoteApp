@@ -8,6 +8,7 @@
     <dimen name="app_margin_large">32dp</dimen>
     <dimen name="app_corner_radius">8dp</dimen>
     <dimen name="app_border_width">2dp</dimen>
+    <dimen name="app_border_padding">2dp</dimen>
     <dimen name="app_card_elevation">8dp</dimen>
 
     <!-- Top Users Dimensions -->

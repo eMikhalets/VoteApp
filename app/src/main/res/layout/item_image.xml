@@ -20,8 +20,8 @@
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            tools:ignore="ContentDescription"
-            tools:src="@drawable/placeholder_default" />
+            android:src="@drawable/placeholder_default"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/text_rating"

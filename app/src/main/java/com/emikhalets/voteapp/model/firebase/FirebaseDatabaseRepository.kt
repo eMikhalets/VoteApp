@@ -35,9 +35,9 @@ class FirebaseDatabaseRepository {
         Timber.d("Database request: loadUserImages: STARTED")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_OWNER_ID).equalTo(USER_ID)
                 .singleDataChange { snapshot ->
-                    Timber.d("Database request: loadUserImages: COMPLETE")
                     val list = mutableListOf<Image>()
                     snapshot.children.forEach { list.add(it.toImage()) }
+                    Timber.d("Database request: loadUserImages: COMPLETE")
                     onComplete(list)
                 }
     }
@@ -54,9 +54,9 @@ class FirebaseDatabaseRepository {
         Timber.d("Database request: loadLatestImages: STARTED")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_TIMESTAMP).limitToLast(30)
                 .singleDataChange { snapshot ->
-                    Timber.d("Database request: loadLatestImages: COMPLETE")
                     val list = mutableListOf<Image>()
                     snapshot.children.forEach { list.add(it.toImage()) }
+                    Timber.d("Database request: loadLatestImages: COMPLETE")
                     onComplete(list)
                 }
     }
@@ -64,9 +64,9 @@ class FirebaseDatabaseRepository {
     fun loadTopImages(onComplete: (List<Image>) -> Unit) {
         Timber.d("Database request: loadTopImages: STARTED")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_RATING).singleDataChange { snapshot ->
-            Timber.d("Database request: loadTopImages: COMPLETE")
             val list = mutableListOf<Image>()
             snapshot.children.forEach { list.add(it.toImage()) }
+            Timber.d("Database request: loadTopImages: COMPLETE")
             onComplete(list)
         }
     }
@@ -74,9 +74,19 @@ class FirebaseDatabaseRepository {
     fun loadTopUsers(onComplete: (List<User>) -> Unit) {
         Timber.d("Database request: loadTopUsers: STARTED")
         refDatabase.child(NODE_USERS).orderByChild(CHILD_RATING).singleDataChange { snapshot ->
-            Timber.d("Database request: loadTopUsers: COMPLETE")
             val list = mutableListOf<User>()
             snapshot.children.forEach { list.add(it.toUser()) }
+            Timber.d("Database request: loadTopUsers: COMPLETE")
+            onComplete(list)
+        }
+    }
+
+    fun loadAllImages(onComplete: (List<Image>) -> Unit) {
+        Timber.d("Database request: loadAllImages: STARTED")
+        refDatabase.child(NODE_IMAGES).singleDataChange { snapshot ->
+            val list = mutableListOf<Image>()
+            snapshot.children.forEach { list.add(it.toImage()) }
+            Timber.d("Database request: loadAllImages: COMPLETE")
             onComplete(list)
         }
     }
@@ -149,6 +159,28 @@ class FirebaseDatabaseRepository {
                 }
     }
 
+    fun updateImageRating(name: String, onComplete: (String) -> Unit) {
+        Timber.d("Database request: updateImageRating: STARTED")
+        refDatabase.child(NODE_IMAGES).child(name).singleDataChange { snapshot ->
+            val image = snapshot.toImage()
+            image.rating += 1
+            snapshot.ref.child(CHILD_RATING).setValue(image.rating)
+            Timber.d("Database request: updateImageRating: COMPLETE")
+            onComplete(image.owner_id)
+        }
+    }
+
+    fun updateUserRating(id: String, onComplete: () -> Unit) {
+        Timber.d("Database request: updateUserRating: STARTED")
+        refDatabase.child(NODE_USERS).child(id).singleDataChange { snapshot ->
+            val user = snapshot.toUser()
+            user.rating += 1
+            snapshot.ref.child(CHILD_RATING).setValue(user.rating)
+            Timber.d("Database request: updateUserRating: COMPLETE")
+            onComplete()
+        }
+    }
+
     fun deleteImage(name: String, onSuccess: () -> Unit) {
         Timber.d("Database request: deleteImage: STARTED")
         refDatabase.child(NODE_IMAGES).child(name).setValue(null)
@@ -162,18 +194,18 @@ class FirebaseDatabaseRepository {
                 }
     }
 
-    companion object {
-        private const val NODE_IMAGES = "images"
-        private const val NODE_USERS = "users"
+    private companion object {
+        const val NODE_IMAGES = "images"
+        const val NODE_USERS = "users"
 
-        private const val CHILD_OWNER_NAME = "owner_name"
-        private const val CHILD_TIMESTAMP = "timestamp"
-        private const val CHILD_OWNER_ID = "owner_id"
-        private const val CHILD_USERNAME = "username"
-        private const val CHILD_RATING = "rating"
-        private const val CHILD_PHOTO = "photo"
-        private const val CHILD_NAME = "name"
-        private const val CHILD_URL = "url"
-        private const val CHILD_ID = "id"
+        const val CHILD_OWNER_NAME = "owner_name"
+        const val CHILD_TIMESTAMP = "timestamp"
+        const val CHILD_OWNER_ID = "owner_id"
+        const val CHILD_USERNAME = "username"
+        const val CHILD_RATING = "rating"
+        const val CHILD_PHOTO = "photo"
+        const val CHILD_NAME = "name"
+        const val CHILD_URL = "url"
+        const val CHILD_ID = "id"
     }
 }

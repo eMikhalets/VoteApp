@@ -25,12 +25,12 @@
                 android:layout_width="@dimen/item_user_photo_size"
                 android:layout_height="@dimen/item_user_photo_size"
                 android:layout_gravity="center_horizontal"
+                android:src="@drawable/placeholder_user"
                 android:transitionName="@string/app_transition_name_image_zoom"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription"
-                tools:src="@drawable/placeholder_user" />
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/text_username"
