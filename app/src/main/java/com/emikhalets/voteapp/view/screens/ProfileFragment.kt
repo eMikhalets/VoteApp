@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
 
     private val binding: FragmentProfileBinding by viewBinding()
-    private val viewModel: ProfileViewModel by activityViewModels()
+    lateinit var viewModel: ProfileViewModel
 
     private val takeImageResult = registerForActivityResult(TakeImageContract()) {
         onTakeImageResult(it)
@@ -29,6 +28,7 @@ class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
         sharedElementEnterTransition =
                 TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         ACTIVITY.title = getString(R.string.profile_title)

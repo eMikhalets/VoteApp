@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
@@ -20,7 +19,7 @@ import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private val binding: FragmentUserImagesBinding by viewBinding()
-    private val viewModel: UserImagesViewModel by activityViewModels()
+    lateinit var viewModel: UserImagesViewModel
 
     private val imagesAdapter = ImagesAdapter(
             false,
@@ -34,6 +33,7 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
         setHasOptionsMenu(true)
         ACTIVITY.title = getString(R.string.images_title)
         initRecyclerView()

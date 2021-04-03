@@ -4,29 +4,28 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogChangePassBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.injectViewModel
 import com.emikhalets.voteapp.utils.popBackStack
 import com.emikhalets.voteapp.utils.toast
 import com.emikhalets.voteapp.viewmodel.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
-/**
- * With viewBinding delegate throws exception:
- * IllegalStateException: Fragment ChangePassDialog did not return a View from onCreateView()
- * or this was called before onCreateView().
- */
+// TODO: With viewBinding delegate throws exception:
+//  IllegalStateException: Fragment ChangePassDialog did not return a View from onCreateView()
+//  or this was called before onCreateView().
 class ChangePassDialog : DialogFragment() {
 
     private var _binding: DialogChangePassBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ProfileViewModel by viewModels()
+    lateinit var viewModel: ProfileViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
         _binding = DialogChangePassBinding.inflate(LayoutInflater.from(context))
         binding.btnApply.setOnClickListener { onApplyClick() }
         return MaterialAlertDialogBuilder(ACTIVITY)

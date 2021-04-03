@@ -18,7 +18,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding: FragmentHomeBinding by viewBinding()
     private val imagesAdapter = ImagesAdapter(true, { url, v -> onImageClick(url, v) })
-
     lateinit var viewModel: HomeViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -6,12 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.Image
-import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
-import com.emikhalets.voteapp.utils.STORAGE_REPOSITORY
+import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
+import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel.SortState.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UserImagesViewModel : ViewModel() {
+class UserImagesViewModel @Inject constructor(
+        private val databaseRepository: FirebaseDatabaseRepository,
+        private val storageRepository: FirebaseStorageRepository,
+) : ViewModel() {
 
     private val _images = MutableLiveData<List<Image>>()
     val images get():LiveData<List<Image>> = _images
@@ -22,7 +26,7 @@ class UserImagesViewModel : ViewModel() {
     fun sendLoadUserImagesRequest() {
         if (_images.value.isNullOrEmpty()) {
             viewModelScope.launch {
-                DATABASE_REPOSITORY.loadUserImages {
+                databaseRepository.loadUserImages {
                     if (it.isNotEmpty()) {
                         imagesList = it.toMutableList()
                         sortImagesWhenAdding()
@@ -36,10 +40,10 @@ class UserImagesViewModel : ViewModel() {
     fun sendSaveImageRequest(uri: Uri?, onSuccess: (List<Image>) -> Unit) {
         uri?.let {
             viewModelScope.launch {
-                STORAGE_REPOSITORY.saveImage(it) { imageName ->
-                    STORAGE_REPOSITORY.loadImageUrl(imageName) { url ->
-                        DATABASE_REPOSITORY.saveImage(imageName, url) {
-                            DATABASE_REPOSITORY.loadAddedUserImage(imageName) { image ->
+                storageRepository.saveImage(it) { imageName ->
+                    storageRepository.loadImageUrl(imageName) { url ->
+                        databaseRepository.saveImage(imageName, url) {
+                            databaseRepository.loadAddedUserImage(imageName) { image ->
                                 imagesList.add(image)
                                 sortImagesWhenAdding()
                                 _images.postValue(imagesList)
@@ -55,8 +59,8 @@ class UserImagesViewModel : ViewModel() {
     fun sendDeleteImageRequest(name: String, position: Int, onSuccess: () -> Unit) {
         if (name.isEmpty()) onSuccess()
         else viewModelScope.launch {
-            STORAGE_REPOSITORY.deleteImage(name) {
-                DATABASE_REPOSITORY.deleteImage(name) {
+            storageRepository.deleteImage(name) {
+                databaseRepository.deleteImage(name) {
                     imagesList.removeAt(position)
                     _images.postValue(imagesList)
                     onSuccess()

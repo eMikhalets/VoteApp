@@ -2,11 +2,15 @@ package com.emikhalets.voteapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.voteapp.utils.AUTH_REPOSITORY
-import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
+import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
+import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel @Inject constructor(
+        private val authRepository: FirebaseAuthRepository,
+        private val databaseRepository: FirebaseDatabaseRepository,
+) : ViewModel() {
 
     fun sendLoginRequest(
             login: String,
@@ -15,8 +19,8 @@ class LoginViewModel : ViewModel() {
             onFailure: () -> Unit,
     ) {
         viewModelScope.launch {
-            AUTH_REPOSITORY.login(login, pass) {
-                DATABASE_REPOSITORY.loadUserData {
+            authRepository.login(login, pass) {
+                databaseRepository.loadUserData {
                     if (it != null) onSuccess()
                     else onFailure()
                 }

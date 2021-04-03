@@ -7,26 +7,23 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.emikhalets.voteapp.databinding.DialogDeleteImageBinding
-import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.ARGS_NAME
-import com.emikhalets.voteapp.utils.ARGS_POS
-import com.emikhalets.voteapp.utils.popBackStack
+import com.emikhalets.voteapp.utils.*
+import com.emikhalets.voteapp.viewmodel.HomeViewModel
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
-/**
- * With viewBinding delegate throws exception:
- * IllegalStateException: Fragment ChangeNameDialog did not return a View from onCreateView()
- * or this was called before onCreateView().
- */
+// TODO: With viewBinding delegate throws exception:
+//  IllegalStateException: Fragment DeleteImageDialog did not return a View from onCreateView()
+//  or this was called before onCreateView().
 class DeleteImageDialog : DialogFragment() {
 
     private var _binding: DialogDeleteImageBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: UserImagesViewModel by activityViewModels()
+    lateinit var viewModel: UserImagesViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
         _binding = DialogDeleteImageBinding.inflate(LayoutInflater.from(context))
         binding.btnYes.setOnClickListener { onYesClick() }
         binding.btnNo.setOnClickListener { dismiss() }

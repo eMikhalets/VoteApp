@@ -2,15 +2,11 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentAuthLoginBinding
-import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.hideKeyboard
-import com.emikhalets.voteapp.utils.navigate
-import com.emikhalets.voteapp.utils.toast
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.base.NoDrawerFragment
 import com.emikhalets.voteapp.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
@@ -18,10 +14,11 @@ import kotlinx.coroutines.launch
 class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
 
     private val binding: FragmentAuthLoginBinding by viewBinding()
-    private val viewModel: LoginViewModel by viewModels()
+    lateinit var viewModel: LoginViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
         ACTIVITY.title = getString(R.string.auth_title)
         binding.apply {
             btnLogin.setOnClickListener { onLoginClick() }

@@ -5,10 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
+import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TopUsersViewModel : ViewModel() {
+class TopUsersViewModel @Inject constructor(
+        private val databaseRepository: FirebaseDatabaseRepository,
+) : ViewModel() {
 
     private val _users = MutableLiveData<List<User>>()
     val users get():LiveData<List<User>> = _users
@@ -16,7 +19,7 @@ class TopUsersViewModel : ViewModel() {
     fun sendLoadTopUsersRequest() {
         if (_users.value.isNullOrEmpty()) {
             viewModelScope.launch {
-                DATABASE_REPOSITORY.loadTopUsers {
+                databaseRepository.loadTopUsers {
                     if (it.isNotEmpty()) {
                         val images = it.sortedByDescending { item -> item.rating }
                         _users.postValue(images)

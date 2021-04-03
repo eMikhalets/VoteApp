@@ -3,17 +3,18 @@ package com.emikhalets.voteapp.model.firebase
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.*
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ServerValue
 import timber.log.Timber
 import javax.inject.Inject
 
-class FirebaseDatabaseRepository @Inject constructor() {
-
-    private val refDatabase = FirebaseDatabase.getInstance().reference
+class FirebaseDatabaseRepository @Inject constructor(
+        private val refDatabase: DatabaseReference
+) {
 
     fun loadUserData(onSuccess: (User?) -> Unit) {
         Timber.d("Database request: loadUserData: STARTED")
+        Timber.d("$this $refDatabase")
         refDatabase.child(NODE_USERS).child(USER.id).singleDataChange { snapshot ->
             if (snapshot.exists()) {
                 Timber.d("Database request: loadUserData: COMPLETE (User exist)")
@@ -47,6 +48,7 @@ class FirebaseDatabaseRepository @Inject constructor() {
 
     fun loadLatestImages(onComplete: (List<Image>) -> Unit) {
         Timber.d("Database request: loadLatestImages: STARTED")
+        Timber.d("$this $refDatabase")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_TIMESTAMP).limitToLast(30)
                 .singleDataChange { snapshot ->
                     val list = mutableListOf<Image>()

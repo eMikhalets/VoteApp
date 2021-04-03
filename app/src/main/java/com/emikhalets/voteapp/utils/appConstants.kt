@@ -10,9 +10,9 @@ import com.emikhalets.voteapp.view.MainActivity
 lateinit var ACTIVITY: MainActivity
 var USER: User = User()
 
-val AUTH_REPOSITORY = FirebaseAuthRepository()
-val STORAGE_REPOSITORY = FirebaseStorageRepository()
-val DATABASE_REPOSITORY = FirebaseDatabaseRepository()
+//val AUTH_REPOSITORY = FirebaseAuthRepository()
+//val STORAGE_REPOSITORY = FirebaseStorageRepository()
+//val DATABASE_REPOSITORY = FirebaseDatabaseRepository()
 
 const val CAMERA = Manifest.permission.CAMERA
 

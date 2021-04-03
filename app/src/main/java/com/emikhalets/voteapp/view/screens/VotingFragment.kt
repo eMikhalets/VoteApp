@@ -2,12 +2,12 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentVotingBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.ImageNumber
+import com.emikhalets.voteapp.utils.injectViewModel
 import com.emikhalets.voteapp.utils.loadImage
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.VotingViewModel
@@ -15,7 +15,7 @@ import com.emikhalets.voteapp.viewmodel.VotingViewModel
 class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
 
     private val binding: FragmentVotingBinding by viewBinding()
-    private val viewModel: VotingViewModel by viewModels()
+    lateinit var viewModel: VotingViewModel
 
     private var isVoteEnabled = false
     private var isFirstSelected = false
@@ -23,6 +23,7 @@ class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
         ACTIVITY.title = getString(R.string.voting_title)
         if (savedInstanceState != null) initViews(savedInstanceState)
         initListeners()

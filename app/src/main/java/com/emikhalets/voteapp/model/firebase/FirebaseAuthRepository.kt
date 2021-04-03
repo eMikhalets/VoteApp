@@ -5,13 +5,13 @@ import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.USER
 import com.emikhalets.voteapp.utils.toastException
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import timber.log.Timber
+import javax.inject.Inject
 
-class FirebaseAuthRepository {
-
-    private val auth = Firebase.auth
+class FirebaseAuthRepository @Inject constructor(
+        private val auth: FirebaseAuth,
+) {
 
     init {
         USER.id = auth.currentUser?.uid ?: ""

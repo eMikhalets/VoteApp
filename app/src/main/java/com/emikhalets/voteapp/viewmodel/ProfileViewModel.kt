@@ -6,20 +6,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.AUTH_REPOSITORY
-import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
-import com.emikhalets.voteapp.utils.STORAGE_REPOSITORY
+import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
+import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
+import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
 import com.emikhalets.voteapp.utils.USER
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel @Inject constructor(
+        private val authRepository: FirebaseAuthRepository,
+        private val databaseRepository: FirebaseDatabaseRepository,
+        private val storageRepository: FirebaseStorageRepository,
+) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     val user get():LiveData<User> = _user
 
     fun sendLogOutRequest(onComplete: () -> Unit) {
         viewModelScope.launch {
-            AUTH_REPOSITORY.logOut {
+            authRepository.logOut {
                 _user.value = User()
                 onComplete()
             }
@@ -29,7 +34,7 @@ class ProfileViewModel : ViewModel() {
     fun sendLoadUserDataRequest(onFailure: () -> Unit) {
         if (_user.value == null || _user.value?.id == "") {
             viewModelScope.launch {
-                DATABASE_REPOSITORY.loadUserData {
+                databaseRepository.loadUserData {
                     if (it != null) _user.postValue(it)
                     else onFailure()
                 }
@@ -40,9 +45,9 @@ class ProfileViewModel : ViewModel() {
     fun sendUpdateUserPhotoRequest(uri: Uri?) {
         uri?.let {
             viewModelScope.launch {
-                STORAGE_REPOSITORY.saveUserPhoto(it) {
-                    STORAGE_REPOSITORY.loadUserPhotoUrl { url ->
-                        DATABASE_REPOSITORY.updateUserPhoto(url) {
+                storageRepository.saveUserPhoto(it) {
+                    storageRepository.loadUserPhotoUrl { url ->
+                        databaseRepository.updateUserPhoto(url) {
                             val newUser = USER
                             _user.postValue(newUser)
                         }
@@ -54,7 +59,7 @@ class ProfileViewModel : ViewModel() {
 
     fun sendUpdatePassRequest(pass: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
-            AUTH_REPOSITORY.updateUserPassword(pass) {
+            authRepository.updateUserPassword(pass) {
                 onSuccess()
             }
         }
@@ -62,7 +67,7 @@ class ProfileViewModel : ViewModel() {
 
     fun sendUpdateUsernameRequest(name: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
-            DATABASE_REPOSITORY.updateUsername(name) {
+            databaseRepository.updateUsername(name) {
                 val newUser = USER
                 _user.postValue(newUser)
                 onSuccess()

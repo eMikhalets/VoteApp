@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.Image
-import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
+import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.utils.ImageNumber
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.random.Random
 
-class VotingViewModel : ViewModel() {
+class VotingViewModel @Inject constructor(
+        private val databaseRepository: FirebaseDatabaseRepository,
+) : ViewModel() {
 
     private val _image1 = MutableLiveData<Image>()
     val image1 get():LiveData<Image> = _image1
@@ -24,7 +27,7 @@ class VotingViewModel : ViewModel() {
     fun sendPrepareVotingRequest(onComplete: () -> Unit) {
         if (images.isEmpty()) {
             viewModelScope.launch {
-                DATABASE_REPOSITORY.loadAllImages { list ->
+                databaseRepository.loadAllImages { list ->
                     images = list
                     setNextRandomImages()
                     onComplete()
@@ -43,8 +46,8 @@ class VotingViewModel : ViewModel() {
     fun sendVoteRequest(onComplete: () -> Unit) {
         if (selectedName.isNotEmpty()) {
             viewModelScope.launch {
-                DATABASE_REPOSITORY.updateImageRating(selectedName) { user_id ->
-                    DATABASE_REPOSITORY.updateUserRating(user_id) {
+                databaseRepository.updateImageRating(selectedName) { user_id ->
+                    databaseRepository.updateUserRating(user_id) {
                         selectedName = ""
                         setNextRandomImages()
                         onComplete()

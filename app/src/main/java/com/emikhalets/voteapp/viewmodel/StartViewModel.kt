@@ -2,14 +2,17 @@ package com.emikhalets.voteapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.voteapp.utils.DATABASE_REPOSITORY
+import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StartViewModel : ViewModel() {
+class StartViewModel @Inject constructor(
+        private val databaseRepository: FirebaseDatabaseRepository,
+) : ViewModel() {
 
     fun sendLoadUserDataRequest(onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            DATABASE_REPOSITORY.loadUserData {
+            databaseRepository.loadUserData {
                 if (it != null) onSuccess()
                 else onFailure()
             }

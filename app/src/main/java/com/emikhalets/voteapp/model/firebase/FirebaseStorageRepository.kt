@@ -3,13 +3,14 @@ package com.emikhalets.voteapp.model.firebase
 import android.net.Uri
 import com.emikhalets.voteapp.utils.USER
 import com.emikhalets.voteapp.utils.toastException
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-class FirebaseStorageRepository {
-
-    private val refStorage = FirebaseStorage.getInstance().reference
+class FirebaseStorageRepository @Inject constructor(
+        private val refStorage: StorageReference
+) {
 
     fun loadImageUrl(name: String, onSuccess: (url: String) -> Unit) {
         Timber.d("Storage request: loadImageUrl: STARTED")
