@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentHomeBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.ARGS_PHOTO
+import com.emikhalets.voteapp.utils.injectViewModel
 import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.viewmodel.HomeViewModel
@@ -17,12 +17,13 @@ import com.emikhalets.voteapp.viewmodel.HomeViewModel
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding: FragmentHomeBinding by viewBinding()
-    private val viewModel: HomeViewModel by viewModels()
-
     private val imagesAdapter = ImagesAdapter(true, { url, v -> onImageClick(url, v) })
+
+    lateinit var viewModel: HomeViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
         ACTIVITY.drawer.enableDrawer()
         ACTIVITY.title = getString(R.string.home_title)
         initRecyclerView()

@@ -6,8 +6,9 @@ import com.emikhalets.voteapp.utils.*
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import timber.log.Timber
+import javax.inject.Inject
 
-class FirebaseDatabaseRepository {
+class FirebaseDatabaseRepository @Inject constructor() {
 
     private val refDatabase = FirebaseDatabase.getInstance().reference
 

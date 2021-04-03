@@ -8,13 +8,18 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ActivityMainBinding
+import com.emikhalets.voteapp.di.viewmodel.ViewModelFactory
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.CAMERA
-import com.emikhalets.voteapp.utils.initLogger
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
     lateinit var navController: NavController
     lateinit var drawer: AppDrawer
     lateinit var toolbar: Toolbar
@@ -25,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AndroidInjection.inject(this)
         ACTIVITY = this
-        initLogger()
         initNavigation()
         initViews()
     }

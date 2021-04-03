@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.recyclerview.widget.RecyclerView
@@ -84,4 +87,8 @@ fun RecyclerView.scrollToTop() {
         delay(100)
         this@scrollToTop.smoothScrollToPosition(0)
     }
+}
+
+inline fun <reified T : ViewModel> Fragment.injectViewModel(factory: ViewModelProvider.Factory): T {
+    return ViewModelProvider(this, factory).get(T::class.java)
 }
