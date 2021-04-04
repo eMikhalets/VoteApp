@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.di
+package com.emikhalets.voteapp.di.module
 
 import android.app.Application
 import android.content.Context

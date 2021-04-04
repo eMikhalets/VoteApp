@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.di
+package com.emikhalets.voteapp.di.module
 
 import com.emikhalets.voteapp.di.scopes.FragmentScoped
 import com.emikhalets.voteapp.view.screens.HomeFragment

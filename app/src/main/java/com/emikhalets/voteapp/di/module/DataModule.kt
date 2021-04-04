@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.di
+package com.emikhalets.voteapp.di.module
 
 import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository

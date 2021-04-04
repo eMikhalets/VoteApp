@@ -82,8 +82,8 @@ class FirebaseStorageRepository @Inject constructor(
                 }
     }
 
-    companion object {
-        private const val FOLDER_IMAGES = "images"
-        private const val FOLDER_PROFILES = "profile_images"
+    private companion object {
+        const val FOLDER_IMAGES = "images"
+        const val FOLDER_PROFILES = "profile_images"
     }
 }

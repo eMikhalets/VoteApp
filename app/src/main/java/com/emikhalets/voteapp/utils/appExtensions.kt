@@ -19,7 +19,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +37,8 @@ fun initLogger() {
     })
 }
 
+// Navigation Component
+
 fun navigate(
         action: Int,
         args: Bundle? = null,
@@ -47,10 +51,7 @@ fun popBackStack(destination: Int? = null, inclusive: Boolean = false) {
     else ACTIVITY.navController.popBackStack(destination, inclusive)
 }
 
-fun hideKeyboard() {
-    val imm = ACTIVITY.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(ACTIVITY.window.decorView.windowToken, 0)
-}
+// Toasts
 
 fun toast(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_SHORT).show()
 
@@ -69,6 +70,8 @@ fun toastException(exception: Exception?) {
     }
 }
 
+// Image Loaders
+
 fun ImageView.loadImage(
         url: String,
         placeholder: Int = R.drawable.placeholder_default,
@@ -77,9 +80,12 @@ fun ImageView.loadImage(
     Picasso.get().load(image).placeholder(placeholder).error(placeholder).into(this)
 }
 
-fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
+// View extensions
 
-fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
+fun hideKeyboard() {
+    val imm = ACTIVITY.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(ACTIVITY.window.decorView.windowToken, 0)
+}
 
 // TODO Is this approach right? (moved the recyclerView scroll into extensions)
 fun RecyclerView.scrollToTop() {
@@ -89,6 +95,16 @@ fun RecyclerView.scrollToTop() {
     }
 }
 
+// Dependency injection
+
 inline fun <reified T : ViewModel> Fragment.injectViewModel(factory: ViewModelProvider.Factory): T {
     return ViewModelProvider(this, factory).get(T::class.java)
 }
+
+// Firebase extensions
+
+fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
+
+fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
+
+fun userId(): String = Firebase.auth.currentUser?.uid.toString()

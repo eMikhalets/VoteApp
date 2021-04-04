@@ -1,4 +1,4 @@
-package com.emikhalets.voteapp.di
+package com.emikhalets.voteapp.di.module
 
 import com.emikhalets.voteapp.di.scopes.ActivityScoped
 import com.emikhalets.voteapp.view.MainActivity
