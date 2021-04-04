@@ -26,6 +26,7 @@
     <string name="drawer_voting">Voting</string>
     <string name="drawer_top_images">Top Images</string>
     <string name="drawer_top_users">Top Users</string>
+    <string name="drawer_rating">Current rating: %d</string>
 
     <!-- Auth Screens -->
     <string name="auth_text_login_label">Authorization</string>

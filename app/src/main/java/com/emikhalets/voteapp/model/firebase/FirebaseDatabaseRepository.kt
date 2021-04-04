@@ -14,7 +14,6 @@ class FirebaseDatabaseRepository @Inject constructor(
 
     fun loadUserData(onSuccess: (User?) -> Unit) {
         Timber.d("Database request: loadUserData: STARTED")
-        Timber.d("$this $refDatabase")
         refDatabase.child(NODE_USERS).child(USER.id).singleDataChange { snapshot ->
             if (snapshot.exists()) {
                 Timber.d("Database request: loadUserData: COMPLETE (User exist)")
@@ -48,7 +47,6 @@ class FirebaseDatabaseRepository @Inject constructor(
 
     fun loadLatestImages(onComplete: (List<Image>) -> Unit) {
         Timber.d("Database request: loadLatestImages: STARTED")
-        Timber.d("$this $refDatabase")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_TIMESTAMP).limitToLast(30)
                 .singleDataChange { snapshot ->
                     val list = mutableListOf<Image>()

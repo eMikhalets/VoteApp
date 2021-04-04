@@ -67,7 +67,9 @@ class AppDrawer {
     }
 
     fun updateHeader() {
-        profile.withName(USER.username).withIdentifier(0)
+        profile.withName(USER.username)
+                .withEmail(ACTIVITY.getString(R.string.drawer_rating, USER.rating))
+                .withIdentifier(0)
         if (USER.photo.isNotEmpty() && USER.photo != "null") profile.withIcon(USER.photo)
         else profile.withIcon(R.drawable.placeholder_user)
         header.updateProfile(profile)
@@ -87,6 +89,7 @@ class AppDrawer {
         profile = ProfileDrawerItem()
                 .withName(USER.username)
                 .withIcon(R.drawable.placeholder_user)
+                .withEmail(ACTIVITY.getString(R.string.drawer_rating, USER.rating))
                 .withIdentifier(0)
         header = AccountHeaderBuilder()
                 .withActivity(ACTIVITY)

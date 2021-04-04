@@ -13,10 +13,6 @@ class FirebaseAuthRepository @Inject constructor(
         private val auth: FirebaseAuth,
 ) {
 
-    init {
-        USER.id = auth.currentUser?.uid ?: ""
-    }
-
     fun login(login: String, pass: String, onSuccess: () -> Unit) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
