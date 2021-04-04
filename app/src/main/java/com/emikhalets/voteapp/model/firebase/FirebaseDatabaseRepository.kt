@@ -9,7 +9,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class FirebaseDatabaseRepository @Inject constructor(
-        private val refDatabase: DatabaseReference
+        private val refDatabase: DatabaseReference,
 ) {
 
     fun loadUserData(onSuccess: (User?) -> Unit) {
@@ -35,14 +35,6 @@ class FirebaseDatabaseRepository @Inject constructor(
                     Timber.d("Database request: loadUserImages: COMPLETE")
                     onComplete(list)
                 }
-    }
-
-    fun loadAddedUserImage(name: String, onComplete: (Image) -> Unit) {
-        Timber.d("Database request: loadAddedUserImage: STARTED")
-        refDatabase.child(NODE_IMAGES).child(name).singleDataChange { snapshot ->
-            Timber.d("Database request: loadAddedUserImage: COMPLETE")
-            onComplete(snapshot.toImage())
-        }
     }
 
     fun loadLatestImages(onComplete: (List<Image>) -> Unit) {
@@ -106,7 +98,7 @@ class FirebaseDatabaseRepository @Inject constructor(
                 }
     }
 
-    fun saveImage(name: String, url: String, onSuccess: () -> Unit) {
+    fun saveUserImage(name: String, url: String, onSuccess: (Image) -> Unit) {
         Timber.d("Database request: saveImage: STARTED")
         val map = hashMapOf(
                 CHILD_NAME to name,
@@ -119,7 +111,9 @@ class FirebaseDatabaseRepository @Inject constructor(
         refDatabase.child(NODE_IMAGES).child(name).setValue(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: saveImage: SUCCESS")
-                    onSuccess()
+                    loadAddedUserImage(name) { image ->
+                        onSuccess(image)
+                    }
                 }
                 .addOnFailureListener {
                     Timber.d("Database request: saveImage: FAILURE")
@@ -157,29 +151,16 @@ class FirebaseDatabaseRepository @Inject constructor(
                 }
     }
 
-    fun updateImageRating(name: String, onComplete: (String) -> Unit) {
+    fun updateImageRating(name: String, onComplete: () -> Unit) {
         Timber.d("Database request: updateImageRating: STARTED")
         refDatabase.child(NODE_IMAGES).child(name).singleDataChange { snapshot ->
             val image = snapshot.toImage()
             image.rating += 1
             snapshot.ref.child(CHILD_RATING).setValue(image.rating)
             Timber.d("Database request: updateImageRating: COMPLETE")
-            onComplete(image.owner_id)
-        }
-    }
-
-    /**
-     * Updates the rating of the user whose image was voted for
-     * @param id image owner user id
-     */
-    fun updateUserRating(id: String, onComplete: () -> Unit) {
-        Timber.d("Database request: updateUserRating: STARTED")
-        refDatabase.child(NODE_USERS).child(id).singleDataChange { snapshot ->
-            val user = snapshot.toUser()
-            user.rating += 1
-            snapshot.ref.child(CHILD_RATING).setValue(user.rating)
-            Timber.d("Database request: updateUserRating: COMPLETE")
-            onComplete()
+            updateUserRating(image.owner_id) {
+                onComplete()
+            }
         }
     }
 
@@ -194,6 +175,29 @@ class FirebaseDatabaseRepository @Inject constructor(
                     Timber.d("Database request: deleteImage: FAILURE")
                     toastException(it)
                 }
+    }
+
+    /**
+     * Updates the rating of the user whose image was voted for
+     * @param id image owner user id
+     */
+    private fun updateUserRating(id: String, onComplete: () -> Unit) {
+        Timber.d("Database request: updateUserRating: STARTED")
+        refDatabase.child(NODE_USERS).child(id).singleDataChange { snapshot ->
+            val user = snapshot.toUser()
+            user.rating += 1
+            snapshot.ref.child(CHILD_RATING).setValue(user.rating)
+            Timber.d("Database request: updateUserRating: COMPLETE")
+            onComplete()
+        }
+    }
+
+    private fun loadAddedUserImage(name: String, onComplete: (Image) -> Unit) {
+        Timber.d("Database request: loadAddedUserImage: STARTED")
+        refDatabase.child(NODE_IMAGES).child(name).singleDataChange { snapshot ->
+            Timber.d("Database request: loadAddedUserImage: COMPLETE")
+            onComplete(snapshot.toImage())
+        }
     }
 
     private companion object {

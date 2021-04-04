@@ -45,12 +45,10 @@ class ProfileViewModel @Inject constructor(
     fun sendUpdateUserPhotoRequest(uri: Uri?) {
         uri?.let {
             viewModelScope.launch {
-                storageRepository.saveUserPhoto(it) {
-                    storageRepository.loadUserPhotoUrl { url ->
-                        databaseRepository.updateUserPhoto(url) {
-                            val newUser = USER
-                            _user.postValue(newUser)
-                        }
+                storageRepository.saveUserPhoto(it) { url ->
+                    databaseRepository.updateUserPhoto(url) {
+                        val newUser = USER
+                        _user.postValue(newUser)
                     }
                 }
             }

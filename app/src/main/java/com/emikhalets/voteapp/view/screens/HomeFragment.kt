@@ -7,10 +7,7 @@ import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentHomeBinding
-import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.ARGS_PHOTO
-import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.navigate
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.viewmodel.HomeViewModel
 
@@ -44,6 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 root.isRefreshing = false
                 progress.visibility = View.GONE
                 listImages.visibility = View.VISIBLE
+                listImages.scrollToTop()
             }
         }
         binding.root.setOnRefreshListener { onRefreshInvoke() }

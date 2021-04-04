@@ -46,12 +46,10 @@ class VotingViewModel @Inject constructor(
     fun sendVoteRequest(onComplete: () -> Unit) {
         if (selectedName.isNotEmpty()) {
             viewModelScope.launch {
-                databaseRepository.updateImageRating(selectedName) { user_id ->
-                    databaseRepository.updateUserRating(user_id) {
-                        selectedName = ""
-                        setNextRandomImages()
-                        onComplete()
-                    }
+                databaseRepository.updateImageRating(selectedName) {
+                    selectedName = ""
+                    setNextRandomImages()
+                    onComplete()
                 }
             }
         } else onComplete()

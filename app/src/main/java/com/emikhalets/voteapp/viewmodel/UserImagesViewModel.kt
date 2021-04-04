@@ -40,16 +40,12 @@ class UserImagesViewModel @Inject constructor(
     fun sendSaveImageRequest(uri: Uri?, onSuccess: (List<Image>) -> Unit) {
         uri?.let {
             viewModelScope.launch {
-                storageRepository.saveImage(it) { imageName ->
-                    storageRepository.loadImageUrl(imageName) { url ->
-                        databaseRepository.saveImage(imageName, url) {
-                            databaseRepository.loadAddedUserImage(imageName) { image ->
-                                imagesList.add(image)
-                                sortImagesWhenAdding()
-                                _images.postValue(imagesList)
-                                onSuccess(imagesList)
-                            }
-                        }
+                storageRepository.saveImage(it) { name, url ->
+                    databaseRepository.saveUserImage(name, url) { image ->
+                        imagesList.add(image)
+                        sortImagesWhenAdding()
+                        _images.postValue(imagesList)
+                        onSuccess(imagesList)
                     }
                 }
             }

@@ -9,42 +9,18 @@ import java.util.*
 import javax.inject.Inject
 
 class FirebaseStorageRepository @Inject constructor(
-        private val refStorage: StorageReference
+        private val refStorage: StorageReference,
 ) {
 
-    fun loadImageUrl(name: String, onSuccess: (url: String) -> Unit) {
-        Timber.d("Storage request: loadImageUrl: STARTED")
-        refStorage.child(FOLDER_IMAGES).child(name).downloadUrl
-                .addOnSuccessListener {
-                    Timber.d("Storage request: loadImageUrl: SUCCESS")
-                    onSuccess(it.toString())
-                }
-                .addOnFailureListener {
-                    Timber.d("Storage request: loadImageUrl: FAILURE")
-                    toastException(it)
-                }
-    }
-
-    fun loadUserPhotoUrl(onSuccess: (url: String) -> Unit) {
-        Timber.d("Storage request: loadUserPhotoUrl: STARTED")
-        refStorage.child(FOLDER_PROFILES).child(USER.id).downloadUrl
-                .addOnSuccessListener {
-                    Timber.d("Storage request: loadUserPhotoUrl: SUCCESS")
-                    onSuccess(it.toString())
-                }
-                .addOnFailureListener {
-                    Timber.d("Storage request: loadUserPhotoUrl: FAILURE")
-                    toastException(it)
-                }
-    }
-
-    fun saveImage(uri: Uri, onSuccess: (String) -> Unit) {
+    fun saveImage(uri: Uri, onSuccess: (String, String) -> Unit) {
         Timber.d("Storage request: saveImage: STARTED")
         val imageName = UUID.randomUUID().toString()
         refStorage.child(FOLDER_IMAGES).child(imageName).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveImage: SUCCESS")
-                    onSuccess(imageName)
+                    loadImageUrl(imageName) { url ->
+                        onSuccess(imageName, url)
+                    }
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: saveImage: FAILURE")
@@ -52,12 +28,14 @@ class FirebaseStorageRepository @Inject constructor(
                 }
     }
 
-    fun saveUserPhoto(uri: Uri, onSuccess: () -> Unit) {
+    fun saveUserPhoto(uri: Uri, onSuccess: (String) -> Unit) {
         Timber.d("Storage request: saveUserPhoto: STARTED")
         refStorage.child(FOLDER_PROFILES).child(USER.id).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveUserPhoto: SUCCESS")
-                    onSuccess()
+                    loadUserPhotoUrl { url ->
+                        onSuccess(url)
+                    }
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: saveUserPhoto: FAILURE")
@@ -74,6 +52,32 @@ class FirebaseStorageRepository @Inject constructor(
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: deleteImage: FAILURE")
+                    toastException(it)
+                }
+    }
+
+    private fun loadImageUrl(name: String, onSuccess: (url: String) -> Unit) {
+        Timber.d("Storage request: loadImageUrl: STARTED")
+        refStorage.child(FOLDER_IMAGES).child(name).downloadUrl
+                .addOnSuccessListener {
+                    Timber.d("Storage request: loadImageUrl: SUCCESS")
+                    onSuccess(it.toString())
+                }
+                .addOnFailureListener {
+                    Timber.d("Storage request: loadImageUrl: FAILURE")
+                    toastException(it)
+                }
+    }
+
+    private fun loadUserPhotoUrl(onSuccess: (url: String) -> Unit) {
+        Timber.d("Storage request: loadUserPhotoUrl: STARTED")
+        refStorage.child(FOLDER_PROFILES).child(USER.id).downloadUrl
+                .addOnSuccessListener {
+                    Timber.d("Storage request: loadUserPhotoUrl: SUCCESS")
+                    onSuccess(it.toString())
+                }
+                .addOnFailureListener {
+                    Timber.d("Storage request: loadUserPhotoUrl: FAILURE")
                     toastException(it)
                 }
     }
