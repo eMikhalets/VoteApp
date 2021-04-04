@@ -31,17 +31,24 @@ class RegisterFragment : NoDrawerFragment(R.layout.fragment_auth_register) {
 
         if (login.isNotEmpty() && pass.isNotEmpty() && passConf.isNotEmpty()) {
             if (pass == passConf) {
-                viewModel.sendRegisterRequest(login, pass) {
-                    lifecycleScope.launch {
-                        ACTIVITY.drawer.updateHeader()
-                        navigate(R.id.homeFragment)
-                    }
-                }
+                binding.progressBar.visibility = View.VISIBLE
+                viewModel.sendRegisterRequest(login, pass, { onRegisterSuccess() }, { onRegisterFailure() })
             } else {
                 toast(getString(R.string.app_toast_pass_not_confirm))
             }
         } else {
             toast(getString(R.string.app_toast_fill_fields))
         }
+    }
+
+    private fun onRegisterSuccess() {
+        lifecycleScope.launch {
+            ACTIVITY.drawer.updateHeader()
+            navigate(R.id.homeFragment)
+        }
+    }
+
+    private fun onRegisterFailure() {
+        binding.progressBar.visibility = View.GONE
     }
 }

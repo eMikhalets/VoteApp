@@ -17,14 +17,15 @@ class LoginViewModel @Inject constructor(
             pass: String,
             onSuccess: () -> Unit,
             onFailure: () -> Unit,
+            onAuthFailure: () -> Unit,
     ) {
         viewModelScope.launch {
-            authRepository.login(login, pass) {
+            authRepository.login(login, pass, {
                 databaseRepository.loadUserData {
                     if (it != null) onSuccess()
                     else onFailure()
                 }
-            }
+            }, { onAuthFailure() })
         }
     }
 }

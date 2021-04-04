@@ -32,7 +32,8 @@ class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
         val pass = binding.inputPass.text.toString()
 
         if (login.isNotEmpty() && pass.isNotEmpty()) {
-            viewModel.sendLoginRequest(login, pass, { onUserExist() }, { onUserNotExist() })
+            binding.progressBar.visibility = View.VISIBLE
+            viewModel.sendLoginRequest(login, pass, { onUserExist() }, { onUserNotExist() }, { onAuthFailure() })
         } else {
             toast(getString(R.string.app_toast_fill_fields))
         }
@@ -46,7 +47,12 @@ class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
     }
 
     private fun onUserNotExist() {
+        binding.progressBar.visibility = View.GONE
         toast(getString(R.string.app_toast_user_not_exist_db))
+    }
+
+    private fun onAuthFailure() {
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun onRegisterClick() {

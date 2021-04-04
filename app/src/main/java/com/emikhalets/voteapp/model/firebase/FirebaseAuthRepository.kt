@@ -13,7 +13,7 @@ class FirebaseAuthRepository @Inject constructor(
         private val auth: FirebaseAuth,
 ) {
 
-    fun login(login: String, pass: String, onSuccess: () -> Unit) {
+    fun login(login: String, pass: String, onSuccess: () -> Unit, onFailure: () -> Unit) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
         auth.signInWithEmailAndPassword(email, pass)
@@ -24,11 +24,12 @@ class FirebaseAuthRepository @Inject constructor(
                 }
                 .addOnFailureListener {
                     Timber.d("Authentication request: signInWithEmailAndPassword: FAILURE")
+                    onFailure()
                     toastException(it)
                 }
     }
 
-    fun register(login: String, pass: String, onSuccess: () -> Unit) {
+    fun register(login: String, pass: String, onSuccess: () -> Unit, onFailure: () -> Unit) {
         Timber.d("Authentication request: createUserWithEmailAndPassword: STARTED")
         val email = ACTIVITY.getString(R.string.app_login_to_email, login)
         auth.createUserWithEmailAndPassword(email, pass)
@@ -44,6 +45,7 @@ class FirebaseAuthRepository @Inject constructor(
                 }
                 .addOnFailureListener {
                     Timber.d("Authentication request: createUserWithEmailAndPassword: FAILURE")
+                    onFailure()
                     toastException(it)
                 }
     }
