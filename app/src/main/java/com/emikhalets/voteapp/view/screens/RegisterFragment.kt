@@ -28,27 +28,30 @@ class RegisterFragment : NoDrawerFragment(R.layout.fragment_auth_register) {
         val login = binding.inputLogin.text.toString()
         val pass = binding.inputPass.text.toString()
         val passConf = binding.inputPassConf.text.toString()
-
-        if (login.isNotEmpty() && pass.isNotEmpty() && passConf.isNotEmpty()) {
-            if (pass == passConf) {
-                binding.progressBar.visibility = View.VISIBLE
-                viewModel.sendRegisterRequest(login, pass, { onRegisterSuccess() }, { onRegisterFailure() })
-            } else {
-                toast(getString(R.string.app_toast_pass_not_confirm))
+        validateRegister(login, pass, passConf) {
+            when (it) {
+                RegisterToast.SUCCESS -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    viewModel.sendRegisterRequest(login, pass) { isSuccess, error ->
+                        onRequestComplete(isSuccess, error)
+                    }
+                }
+                RegisterToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
+                RegisterToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
+                RegisterToast.INVALID_PASS -> toast(R.string.app_toast_invalid_pass)
+                RegisterToast.PASS_MISMATCH -> toast(R.string.app_toast_pass_not_confirm)
             }
-        } else {
-            toast(getString(R.string.app_toast_fill_fields))
         }
     }
 
-    private fun onRegisterSuccess() {
-        lifecycleScope.launch {
-            ACTIVITY.drawer.updateHeader()
-            navigate(R.id.homeFragment)
-        }
-    }
-
-    private fun onRegisterFailure() {
+    // TODO: remove drawer logic
+    private fun onRequestComplete(isSuccess: Boolean, error: String) {
         binding.progressBar.visibility = View.GONE
+        if (isSuccess) {
+            navigate(R.id.homeFragment)
+            lifecycleScope.launch { ACTIVITY.drawer.updateHeader() }
+        } else {
+            toastLong(error)
+        }
     }
 }

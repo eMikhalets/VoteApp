@@ -6,7 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.navigate
+import com.emikhalets.voteapp.utils.navigateOld
 import com.emikhalets.voteapp.view.base.NoDrawerFragment
 import com.emikhalets.voteapp.viewmodel.StartViewModel
 import kotlinx.coroutines.launch
@@ -28,13 +28,13 @@ class StartFragment : NoDrawerFragment(R.layout.fragment_start) {
     private fun onUserExist() {
         lifecycleScope.launch {
             ACTIVITY.drawer.updateHeader()
-            navigate(R.id.action_start_to_home)
+            navigateOld(R.id.action_start_to_home)
         }
     }
 
     private fun onUserNotExist() {
         lifecycleScope.launch {
-            navigate(R.id.action_start_to_authLogin)
+            navigateOld(R.id.action_start_to_authLogin)
         }
     }
 }

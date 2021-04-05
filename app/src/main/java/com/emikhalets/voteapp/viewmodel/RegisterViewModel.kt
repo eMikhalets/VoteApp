@@ -12,18 +12,17 @@ class RegisterViewModel @Inject constructor(
         private val databaseRepository: FirebaseDatabaseRepository,
 ) : ViewModel() {
 
-    fun sendRegisterRequest(
-            login: String,
-            pass: String,
-            onSuccess: () -> Unit,
-            onFailure: () -> Unit,
-    ) {
+    fun sendRegisterRequest(login: String, pass: String, complete: (Boolean, String) -> Unit) {
         viewModelScope.launch {
-            authRepository.register(login, pass, {
-                databaseRepository.saveUser {
-                    onSuccess()
+            authRepository.register(login, pass) { isSuccess, error ->
+                if (isSuccess) {
+                    databaseRepository.saveUser { isSaveSuccess, saveError ->
+                        complete(isSaveSuccess, saveError)
+                    }
+                } else {
+                    complete(false, error)
                 }
-            }, { onFailure() })
+            }
         }
     }
 }

@@ -12,16 +12,16 @@ class FirebaseDatabaseRepository @Inject constructor(
         private val refDatabase: DatabaseReference,
 ) {
 
-    fun loadUserData(onSuccess: (User?) -> Unit) {
+    fun loadUserData(complete: (User?, String) -> Unit) {
         Timber.d("Database request: loadUserData: STARTED")
         refDatabase.child(NODE_USERS).child(USER.id).singleDataChange { snapshot ->
             if (snapshot.exists()) {
                 Timber.d("Database request: loadUserData: COMPLETE (User exist)")
                 USER = snapshot.toUser()
-                onSuccess(USER)
+                complete(snapshot.toUser(), "")
             } else {
                 Timber.d("Database request: loadUserData: COMPLETE (User not exist)")
-                onSuccess(null)
+                complete(null, "User not exist in database")
             }
         }
     }
@@ -78,7 +78,7 @@ class FirebaseDatabaseRepository @Inject constructor(
         }
     }
 
-    fun saveUser(onSuccess: () -> Unit) {
+    fun saveUser(complete: (Boolean, String) -> Unit) {
         Timber.d("Database request: saveUser: STARTED")
         val map = hashMapOf(
                 CHILD_ID to USER.id,
@@ -90,11 +90,12 @@ class FirebaseDatabaseRepository @Inject constructor(
         refDatabase.child(NODE_USERS).child(USER.id).setValue(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: saveUser: SUCCESS")
-                    onSuccess()
+                    complete(true, "")
                 }
                 .addOnFailureListener {
                     Timber.d("Database request: saveUser: FAILURE")
-                    toastException(it)
+                    it.printStackTrace()
+                    complete(false, it.message.toString())
                 }
     }
 

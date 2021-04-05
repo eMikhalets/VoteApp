@@ -36,7 +36,7 @@
 
     <EditText
         android:id="@+id/input_login"
-        style="@style/AppEditText"
+        style="@style/AppEditTextEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""

@@ -54,6 +54,10 @@
         <item name="android:padding">@dimen/app_padding_mid</item>
     </style>
 
+    <style name="AppEditTextEmail" parent="AppEditText">
+        <item name="android:inputType">textEmailAddress</item>
+    </style>
+
     <style name="AppEditTextPassword" parent="AppEditText">
         <item name="android:inputType">textPassword</item>
     </style>

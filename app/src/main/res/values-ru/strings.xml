@@ -1,0 +1,70 @@
+<resources>
+    <!-- Application -->
+    <string name="app_name">VoteApp</string>
+    <string name="app_toast_login_not_exist">Логин не существует</string>
+    <string name="app_toast_fill_fields">Заполните все поля</string>
+    <string name="app_toast_invalid_email">Неправильная почта</string>
+    <string name="app_toast_user_not_exist_db">Пользователь не существует в базе данных</string>
+    <string name="app_toast_pass_not_confirm">Пароли не совпадают</string>
+    <string name="app_toast_invalid_pass">Пароль должен содержать 6 символов</string>
+    <string name="app_toast_login_busy">По данной почте уже зарегистрирован аккаунт</string>
+    <string name="app_toast_need_relog_change_pass">Ваша пользовательская сессия длится слишком долго, вам терубется снова войти в систему, чтобы изменить свой пароль</string>
+
+    <string name="app_login_to_email">%s@roflomail.com</string>
+
+    <!-- Toolbar Titles -->
+    <string name="home_title">Последние Фото</string>
+    <string name="auth_title">Авторизация</string>
+    <string name="profile_title">Профиль</string>
+    <string name="images_title">Мои Фото</string>
+    <string name="voting_title">Голосование</string>
+    <string name="top_images_title">Топ Фото</string>
+    <string name="top_users_title">Топ Пользователей</string>
+
+    <!-- Drawer -->
+    <string name="drawer_profile">Профиль</string>
+    <string name="drawer_user_images">Мои Фото</string>
+    <string name="drawer_voting">Голосование</string>
+    <string name="drawer_top_images">Топ Фото</string>
+    <string name="drawer_top_users">Топ Пользователей</string>
+    <string name="drawer_rating">Текущий рейтинг: %d</string>
+
+    <!-- Auth Screens -->
+    <string name="auth_text_login_label">Авторизация</string>
+    <string name="auth_text_register_label">Регистрация</string>
+    <string name="auth_text_login">Почта</string>
+    <string name="auth_text_pass">Пароль</string>
+    <string name="auth_text_pass_conf">Подтвердите пароль</string>
+    <string name="auth_btn_login">Войти</string>
+    <string name="auth_btn_register">Регистрация</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_text_rating">Рейтинг: %d</string>
+    <string name="profile_btn_change_photo">Поменять фото профиля</string>
+    <string name="profile_btn_change_name">Поменять Имя</string>
+    <string name="profile_btn_change_pass">Поменять Пароль</string>
+    <string name="profile_btn_logout">Выйти</string>
+    <string name="profile_text_new_pass">Новый пароль</string>
+    <string name="profile_text_new_pass_conf">Подтвердите новый пароль</string>
+    <string name="profile_text_change_name">Новое имя</string>
+    <string name="profile_btn_apply">Принять</string>
+
+    <!-- User Images Screen -->
+    <string name="images_menu_sort">Сортировать фото</string>
+    <string name="images_menu_add">Добавить Фото</string>
+    <string name="images_menu_sort_date">Сортировать по дате</string>
+    <string name="images_menu_sort_rating">Сортировать по рейтингу</string>
+    <string name="images_text_delete_image">Удалить это фото?</string>
+    <string name="images_btn_no">Нет</string>
+    <string name="images_btn_yes">Да</string>
+
+    <!-- Voting Screen -->
+    <string name="voting_btn_vote">Голосовать</string>
+
+    <!-- Users List Adapter -->
+    <string name="item_users_text_rating">Рейтинг: %d</string>
+
+    <!-- Images List Adapter -->
+    <string name="item_images_text_rating">Рейтинг: %d</string>
+    <string name="item_images_text_owner">Владелец: %s</string>
+</resources>

@@ -9,7 +9,7 @@ import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogChangePassBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.popBackStack
+import com.emikhalets.voteapp.utils.popBackStackOld
 import com.emikhalets.voteapp.utils.toast
 import com.emikhalets.voteapp.viewmodel.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -45,7 +45,7 @@ class ChangePassDialog : DialogFragment() {
             if (newPass == newConf) {
                 viewModel.sendUpdatePassRequest(newPass) {
                     lifecycleScope.launch {
-                        popBackStack()
+                        popBackStackOld()
                     }
                 }
             } else {

@@ -30,33 +30,34 @@ class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
         hideKeyboard()
         val login = binding.inputLogin.text.toString()
         val pass = binding.inputPass.text.toString()
-
-        if (login.isNotEmpty() && pass.isNotEmpty()) {
-            binding.progressBar.visibility = View.VISIBLE
-            viewModel.sendLoginRequest(login, pass, { onUserExist() }, { onUserNotExist() }, { onAuthFailure() })
-        } else {
-            toast(getString(R.string.app_toast_fill_fields))
+        validateLogIn(login, pass) {
+            when (it) {
+                LoginToast.SUCCESS -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    viewModel.sendLoginRequest(login, pass) { isSuccess, error ->
+                        onRequestComplete(isSuccess, error)
+                    }
+                }
+                LoginToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
+                LoginToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
+                LoginToast.INVALID_PASS -> toast(R.string.app_toast_invalid_pass)
+            }
         }
     }
 
-    private fun onUserExist() {
-        lifecycleScope.launch {
-            ACTIVITY.drawer.updateHeader()
+    // TODO: remove drawer logic
+    private fun onRequestComplete(isSuccess: Boolean, error: String) {
+        binding.progressBar.visibility = View.GONE
+        if (isSuccess) {
             navigate(R.id.homeFragment)
+            lifecycleScope.launch { ACTIVITY.drawer.updateHeader() }
+        } else {
+            toastLong(error)
         }
-    }
-
-    private fun onUserNotExist() {
-        binding.progressBar.visibility = View.GONE
-        toast(getString(R.string.app_toast_user_not_exist_db))
-    }
-
-    private fun onAuthFailure() {
-        binding.progressBar.visibility = View.GONE
     }
 
     private fun onRegisterClick() {
         hideKeyboard()
-        navigate(R.id.action_authLogin_to_authRegister)
+        navigateOld(R.id.action_authLogin_to_authRegister)
     }
 }

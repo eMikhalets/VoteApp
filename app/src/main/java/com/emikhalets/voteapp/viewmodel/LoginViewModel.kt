@@ -12,20 +12,21 @@ class LoginViewModel @Inject constructor(
         private val databaseRepository: FirebaseDatabaseRepository,
 ) : ViewModel() {
 
-    fun sendLoginRequest(
-            login: String,
-            pass: String,
-            onSuccess: () -> Unit,
-            onFailure: () -> Unit,
-            onAuthFailure: () -> Unit,
-    ) {
+    fun sendLoginRequest(login: String, pass: String, complete: (Boolean, String) -> Unit) {
         viewModelScope.launch {
-            authRepository.login(login, pass, {
-                databaseRepository.loadUserData {
-                    if (it != null) onSuccess()
-                    else onFailure()
+            authRepository.login(login, pass) { isSuccess, error ->
+                if (isSuccess) {
+                    databaseRepository.loadUserData { user, userError ->
+                        if (user != null) {
+                            complete(true, "")
+                        } else {
+                            complete(false, userError)
+                        }
+                    }
+                } else {
+                    complete(false, error)
                 }
-            }, { onAuthFailure() })
+            }
         }
     }
 }

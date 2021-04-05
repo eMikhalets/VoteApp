@@ -9,7 +9,7 @@ import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogChangeNameBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.popBackStack
+import com.emikhalets.voteapp.utils.popBackStackOld
 import com.emikhalets.voteapp.utils.toast
 import com.emikhalets.voteapp.viewmodel.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,7 +42,7 @@ class ChangeNameDialog : DialogFragment() {
         val name = binding.inputName.text.toString()
         if (name.isNotEmpty()) viewModel.sendUpdateUsernameRequest(name) {
             lifecycleScope.launch {
-                popBackStack()
+                popBackStackOld()
             }
         }
         else toast(getString(R.string.app_toast_fill_fields))

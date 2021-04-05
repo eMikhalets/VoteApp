@@ -1,15 +1,16 @@
 <resources>
     <!-- Application -->
     <string name="app_name">VoteApp</string>
-    <string name="app_login_to_email">%s@roflomail.com</string>
-    <string name="app_toast_fill_fields">Fill all fields</string>
-    <string name="app_toast_user_not_exist_db">User not exist in database</string>
-    <string name="app_toast_pass_not_confirm">Pass not confirm</string>
     <string name="app_toast_login_not_exist">Login not exist</string>
-    <string name="app_toast_invalid_pass">Invalid password</string>
-    <string name="app_toast_login_busy">Login is busy</string>
+    <string name="app_toast_fill_fields">Fill all fields</string>
+    <string name="app_toast_invalid_email">Invalid E-mail</string>
+    <string name="app_toast_user_not_exist_db">User not exist in database</string>
+    <string name="app_toast_pass_not_confirm">Password mismatch</string>
+    <string name="app_toast_invalid_pass">Password must be 6 characters</string>
+    <string name="app_toast_login_busy">An account has already been registered by this mail</string>
     <string name="app_toast_need_relog_change_pass">Your user session is too long, you are required to log in again to change your password</string>
-    <string name="temp_to_rus">Ваша пользовательская сессия длится слишком долго, вам терубется снова войти в систему, чтобы изменить свой пароль</string>
+
+    <string name="app_login_to_email">%s@roflomail.com</string>
 
     <!-- Toolbar Titles -->
     <string name="home_title">Latest Images</string>
@@ -47,7 +48,7 @@
     <string name="profile_text_new_pass_conf">Confirm new password</string>
     <string name="profile_text_change_name">New username</string>
     <string name="profile_btn_apply">Apply</string>
-    <string name="app_transition_name_image_zoom">image_zoom</string>
+    <string name="app_transition_name_image_zoom" translatable="false">image_zoom</string>
 
     <!-- User Images Screen -->
     <string name="images_menu_sort">Sort images</string>

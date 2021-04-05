@@ -12,8 +12,8 @@ class StartViewModel @Inject constructor(
 
     fun sendLoadUserDataRequest(onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            databaseRepository.loadUserData {
-                if (it != null) onSuccess()
+            databaseRepository.loadUserData { user, _ ->
+                if (user != null) onSuccess()
                 else onFailure()
             }
         }

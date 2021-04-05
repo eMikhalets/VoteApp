@@ -34,8 +34,8 @@ class ProfileViewModel @Inject constructor(
     fun sendLoadUserDataRequest(onFailure: () -> Unit) {
         if (_user.value == null || _user.value?.id == "") {
             viewModelScope.launch {
-                databaseRepository.loadUserData {
-                    if (it != null) _user.postValue(it)
+                databaseRepository.loadUserData { user, _ ->
+                    if (user != null) _user.postValue(user)
                     else onFailure()
                 }
             }

@@ -27,11 +27,11 @@ class AppDrawer {
     private val itemClickListener = object : Drawer.OnDrawerItemClickListener {
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
             when (position) {
-                1 -> navigate(R.id.action_home_to_profile)
-                2 -> navigate(R.id.action_home_to_userImages)
-                3 -> navigate(R.id.action_home_to_voting)
-                4 -> navigate(R.id.action_home_to_topImages)
-                5 -> navigate(R.id.action_home_to_topUsers)
+                1 -> navigateOld(R.id.action_home_to_profile)
+                2 -> navigateOld(R.id.action_home_to_userImages)
+                3 -> navigateOld(R.id.action_home_to_voting)
+                4 -> navigateOld(R.id.action_home_to_topImages)
+                5 -> navigateOld(R.id.action_home_to_topUsers)
                 else -> {
                 }
             }
@@ -63,7 +63,7 @@ class AppDrawer {
         drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
         ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        ACTIVITY.toolbar.setNavigationOnClickListener { popBackStack() }
+        ACTIVITY.toolbar.setNavigationOnClickListener { popBackStackOld() }
     }
 
     fun updateHeader() {

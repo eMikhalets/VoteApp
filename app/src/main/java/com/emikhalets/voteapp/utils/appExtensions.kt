@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
@@ -39,19 +41,41 @@ fun initLogger() {
 
 // Navigation Component
 
-fun navigate(
+fun Fragment.navigate(
+        destination: Int,
+        args: Bundle? = null,
+        options: NavOptions? = null,
+        extras: Navigator.Extras? = null,
+) {
+    lifecycleScope.launchWhenResumed {
+        findNavController().navigate(destination, args, options, extras)
+    }
+}
+
+fun Fragment.popBackStack(destination: Int? = null, inclusive: Boolean = false) {
+    lifecycleScope.launchWhenResumed {
+        if (destination == null) ACTIVITY.navController.popBackStack()
+        else ACTIVITY.navController.popBackStack(destination, inclusive)
+    }
+}
+
+fun navigateOld(
         action: Int,
         args: Bundle? = null,
         options: NavOptions? = null,
         extras: Navigator.Extras? = null,
 ) = ACTIVITY.navController.navigate(action, args, options, extras)
 
-fun popBackStack(destination: Int? = null, inclusive: Boolean = false) {
+fun popBackStackOld(destination: Int? = null, inclusive: Boolean = false) {
     if (destination == null) ACTIVITY.navController.popBackStack()
     else ACTIVITY.navController.popBackStack(destination, inclusive)
 }
 
 // Toasts
+
+fun Fragment.toast(stringRes: Int) = Toast.makeText(requireContext(), stringRes, Toast.LENGTH_SHORT).show()
+
+fun Fragment.toastLong(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
 fun toast(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_SHORT).show()
 
@@ -76,7 +100,7 @@ fun ImageView.loadImage(
         url: String,
         placeholder: Int = R.drawable.placeholder_default,
 ) {
-    val image = if (url.isEmpty()) "no image" else url
+    val image = if (url.isEmpty()) "null" else url
     Picasso.get().load(image).placeholder(placeholder).error(placeholder).into(this)
 }
 

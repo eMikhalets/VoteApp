@@ -60,7 +60,7 @@ class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
         viewModel.sendLoadUserDataRequest {
             lifecycleScope.launch {
                 toast(getString(R.string.app_toast_user_not_exist_db))
-                navigate(R.id.authLoginFragment)
+                navigateOld(R.id.authLoginFragment)
             }
         }
     }
@@ -71,7 +71,7 @@ class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
             val extras = FragmentNavigatorExtras(
                     binding.image to getString(R.string.app_transition_name_image_zoom)
             )
-            navigate(R.id.action_profile_to_image, args, extras = extras)
+            navigateOld(R.id.action_profile_to_image, args, extras = extras)
         }
     }
 
@@ -84,17 +84,17 @@ class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
     }
 
     private fun onChangeUsernameClick() {
-        navigate(R.id.action_profile_to_changeName)
+        navigateOld(R.id.action_profile_to_changeName)
     }
 
     private fun onChangePassClick() {
-        navigate(R.id.action_profile_to_changePass)
+        navigateOld(R.id.action_profile_to_changePass)
     }
 
     private fun onLogoutClick() {
         viewModel.sendLogOutRequest {
             lifecycleScope.launch {
-                navigate(R.id.authLoginFragment)
+                navigateOld(R.id.authLoginFragment)
             }
         }
     }

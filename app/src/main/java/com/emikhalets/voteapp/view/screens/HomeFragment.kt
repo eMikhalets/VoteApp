@@ -57,6 +57,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
-        navigate(R.id.action_home_to_image, args)
+        navigateOld(R.id.action_home_to_image, args)
     }
 }

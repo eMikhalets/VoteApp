@@ -9,7 +9,7 @@ import com.emikhalets.voteapp.databinding.FragmentTopImagesBinding
 import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.ARGS_PHOTO
 import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.navigate
+import com.emikhalets.voteapp.utils.navigateOld
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.TopImagesViewModel
@@ -50,6 +50,6 @@ class TopImagesFragment : WithDrawerFragment(R.layout.fragment_top_images) {
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
-        navigate(R.id.action_topImages_to_image, args)
+        navigateOld(R.id.action_topImages_to_image, args)
     }
 }

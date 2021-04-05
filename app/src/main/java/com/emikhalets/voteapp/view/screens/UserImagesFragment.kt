@@ -102,12 +102,12 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
-        navigate(R.id.action_userImages_to_image, args)
+        navigateOld(R.id.action_userImages_to_image, args)
     }
 
     private fun onDeleteImageClick(name: String, pos: Int): Boolean {
         val args = bundleOf(ARGS_NAME to name, ARGS_POS to pos)
-        navigate(R.id.action_userImages_to_deleteImage, args)
+        navigateOld(R.id.action_userImages_to_deleteImage, args)
         return true
     }
 }
