@@ -1,9 +1,8 @@
 package com.emikhalets.voteapp.model.firebase
 
-import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.USER
-import com.emikhalets.voteapp.utils.toastException
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -11,11 +10,19 @@ class FirebaseAuthRepository @Inject constructor(
         private val auth: FirebaseAuth,
 ) {
 
-    fun login(login: String, pass: String, complete: (Boolean, String) -> Unit) {
+    /**
+     * Log in a user.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true and an empty error message.
+     * Else, callback returns false and a exception message
+     * @param login User e-mail
+     * @param pass User password
+     * @param complete Callback
+     */
+    fun login(login: String, pass: String, complete: (success: Boolean, error: String) -> Unit) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         auth.signInWithEmailAndPassword(login, pass)
                 .addOnSuccessListener {
-                    USER = User(id = auth.currentUser?.uid ?: "")
                     Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
                     complete(true, "")
                 }
@@ -26,19 +33,25 @@ class FirebaseAuthRepository @Inject constructor(
                 }
     }
 
-    fun register(login: String, pass: String, complete: (Boolean, String) -> Unit) {
+    /**
+     * Registers a new user and sets a username based by e-mail.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true and an empty error message.
+     * Else, callback returns false and a exception message
+     * @param login User e-mail
+     * @param pass User password
+     * @param complete Callback
+     */
+    fun register(login: String, pass: String, complete: (success: Boolean, error: String) -> Unit) {
         Timber.d("Authentication request: createUserWithEmailAndPassword: STARTED")
         val username = login.split("@")[0]
         auth.createUserWithEmailAndPassword(login, pass)
                 .addOnSuccessListener {
-                    USER = User(
-                            id = auth.currentUser?.uid ?: "",
-                            username = username,
-                            login = login,
-                            photo = "null"
-                    )
-                    Timber.d("Authentication request: createUserWithEmailAndPassword: SUCCESS")
-                    complete(true, "")
+                    updateUsername(username) { isSuccess, error ->
+                        Timber.d("Authentication request: createUserWithEmailAndPassword: SUCCESS")
+                        if (isSuccess) complete(true, "")
+                        else complete(false, error)
+                    }
                 }
                 .addOnFailureListener {
                     Timber.d("Authentication request: createUserWithEmailAndPassword: FAILURE")
@@ -47,24 +60,83 @@ class FirebaseAuthRepository @Inject constructor(
                 }
     }
 
-    fun logOut(onComplete: () -> Unit) {
+    /**
+     * Sing out and change current user (change authentication provider).
+     * Called [complete] when the server responds to a request
+     * @param complete Callback
+     */
+    fun logOut(complete: () -> Unit) {
         Timber.d("Authentication request: signOut: STARTED")
-        USER = User()
         auth.signOut()
         Timber.d("Authentication request: signOut: COMPLETE")
-        onComplete()
+        complete()
     }
 
-    fun updateUserPassword(pass: String, onSuccess: () -> Unit) {
+    /**
+     * Updates the password of the current user.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true and an empty error message.
+     * Else, callback returns false and a exception message
+     * @param pass New password of the current user
+     * @param complete Callback
+     */
+    fun updateUserPassword(pass: String, complete: (success: Boolean, error: String) -> Unit) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         auth.currentUser?.updatePassword(pass)
                 ?.addOnSuccessListener {
                     Timber.d("Authentication request: signInWithEmailAndPassword: SUCCESS")
-                    onSuccess()
+                    complete(true, "")
                 }
                 ?.addOnFailureListener {
                     Timber.d("Authentication request: signInWithEmailAndPassword: FAILURE")
-                    toastException(it)
+                    it.printStackTrace()
+                    complete(false, it.message.toString())
+                }
+    }
+
+    /**
+     * Updates the username of the current user.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true and an empty error message.
+     * Else, callback returns false and a exception message
+     * @param name New name of the current user
+     * @param complete Callback
+     */
+    fun updateUsername(name: String, complete: (success: Boolean, error: String) -> Unit) {
+        Timber.d("Authentication request: updateUsername: STARTED")
+        val profile = UserProfileChangeRequest.Builder().setDisplayName(name).build()
+        auth.currentUser?.updateProfile(profile)
+                ?.addOnSuccessListener {
+                    Timber.d("Authentication request: updateUsername: SUCCESS")
+                    complete(true, "")
+                }
+                ?.addOnFailureListener {
+                    Timber.d("Authentication request: updateUsername: FAILURE")
+                    it.printStackTrace()
+                    complete(false, it.message.toString())
+                }
+    }
+
+    /**
+     * Updates the profile photo of the current user.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true and an empty error message.
+     * Else, callback returns false and a exception message
+     * @param url Url of the profile photo in Firebase Cloud Storage
+     * @param complete Callback
+     */
+    fun updateUserPhoto(url: String, complete: (success: Boolean, error: String) -> Unit) {
+        Timber.d("Authentication request: updateUserPhoto: STARTED")
+        val profile = UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(url)).build()
+        auth.currentUser?.updateProfile(profile)
+                ?.addOnSuccessListener {
+                    Timber.d("Authentication request: updateUserPhoto: SUCCESS")
+                    complete(true, "")
+                }
+                ?.addOnFailureListener {
+                    Timber.d("Authentication request: updateUserPhoto: FAILURE")
+                    it.printStackTrace()
+                    complete(false, it.message.toString())
                 }
     }
 }

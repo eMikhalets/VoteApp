@@ -132,3 +132,5 @@ fun DataSnapshot.toUser(): User = this.getValue(User::class.java) ?: User()
 fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
 
 fun userId(): String = Firebase.auth.currentUser?.uid.toString()
+
+fun username(): String = Firebase.auth.currentUser?.displayName.toString()

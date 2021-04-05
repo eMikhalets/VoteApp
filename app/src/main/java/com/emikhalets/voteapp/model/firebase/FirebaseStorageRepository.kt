@@ -2,7 +2,7 @@ package com.emikhalets.voteapp.model.firebase
 
 import android.net.Uri
 import com.emikhalets.voteapp.utils.USER
-import com.emikhalets.voteapp.utils.toastException
+import com.emikhalets.voteapp.utils.userId
 import com.google.firebase.storage.StorageReference
 import timber.log.Timber
 import java.util.*
@@ -12,73 +12,119 @@ class FirebaseStorageRepository @Inject constructor(
         private val refStorage: StorageReference,
 ) {
 
-    fun saveImage(uri: Uri, onSuccess: (String, String) -> Unit) {
+    /**
+     * Updates the rating of the user whose image was voted for.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true, image name, url and an empty error message.
+     * Else, callback returns false and a exception message
+     * @param name Image name
+     * @param complete Callback
+     */
+    fun saveImage(uri: Uri, complete: (success: Boolean, name: String, url: String, error: String) -> Unit) {
         Timber.d("Storage request: saveImage: STARTED")
         val imageName = UUID.randomUUID().toString()
         refStorage.child(FOLDER_IMAGES).child(imageName).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveImage: SUCCESS")
-                    loadImageUrl(imageName) { url ->
-                        onSuccess(imageName, url)
+                    loadImageUrl(imageName) { isSuccess, url, error ->
+                        if (isSuccess) complete(true, imageName, url, "")
+                        else complete(false, "", "", error)
                     }
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: saveImage: FAILURE")
-                    toastException(it)
+                    it.printStackTrace()
+                    complete(false, "", "", it.message.toString())
                 }
     }
 
-    fun saveUserPhoto(uri: Uri, onSuccess: (String) -> Unit) {
+    /**
+     * Updates the rating of the user whose image was voted for.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true, photo url and an empty error message.
+     * Else, callback returns false, empty photo url and a exception message
+     * @param name Image name
+     * @param complete Callback
+     */
+    fun saveUserPhoto(uri: Uri, complete: (success: Boolean, url: String, error: String) -> Unit) {
         Timber.d("Storage request: saveUserPhoto: STARTED")
         refStorage.child(FOLDER_PROFILES).child(USER.id).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveUserPhoto: SUCCESS")
-                    loadUserPhotoUrl { url ->
-                        onSuccess(url)
+                    loadUserPhotoUrl { isSuccess, url, error ->
+                        if (isSuccess) complete(true, url, "")
+                        else complete(false, "", error)
                     }
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: saveUserPhoto: FAILURE")
-                    toastException(it)
+                    it.printStackTrace()
+                    complete(false, "", it.message.toString())
                 }
     }
 
-    fun deleteImage(name: String, onSuccess: () -> Unit) {
+    /**
+     * Deleted image from cloud storage.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true and an empty error message.
+     * Else, callback returns false and a exception message
+     * @param name Image name
+     * @param complete Callback
+     */
+    fun deleteImage(name: String, complete: (success: Boolean, error: String) -> Unit) {
         Timber.d("Storage request: deleteImage: STARTED")
         refStorage.child(FOLDER_IMAGES).child(name).delete()
                 .addOnSuccessListener {
                     Timber.d("Storage request: deleteImage: SUCCESS")
-                    onSuccess()
+                    complete(true, "")
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: deleteImage: FAILURE")
-                    toastException(it)
+                    it.printStackTrace()
+                    complete(false, it.message.toString())
                 }
     }
 
-    private fun loadImageUrl(name: String, onSuccess: (url: String) -> Unit) {
+    /**
+     * Uploads an image to cloud storage.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true, image url and an empty error message.
+     * Else, callback returns false, empty image url and a exception message
+     * @param name Image name
+     * @param complete Callback
+     */
+    private fun loadImageUrl(name: String, complete: (success: Boolean, url: String, error: String) -> Unit) {
         Timber.d("Storage request: loadImageUrl: STARTED")
         refStorage.child(FOLDER_IMAGES).child(name).downloadUrl
                 .addOnSuccessListener {
                     Timber.d("Storage request: loadImageUrl: SUCCESS")
-                    onSuccess(it.toString())
+                    complete(true, it.toString(), "")
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: loadImageUrl: FAILURE")
-                    toastException(it)
+                    it.printStackTrace()
+                    complete(false, "", it.message.toString())
                 }
     }
 
-    private fun loadUserPhotoUrl(onSuccess: (url: String) -> Unit) {
+    /**
+     * Uploads a profile photo to cloud storage.
+     * Called [complete] when the server responds to a request.
+     * If request is successful, callback returns a true, photo url and an empty error message.
+     * Else, callback returns false, empty photo url and a exception message
+     * @param complete Callback
+     */
+    private fun loadUserPhotoUrl(complete: (success: Boolean, url: String, error: String) -> Unit) {
         Timber.d("Storage request: loadUserPhotoUrl: STARTED")
-        refStorage.child(FOLDER_PROFILES).child(USER.id).downloadUrl
+        refStorage.child(FOLDER_PROFILES).child(userId()).downloadUrl
                 .addOnSuccessListener {
                     Timber.d("Storage request: loadUserPhotoUrl: SUCCESS")
-                    onSuccess(it.toString())
+                    complete(true, it.toString(), "")
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: loadUserPhotoUrl: FAILURE")
-                    toastException(it)
+                    it.printStackTrace()
+                    complete(false, "", it.message.toString())
                 }
     }
 
