@@ -7,7 +7,8 @@
     <dimen name="app_margin_small">8dp</dimen>
     <dimen name="app_margin_large">32dp</dimen>
     <dimen name="app_corner_radius">8dp</dimen>
-    <dimen name="app_border_width">2dp</dimen>
+    <dimen name="app_border_width">4dp</dimen>
+    <dimen name="app_border_width_small">2dp</dimen>
     <dimen name="app_border_padding">2dp</dimen>
     <dimen name="app_card_elevation">8dp</dimen>
 

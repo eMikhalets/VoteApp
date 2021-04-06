@@ -17,13 +17,11 @@ class TopUsersViewModel @Inject constructor(
     val users get():LiveData<List<User>> = _users
 
     fun sendLoadTopUsersRequest() {
-        if (_users.value.isNullOrEmpty()) {
-            viewModelScope.launch {
-                databaseRepository.loadTopUsers {
-                    if (it.isNotEmpty()) {
-                        val images = it.sortedByDescending { item -> item.rating }
-                        _users.postValue(images)
-                    }
+        viewModelScope.launch {
+            databaseRepository.loadTopUsers {
+                if (it.isNotEmpty()) {
+                    val images = it.sortedByDescending { item -> item.rating }
+                    _users.postValue(images)
                 }
             }
         }

@@ -2,24 +2,22 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentAuthLoginBinding
 import com.emikhalets.voteapp.utils.*
-import com.emikhalets.voteapp.view.base.NoDrawerFragment
+import com.emikhalets.voteapp.view.base.HideDrawerFragment
 import com.emikhalets.voteapp.viewmodel.LoginViewModel
-import kotlinx.coroutines.launch
 
-class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
+class LoginFragment : HideDrawerFragment(R.layout.fragment_auth_login) {
 
     private val binding: FragmentAuthLoginBinding by viewBinding()
     lateinit var viewModel: LoginViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
-        ACTIVITY.title = getString(R.string.auth_title)
+        viewModel = injectViewModel(activity().viewModelFactory)
+        activity().title = getString(R.string.auth_title)
         binding.apply {
             btnLogin.setOnClickListener { onLoginClick() }
             btnRegister.setOnClickListener { onRegisterClick() }
@@ -45,19 +43,14 @@ class LoginFragment : NoDrawerFragment(R.layout.fragment_auth_login) {
         }
     }
 
-    // TODO: remove drawer logic
     private fun onRequestComplete(isSuccess: Boolean, error: String) {
         binding.progressBar.visibility = View.GONE
-        if (isSuccess) {
-            navigate(R.id.homeFragment)
-            lifecycleScope.launch { ACTIVITY.drawer.updateHeader() }
-        } else {
-            toastLong(error)
-        }
+        if (isSuccess) navigate(R.id.homeFragment)
+        else toastLong(error)
     }
 
     private fun onRegisterClick() {
         hideKeyboard()
-        navigateOld(R.id.action_authLogin_to_authRegister)
+        navigate(R.id.action_authLogin_to_authRegister)
     }
 }

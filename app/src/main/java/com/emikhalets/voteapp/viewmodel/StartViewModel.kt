@@ -10,11 +10,11 @@ class StartViewModel @Inject constructor(
         private val databaseRepository: FirebaseDatabaseRepository,
 ) : ViewModel() {
 
-    fun sendLoadUserDataRequest(onSuccess: () -> Unit, onFailure: () -> Unit) {
+    fun sendLoadUserDataRequest(onComplete: (success: Boolean, error: String) -> Unit) {
         viewModelScope.launch {
-            databaseRepository.loadUserData { user, _ ->
-                if (user != null) onSuccess()
-                else onFailure()
+            databaseRepository.loadUserData { user, error ->
+                if (user != null) onComplete(true, "")
+                else onComplete(false, error)
             }
         }
     }

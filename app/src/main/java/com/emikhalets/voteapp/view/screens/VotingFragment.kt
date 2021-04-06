@@ -5,10 +5,7 @@ import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentVotingBinding
-import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.ImageNumber
-import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.loadImage
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.VotingViewModel
 
@@ -23,11 +20,11 @@ class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
-        ACTIVITY.title = getString(R.string.voting_title)
-        if (savedInstanceState != null) initViews(savedInstanceState)
+        viewModel = injectViewModel(activity().viewModelFactory)
+        activity().title = getString(R.string.voting_title)
+        if (savedInstanceState == null) onViewLoaded()
+        else initViews(savedInstanceState)
         initListeners()
-        onViewLoaded()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -46,6 +43,13 @@ class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
         if (isSecondSelected) binding.imageVote2.setBackgroundResource(R.drawable.background_selected_image)
     }
 
+    private fun onViewLoaded() {
+        viewModel.sendPrepareVotingRequest {
+            isVoteEnabled = true
+            binding.btnVote.isEnabled = true
+        }
+    }
+
     private fun initListeners() {
         viewModel.apply {
             image1.observe(viewLifecycleOwner) { onImageLoaded(it.url, ImageNumber.FIRST) }
@@ -55,13 +59,6 @@ class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
             imageVote1.setOnClickListener { onImageClick(ImageNumber.FIRST) }
             imageVote2.setOnClickListener { onImageClick(ImageNumber.SECOND) }
             btnVote.setOnClickListener { onVoteClick() }
-        }
-    }
-
-    private fun onViewLoaded() {
-        viewModel.sendPrepareVotingRequest {
-            isVoteEnabled = true
-            binding.btnVote.isEnabled = true
         }
     }
 
@@ -93,13 +90,17 @@ class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
     private fun onVoteClick() {
         isVoteEnabled = false
         binding.btnVote.isEnabled = false
-        viewModel.sendVoteRequest {
-            isVoteEnabled = true
-            binding.btnVote.isEnabled = true
-            isFirstSelected = false
-            isSecondSelected = false
-            binding.imageVote1.setBackgroundResource(0)
-            binding.imageVote2.setBackgroundResource(0)
+        viewModel.sendVoteRequest { isSuccess, error ->
+            if (isSuccess) {
+                isVoteEnabled = true
+                binding.btnVote.isEnabled = true
+                isFirstSelected = false
+                isSecondSelected = false
+                binding.imageVote1.setBackgroundResource(0)
+                binding.imageVote2.setBackgroundResource(0)
+            } else {
+                toastLong(error)
+            }
         }
     }
 

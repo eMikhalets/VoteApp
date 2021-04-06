@@ -2,39 +2,36 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.activity
 import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.navigateOld
-import com.emikhalets.voteapp.view.base.NoDrawerFragment
+import com.emikhalets.voteapp.utils.navigate
+import com.emikhalets.voteapp.utils.toastLong
+import com.emikhalets.voteapp.view.base.HideDrawerFragment
 import com.emikhalets.voteapp.viewmodel.StartViewModel
-import kotlinx.coroutines.launch
 
-class StartFragment : NoDrawerFragment(R.layout.fragment_start) {
+class StartFragment : HideDrawerFragment(R.layout.fragment_start) {
 
     lateinit var viewModel: StartViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
+        viewModel = injectViewModel(activity().viewModelFactory)
         if (savedInstanceState == null) onViewLoaded()
     }
 
     private fun onViewLoaded() {
-        viewModel.sendLoadUserDataRequest({ onUserExist() }, { onUserNotExist() })
-    }
-
-    private fun onUserExist() {
-        lifecycleScope.launch {
-            ACTIVITY.drawer.updateHeader()
-            navigateOld(R.id.action_start_to_home)
+        viewModel.sendLoadUserDataRequest { isExist, error ->
+            onRequestComplete(isExist, error)
         }
     }
 
-    private fun onUserNotExist() {
-        lifecycleScope.launch {
-            navigateOld(R.id.action_start_to_authLogin)
+    private fun onRequestComplete(isExist: Boolean, error: String) {
+        if (isExist) {
+            navigate(R.id.action_start_to_home)
+        } else {
+            navigate(R.id.action_start_to_authLogin)
+            toastLong(error)
         }
     }
 }

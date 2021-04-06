@@ -17,13 +17,11 @@ class TopImagesViewModel @Inject constructor(
     val images get():LiveData<List<Image>> = _images
 
     fun sendLoadTopImagesRequest() {
-        if (_images.value.isNullOrEmpty()) {
-            viewModelScope.launch {
-                databaseRepository.loadTopImages {
-                    if (it.isNotEmpty()) {
-                        val images = it.sortedByDescending { item -> item.rating }
-                        _images.postValue(images)
-                    }
+        viewModelScope.launch {
+            databaseRepository.loadTopImages {
+                if (it.isNotEmpty()) {
+                    val images = it.sortedByDescending { item -> item.rating }
+                    _images.postValue(images)
                 }
             }
         }

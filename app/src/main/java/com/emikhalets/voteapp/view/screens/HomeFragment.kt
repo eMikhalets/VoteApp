@@ -14,20 +14,21 @@ import com.emikhalets.voteapp.viewmodel.HomeViewModel
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding: FragmentHomeBinding by viewBinding()
-    private val imagesAdapter = ImagesAdapter(true, { url, v -> onImageClick(url, v) })
+    private lateinit var imagesAdapter: ImagesAdapter
     lateinit var viewModel: HomeViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
-        ACTIVITY.drawer.enableDrawer()
-        ACTIVITY.title = getString(R.string.home_title)
+        viewModel = injectViewModel(activity().viewModelFactory)
+        activity().title = getString(R.string.home_title)
+        activity().drawer.enableDrawer()
         initRecyclerView()
         initListeners()
-        onViewLoaded()
+        if (savedInstanceState == null) onViewLoaded()
     }
 
     private fun initRecyclerView() {
+        imagesAdapter = ImagesAdapter(true, { url, view -> onImageClick(url, view) })
         binding.apply {
             listImages.setHasFixedSize(true)
             listImages.adapter = imagesAdapter
@@ -38,10 +39,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.images.observe(viewLifecycleOwner) {
             imagesAdapter.submitList(it)
             binding.apply {
-                root.isRefreshing = false
+                layoutRefresh.isRefreshing = false
                 progress.visibility = View.GONE
                 listImages.visibility = View.VISIBLE
-                listImages.scrollToTop()
+                listImages.scrollToTop(this@HomeFragment)
             }
         }
         binding.root.setOnRefreshListener { onRefreshInvoke() }
@@ -57,6 +58,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
-        navigateOld(R.id.action_home_to_image, args)
+        navigate(R.id.action_home_to_image, args)
     }
 }

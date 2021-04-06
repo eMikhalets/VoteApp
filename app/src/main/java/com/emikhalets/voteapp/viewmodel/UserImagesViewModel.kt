@@ -20,16 +20,14 @@ class UserImagesViewModel @Inject constructor(
     private val _images = MutableLiveData<List<Image>>()
     val images get():LiveData<List<Image>> = _images
 
-    private var imagesList = mutableListOf<Image>()
-    private var sortState = DATE_DEC
+    private var imageSortingState = DATE_DEC
 
     fun sendLoadUserImagesRequest() {
         if (_images.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 databaseRepository.loadUserImages {
                     if (it.isNotEmpty()) {
-                        imagesList = it.toMutableList()
-                        sortImagesWhenAdding()
+                        val imagesList = sortImagesWhenAdding(it)
                         _images.postValue(imagesList)
                     }
                 }
@@ -37,29 +35,47 @@ class UserImagesViewModel @Inject constructor(
         }
     }
 
-    fun sendSaveImageRequest(uri: Uri?, onSuccess: (List<Image>) -> Unit) {
+    fun sendSaveImageRequest(uri: Uri?, onComplete: (success: Boolean, error: String) -> Unit) {
         uri?.let {
             viewModelScope.launch {
-                storageRepository.saveImage(it) { name, url ->
-                    databaseRepository.saveUserImage(name, url) { image ->
-                        imagesList.add(image)
-                        sortImagesWhenAdding()
-                        _images.postValue(imagesList)
-                        onSuccess(imagesList)
+                storageRepository.saveImage(it) { isSuccess, name, url, saveError ->
+                    if (isSuccess) {
+                        databaseRepository.saveUserImage(name, url) { image, error ->
+                            if (image != null) {
+                                var imagesList = _images.value?.toMutableList() ?: mutableListOf()
+                                imagesList.add(image)
+                                imagesList = sortImagesWhenAdding(imagesList).toMutableList()
+                                _images.postValue(imagesList)
+                                onComplete(true, "")
+                            } else {
+                                onComplete(false, error)
+                            }
+                        }
+                    } else {
+                        onComplete(false, saveError)
                     }
                 }
             }
         }
     }
 
-    fun sendDeleteImageRequest(name: String, position: Int, onSuccess: () -> Unit) {
-        if (name.isEmpty()) onSuccess()
+    fun sendDeleteImageRequest(name: String, position: Int, onComplete: (success: Boolean, error: String) -> Unit) {
+        if (name.isEmpty()) onComplete(false, "Image name is empty")
         else viewModelScope.launch {
-            storageRepository.deleteImage(name) {
-                databaseRepository.deleteImage(name) {
-                    imagesList.removeAt(position)
-                    _images.postValue(imagesList)
-                    onSuccess()
+            storageRepository.deleteImage(name) { isStorageSuccess, storageError ->
+                if (isStorageSuccess) {
+                    databaseRepository.deleteImage(name) { isSuccess, error ->
+                        if (isSuccess) {
+                            val imagesList = _images.value?.toMutableList() ?: mutableListOf()
+                            imagesList.removeAt(position)
+                            _images.postValue(imagesList)
+                            onComplete(true, "")
+                        } else {
+                            onComplete(false, error)
+                        }
+                    }
+                } else {
+                    onComplete(false, storageError)
                 }
             }
         }
@@ -67,36 +83,46 @@ class UserImagesViewModel @Inject constructor(
 
     fun sortImagesByDate() {
         viewModelScope.launch {
-            imagesList = if (sortState == DATE_DEC) {
-                sortState = DATE_ASC
-                imagesList.sortedBy { it.timestamp }.toMutableList()
-            } else {
-                sortState = DATE_DEC
-                imagesList.sortedByDescending { it.timestamp }.toMutableList()
+            _images.value?.let { list ->
+                val imagesList = when (imageSortingState) {
+                    DATE_DEC -> {
+                        imageSortingState = DATE_ASC
+                        list.sortedBy { it.timestamp }.toMutableList()
+                    }
+                    else -> {
+                        imageSortingState = DATE_DEC
+                        list.sortedByDescending { it.timestamp }.toMutableList()
+                    }
+                }
+                _images.postValue(imagesList)
             }
-            _images.postValue(imagesList)
         }
     }
 
     fun sortImagesByRating() {
         viewModelScope.launch {
-            imagesList = if (sortState == RATING_DEC) {
-                sortState = RATING_ASC
-                imagesList.sortedBy { it.rating }.toMutableList()
-            } else {
-                sortState = RATING_DEC
-                imagesList.sortedByDescending { it.rating }.toMutableList()
+            _images.value?.let { list ->
+                val imagesList = when (imageSortingState) {
+                    RATING_DEC -> {
+                        imageSortingState = RATING_ASC
+                        list.sortedBy { it.rating }.toMutableList()
+                    }
+                    else -> {
+                        imageSortingState = RATING_DEC
+                        list.sortedByDescending { it.rating }.toMutableList()
+                    }
+                }
+                _images.postValue(imagesList)
             }
-            _images.postValue(imagesList)
         }
     }
 
-    private fun sortImagesWhenAdding() {
-        imagesList = when (sortState) {
-            DATE_DEC -> imagesList.sortedByDescending { it.timestamp }.toMutableList()
-            DATE_ASC -> imagesList.sortedBy { it.timestamp }.toMutableList()
-            RATING_DEC -> imagesList.sortedByDescending { it.rating }.toMutableList()
-            RATING_ASC -> imagesList.sortedBy { it.rating }.toMutableList()
+    private fun sortImagesWhenAdding(list: List<Image>): List<Image> {
+        return when (imageSortingState) {
+            DATE_DEC -> list.sortedByDescending { it.timestamp }.toMutableList()
+            DATE_ASC -> list.sortedBy { it.timestamp }.toMutableList()
+            RATING_DEC -> list.sortedByDescending { it.rating }.toMutableList()
+            RATING_ASC -> list.sortedBy { it.rating }.toMutableList()
         }
     }
 

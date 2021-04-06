@@ -1,9 +1,7 @@
-package com.emikhalets.voteapp.di.module
+package com.emikhalets.voteapp.di.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.emikhalets.voteapp.di.viewmodel.ViewModelFactory
-import com.emikhalets.voteapp.di.viewmodel.ViewModelKey
 import com.emikhalets.voteapp.viewmodel.*
 import dagger.Binds
 import dagger.Module

@@ -5,11 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
-import com.emikhalets.voteapp.utils.ACTIVITY
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 
-class TakeImageContract : ActivityResultContract<Int, Uri>() {
+class TakeImageContract(private val activity: MainActivity) : ActivityResultContract<Int, Uri>() {
 
     override fun createIntent(context: Context, input: Int): Intent {
         return CropImage.activity()
@@ -17,7 +16,7 @@ class TakeImageContract : ActivityResultContract<Int, Uri>() {
                 .setAspectRatio(1, 1)
                 .setRequestedSize(input, input)
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .getIntent(ACTIVITY)
+                .getIntent(activity)
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

@@ -6,7 +6,7 @@ import com.emikhalets.voteapp.di.module.ActivityBindingModule
 import com.emikhalets.voteapp.di.module.AppModule
 import com.emikhalets.voteapp.di.module.DataModule
 import com.emikhalets.voteapp.di.module.FragmentBindingModule
-import com.emikhalets.voteapp.di.module.ViewModelModule
+import com.emikhalets.voteapp.di.viewmodel.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule

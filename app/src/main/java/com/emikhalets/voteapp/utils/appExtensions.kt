@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
@@ -17,18 +18,12 @@ import com.emikhalets.voteapp.BuildConfig
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.emikhalets.voteapp.view.MainActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 fun initLogger() {
@@ -39,7 +34,13 @@ fun initLogger() {
     })
 }
 
+fun Fragment.activity() = requireActivity() as MainActivity
+
 // Navigation Component
+
+fun navigate(navController: NavController, destination: Int) = navController.navigate(destination)
+
+fun popBackStack(navController: NavController) = navController.popBackStack()
 
 fun Fragment.navigate(
         destination: Int,
@@ -54,21 +55,9 @@ fun Fragment.navigate(
 
 fun Fragment.popBackStack(destination: Int? = null, inclusive: Boolean = false) {
     lifecycleScope.launchWhenResumed {
-        if (destination == null) ACTIVITY.navController.popBackStack()
-        else ACTIVITY.navController.popBackStack(destination, inclusive)
+        if (destination == null) findNavController().popBackStack()
+        else findNavController().popBackStack(destination, inclusive)
     }
-}
-
-fun navigateOld(
-        action: Int,
-        args: Bundle? = null,
-        options: NavOptions? = null,
-        extras: Navigator.Extras? = null,
-) = ACTIVITY.navController.navigate(action, args, options, extras)
-
-fun popBackStackOld(destination: Int? = null, inclusive: Boolean = false) {
-    if (destination == null) ACTIVITY.navController.popBackStack()
-    else ACTIVITY.navController.popBackStack(destination, inclusive)
 }
 
 // Toasts
@@ -77,22 +66,18 @@ fun Fragment.toast(stringRes: Int) = Toast.makeText(requireContext(), stringRes,
 
 fun Fragment.toastLong(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
-fun toast(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_SHORT).show()
-
-fun toastLong(message: String) = Toast.makeText(ACTIVITY, message, Toast.LENGTH_LONG).show()
-
-fun toastException(exception: Exception?) {
-    when (exception) {
-        is FirebaseAuthInvalidUserException -> toast(ACTIVITY.getString(R.string.app_toast_login_not_exist))
-        is FirebaseAuthRecentLoginRequiredException -> toastLong(ACTIVITY.getString(R.string.app_toast_need_relog_change_pass))
-        is FirebaseAuthInvalidCredentialsException -> toast(ACTIVITY.getString(R.string.app_toast_invalid_pass))
-        is FirebaseAuthUserCollisionException -> toast(ACTIVITY.getString(R.string.app_toast_login_busy))
-        else -> {
-            exception?.printStackTrace()
-            Toast.makeText(ACTIVITY, exception?.message.toString(), Toast.LENGTH_LONG).show()
-        }
-    }
-}
+//fun toastException(exception: Exception?) {
+//    when (exception) {
+//        is FirebaseAuthInvalidUserException -> toast(ACTIVITY.getString(R.string.app_toast_login_not_exist))
+//        is FirebaseAuthRecentLoginRequiredException -> toastLong(ACTIVITY.getString(R.string.app_toast_need_relog_change_pass))
+//        is FirebaseAuthInvalidCredentialsException -> toast(ACTIVITY.getString(R.string.app_toast_invalid_pass))
+//        is FirebaseAuthUserCollisionException -> toast(ACTIVITY.getString(R.string.app_toast_login_busy))
+//        else -> {
+//            exception?.printStackTrace()
+//            Toast.makeText(ACTIVITY, exception?.message.toString(), Toast.LENGTH_LONG).show()
+//        }
+//    }
+//}
 
 // Image Loaders
 
@@ -106,14 +91,14 @@ fun ImageView.loadImage(
 
 // View extensions
 
-fun hideKeyboard() {
-    val imm = ACTIVITY.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(ACTIVITY.window.decorView.windowToken, 0)
+fun Fragment.hideKeyboard() {
+    val imm = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(requireActivity().window.decorView.windowToken, 0)
 }
 
 // TODO Is this approach right? (moved the recyclerView scroll into extensions)
-fun RecyclerView.scrollToTop() {
-    CoroutineScope(Dispatchers.Main).launch {
+fun RecyclerView.scrollToTop(fragment: Fragment) {
+    fragment.lifecycleScope.launchWhenResumed {
         delay(100)
         this@scrollToTop.smoothScrollToPosition(0)
     }
@@ -134,3 +119,5 @@ fun DataSnapshot.toImage(): Image = this.getValue(Image::class.java) ?: Image()
 fun userId(): String = Firebase.auth.currentUser?.uid.toString()
 
 fun username(): String = Firebase.auth.currentUser?.displayName.toString()
+
+fun userPhoto(): String = Firebase.auth.currentUser?.photoUrl.toString()

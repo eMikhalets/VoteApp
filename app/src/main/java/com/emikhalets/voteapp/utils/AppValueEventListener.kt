@@ -5,21 +5,33 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 
+class AppValueEventListener(
+        private val dataChange: (snapshot: DataSnapshot) -> Unit,
+) : ValueEventListener {
+
+    override fun onDataChange(snapshot: DataSnapshot) {
+        dataChange(snapshot)
+    }
+
+    override fun onCancelled(error: DatabaseError) {
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////
 // Value Event Listener Methods
 ///////////////////////////////////////////////////////////////////////////
 
 inline fun Query.dataChange(
-        crossinline action: (snapshot: DataSnapshot) -> Unit
+        crossinline action: (snapshot: DataSnapshot) -> Unit,
 ) = addValueEventListener(onDataChange = action)
 
 inline fun Query.cancelled(
-        crossinline action: (error: DatabaseError) -> Unit
+        crossinline action: (error: DatabaseError) -> Unit,
 ) = addValueEventListener(onCancelled = action)
 
 inline fun Query.addValueEventListener(
         crossinline onDataChange: (snapshot: DataSnapshot) -> Unit = { _ -> },
-        crossinline onCancelled: (error: DatabaseError) -> Unit = { _ -> }
+        crossinline onCancelled: (error: DatabaseError) -> Unit = { _ -> },
 ): ValueEventListener {
     val eventListener = object : ValueEventListener {
 
@@ -40,16 +52,16 @@ inline fun Query.addValueEventListener(
 ///////////////////////////////////////////////////////////////////////////
 
 inline fun Query.singleDataChange(
-        crossinline action: (snapshot: DataSnapshot) -> Unit
+        crossinline action: (snapshot: DataSnapshot) -> Unit,
 ) = addSingleValueEventListener(onSingleDataChange = action)
 
 inline fun Query.singleCancelled(
-        crossinline action: (error: DatabaseError) -> Unit
+        crossinline action: (error: DatabaseError) -> Unit,
 ) = addSingleValueEventListener(onSingleCancelled = action)
 
 inline fun Query.addSingleValueEventListener(
         crossinline onSingleDataChange: (snapshot: DataSnapshot) -> Unit = { _ -> },
-        crossinline onSingleCancelled: (error: DatabaseError) -> Unit = { _ -> }
+        crossinline onSingleCancelled: (error: DatabaseError) -> Unit = { _ -> },
 ): ValueEventListener {
     val eventListener = object : ValueEventListener {
 

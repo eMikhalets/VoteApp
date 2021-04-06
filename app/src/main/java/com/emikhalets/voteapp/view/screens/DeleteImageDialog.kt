@@ -4,12 +4,10 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
 import com.emikhalets.voteapp.databinding.DialogDeleteImageBinding
 import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 
 // TODO: With viewBinding delegate throws exception:
 //  IllegalStateException: Fragment DeleteImageDialog did not return a View from onCreateView()
@@ -21,11 +19,11 @@ class DeleteImageDialog : DialogFragment() {
     lateinit var viewModel: UserImagesViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
+        viewModel = injectViewModel(activity().viewModelFactory)
         _binding = DialogDeleteImageBinding.inflate(LayoutInflater.from(context))
         binding.btnYes.setOnClickListener { onYesClick() }
         binding.btnNo.setOnClickListener { dismiss() }
-        return MaterialAlertDialogBuilder(ACTIVITY)
+        return MaterialAlertDialogBuilder(requireContext())
                 .setView(binding.root)
                 .create()
     }
@@ -39,10 +37,9 @@ class DeleteImageDialog : DialogFragment() {
         arguments?.let {
             val name = it.getString(ARGS_NAME) ?: ""
             val pos = it.getInt(ARGS_POS)
-            viewModel.sendDeleteImageRequest(name, pos) {
-                lifecycleScope.launch {
-                    popBackStackOld()
-                }
+            viewModel.sendDeleteImageRequest(name, pos) { success, error ->
+                if (success) popBackStack()
+                else toastLong(error)
             }
         }
     }

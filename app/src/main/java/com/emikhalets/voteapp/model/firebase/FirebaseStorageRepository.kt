@@ -1,7 +1,6 @@
 package com.emikhalets.voteapp.model.firebase
 
 import android.net.Uri
-import com.emikhalets.voteapp.utils.USER
 import com.emikhalets.voteapp.utils.userId
 import com.google.firebase.storage.StorageReference
 import timber.log.Timber
@@ -13,11 +12,11 @@ class FirebaseStorageRepository @Inject constructor(
 ) {
 
     /**
-     * Updates the rating of the user whose image was voted for.
+     * Saves user image in storage and returns image url in callback.
      * Called [complete] when the server responds to a request.
      * If request is successful, callback returns a true, image name, url and an empty error message.
      * Else, callback returns false and a exception message
-     * @param name Image name
+     * @param uri Image uri
      * @param complete Callback
      */
     fun saveImage(uri: Uri, complete: (success: Boolean, name: String, url: String, error: String) -> Unit) {
@@ -39,16 +38,16 @@ class FirebaseStorageRepository @Inject constructor(
     }
 
     /**
-     * Updates the rating of the user whose image was voted for.
+     * Saves user profile photo in storage and returns photo url in callback.
      * Called [complete] when the server responds to a request.
      * If request is successful, callback returns a true, photo url and an empty error message.
      * Else, callback returns false, empty photo url and a exception message
-     * @param name Image name
+     * @param uri Image uri
      * @param complete Callback
      */
     fun saveUserPhoto(uri: Uri, complete: (success: Boolean, url: String, error: String) -> Unit) {
         Timber.d("Storage request: saveUserPhoto: STARTED")
-        refStorage.child(FOLDER_PROFILES).child(USER.id).putFile(uri)
+        refStorage.child(FOLDER_PROFILES).child(userId()).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveUserPhoto: SUCCESS")
                     loadUserPhotoUrl { isSuccess, url, error ->

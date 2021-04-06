@@ -5,8 +5,13 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.utils.*
+import com.emikhalets.voteapp.model.entities.User
+import com.emikhalets.voteapp.utils.loadImage
+import com.emikhalets.voteapp.utils.navigate
+import com.emikhalets.voteapp.utils.popBackStack
+import com.emikhalets.voteapp.utils.username
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -17,7 +22,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 
-class AppDrawer {
+class AppDrawer(
+        private val activity: MainActivity,
+        private val navController: NavController,
+) {
 
     private lateinit var drawer: Drawer
     private lateinit var header: AccountHeader
@@ -27,11 +35,11 @@ class AppDrawer {
     private val itemClickListener = object : Drawer.OnDrawerItemClickListener {
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
             when (position) {
-                1 -> navigateOld(R.id.action_home_to_profile)
-                2 -> navigateOld(R.id.action_home_to_userImages)
-                3 -> navigateOld(R.id.action_home_to_voting)
-                4 -> navigateOld(R.id.action_home_to_topImages)
-                5 -> navigateOld(R.id.action_home_to_topUsers)
+                1 -> navigate(navController, R.id.action_home_to_profile)
+                2 -> navigate(navController, R.id.action_home_to_userImages)
+                3 -> navigate(navController, R.id.action_home_to_voting)
+                4 -> navigate(navController, R.id.action_home_to_topImages)
+                5 -> navigate(navController, R.id.action_home_to_topUsers)
                 else -> {
                 }
             }
@@ -47,30 +55,30 @@ class AppDrawer {
     }
 
     fun enableDrawer() {
-        ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = true
         layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-        ACTIVITY.toolbar.setNavigationOnClickListener { drawer.openDrawer() }
+        activity.toolbar.setNavigationOnClickListener { drawer.openDrawer() }
     }
 
     fun hideDrawer() {
-        ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
         layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
     fun disableDrawer() {
         drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
-        ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        ACTIVITY.toolbar.setNavigationOnClickListener { popBackStackOld() }
+        activity.toolbar.setNavigationOnClickListener { popBackStack(navController) }
     }
 
-    fun updateHeader() {
-        profile.withName(USER.username)
-                .withEmail(ACTIVITY.getString(R.string.drawer_rating, USER.rating))
+    fun updateHeader(user: User) {
+        profile.withName(user.username)
+                .withEmail(activity.getString(R.string.drawer_rating, user.rating))
                 .withIdentifier(0)
-        if (USER.photo.isNotEmpty() && USER.photo != "null") profile.withIcon(USER.photo)
+        if (user.photo.isNotEmpty() && user.photo != "null") profile.withIcon(user.photo)
         else profile.withIcon(R.drawable.placeholder_user)
         header.updateProfile(profile)
     }
@@ -87,12 +95,12 @@ class AppDrawer {
 
     private fun createHeader() {
         profile = ProfileDrawerItem()
-                .withName(USER.username)
+                .withName(username())
                 .withIcon(R.drawable.placeholder_user)
-                .withEmail(ACTIVITY.getString(R.string.drawer_rating, USER.rating))
+                .withEmail(activity.getString(R.string.drawer_rating, 0))
                 .withIdentifier(0)
         header = AccountHeaderBuilder()
-                .withActivity(ACTIVITY)
+                .withActivity(activity)
                 .withSelectionListEnabled(false)
                 .withHeaderBackground(R.drawable.background_drawer_header)
                 .addProfiles(profile)
@@ -101,8 +109,8 @@ class AppDrawer {
 
     private fun createDrawer() {
         drawer = DrawerBuilder()
-                .withActivity(ACTIVITY)
-                .withToolbar(ACTIVITY.toolbar)
+                .withActivity(activity)
+                .withToolbar(activity.toolbar)
                 .withActionBarDrawerToggle(true)
                 .withAccountHeader(header)
                 .withSelectedItem(-1)

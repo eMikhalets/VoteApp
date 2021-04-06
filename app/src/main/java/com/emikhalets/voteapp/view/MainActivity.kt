@@ -9,22 +9,17 @@ import androidx.navigation.fragment.NavHostFragment
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ActivityMainBinding
 import com.emikhalets.voteapp.di.viewmodel.ViewModelFactory
-import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.ACTIVITY
 import com.emikhalets.voteapp.utils.CAMERA
-import com.emikhalets.voteapp.utils.USER
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    lateinit var navController: NavController
     lateinit var drawer: AppDrawer
     lateinit var toolbar: Toolbar
 
@@ -35,15 +30,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AndroidInjection.inject(this)
-        if (savedInstanceState == null) USER = User(id = Firebase.auth.currentUser?.uid.toString())
-        ACTIVITY = this
         initNavigation()
         initViews()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        drawer.updateHeader()
         permissionResult.launch(CAMERA)
     }
 
@@ -62,9 +50,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        drawer = AppDrawer()
         toolbar = binding.toolbar
         setSupportActionBar(toolbar)
+        drawer = AppDrawer(this, navController)
         drawer.create()
     }
 }

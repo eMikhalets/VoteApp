@@ -19,26 +19,21 @@ import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private val binding: FragmentUserImagesBinding by viewBinding()
+    private lateinit var imagesAdapter: ImagesAdapter
     lateinit var viewModel: UserImagesViewModel
 
-    private val imagesAdapter = ImagesAdapter(
-            false,
-            { url, v -> onImageClick(url, v) },
-            { name, pos -> onDeleteImageClick(name, pos) }
-    )
-
-    private val takeImageResult = registerForActivityResult(TakeImageContract()) {
+    private val takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
         onTakeImageResult(it)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
+        viewModel = injectViewModel(activity().viewModelFactory)
+        activity().title = getString(R.string.images_title)
         setHasOptionsMenu(true)
-        ACTIVITY.title = getString(R.string.images_title)
         initRecyclerView()
         initListeners()
-        onViewLoaded()
+        if (savedInstanceState == null) onViewLoaded()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -55,6 +50,11 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     }
 
     private fun initRecyclerView() {
+        imagesAdapter = ImagesAdapter(
+                false,
+                { url, v -> onImageClick(url, v) },
+                { name, pos -> onDeleteImageClick(name, pos) }
+        )
         binding.listImages.apply {
             setHasFixedSize(true)
             isNestedScrollingEnabled = false
@@ -67,9 +67,10 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     //            positionViewHolder (positions of holders not updated)
     private fun initListeners() {
         viewModel.images.observe(viewLifecycleOwner) {
+            if (imagesAdapter.currentList.isEmpty()) imagesAdapter.submitList(null)
             imagesAdapter.submitList(it)
             imagesAdapter.notifyDataSetChanged()
-            binding.listImages.scrollToTop()
+            binding.listImages.scrollToTop(this)
         }
     }
 
@@ -88,26 +89,24 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     }
 
     private fun onTakeImageClick(): Boolean {
-        takeImageResult.launch(500)
+        takeImageResult.launch(1000)
         return true
     }
 
     private fun onTakeImageResult(uri: Uri?) {
-        viewModel.sendSaveImageRequest(uri) { images ->
-            if (imagesAdapter.currentList.isEmpty()) imagesAdapter.submitList(null)
-            imagesAdapter.submitList(images)
-//            binding.listImages.scrollToTop()
+        viewModel.sendSaveImageRequest(uri) { success, error ->
+            if (!success) toastLong(error)
         }
     }
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
-        navigateOld(R.id.action_userImages_to_image, args)
+        navigate(R.id.action_userImages_to_image, args)
     }
 
     private fun onDeleteImageClick(name: String, pos: Int): Boolean {
         val args = bundleOf(ARGS_NAME to name, ARGS_POS to pos)
-        navigateOld(R.id.action_userImages_to_deleteImage, args)
+        navigate(R.id.action_userImages_to_deleteImage, args)
         return true
     }
 }

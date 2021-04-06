@@ -25,13 +25,11 @@ class VotingViewModel @Inject constructor(
     private var selectedName = ""
 
     fun sendPrepareVotingRequest(onComplete: () -> Unit) {
-        if (images.isEmpty()) {
-            viewModelScope.launch {
-                databaseRepository.loadAllImages { list ->
-                    images = list
-                    setNextRandomImages()
-                    onComplete()
-                }
+        viewModelScope.launch {
+            databaseRepository.loadAllImages { list ->
+                images = list
+                setNextRandomImages()
+                onComplete()
             }
         }
     }
@@ -43,16 +41,20 @@ class VotingViewModel @Inject constructor(
         }
     }
 
-    fun sendVoteRequest(onComplete: () -> Unit) {
+    fun sendVoteRequest(onComplete: (success: Boolean, error: String) -> Unit) {
         if (selectedName.isNotEmpty()) {
             viewModelScope.launch {
-                databaseRepository.updateImageRating(selectedName) {
-                    selectedName = ""
-                    setNextRandomImages()
-                    onComplete()
+                databaseRepository.updateImageRating(selectedName) { isSuccess, error ->
+                    if (isSuccess) {
+                        selectedName = ""
+                        setNextRandomImages()
+                        onComplete(true, "")
+                    } else {
+                        onComplete(false, error)
+                    }
                 }
             }
-        } else onComplete()
+        } else onComplete(false, "Selected image name is empty")
     }
 
     private fun setNextRandomImages() {

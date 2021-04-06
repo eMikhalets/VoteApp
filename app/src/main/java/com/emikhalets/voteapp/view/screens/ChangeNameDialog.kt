@@ -4,16 +4,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogChangeNameBinding
-import com.emikhalets.voteapp.utils.ACTIVITY
-import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.popBackStackOld
-import com.emikhalets.voteapp.utils.toast
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.viewmodel.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 
 // TODO: With viewBinding delegate throws exception:
 //  IllegalStateException: Fragment ChangeNameDialog did not return a View from onCreateView()
@@ -25,10 +20,10 @@ class ChangeNameDialog : DialogFragment() {
     lateinit var viewModel: ProfileViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
+        viewModel = injectViewModel(activity().viewModelFactory)
         _binding = DialogChangeNameBinding.inflate(LayoutInflater.from(context))
         binding.btnApply.setOnClickListener { onApplyClick() }
-        return MaterialAlertDialogBuilder(ACTIVITY)
+        return MaterialAlertDialogBuilder(requireContext())
                 .setView(binding.root)
                 .create()
     }
@@ -40,11 +35,13 @@ class ChangeNameDialog : DialogFragment() {
 
     private fun onApplyClick() {
         val name = binding.inputName.text.toString()
-        if (name.isNotEmpty()) viewModel.sendUpdateUsernameRequest(name) {
-            lifecycleScope.launch {
-                popBackStackOld()
+        if (name.isNotEmpty()) {
+            viewModel.sendUpdateUsernameRequest(name) { isSuccess, error ->
+                if (isSuccess) popBackStack()
+                else toastLong(error)
             }
+        } else {
+            toast(R.string.app_toast_fill_fields)
         }
-        else toast(getString(R.string.app_toast_fill_fields))
     }
 }

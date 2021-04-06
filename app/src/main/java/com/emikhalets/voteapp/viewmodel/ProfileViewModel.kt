@@ -9,7 +9,10 @@ import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
-import com.emikhalets.voteapp.utils.USER
+import com.emikhalets.voteapp.utils.AppValueEventListener
+import com.emikhalets.voteapp.utils.toUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +25,24 @@ class ProfileViewModel @Inject constructor(
     private val _user = MutableLiveData<User>()
     val user get():LiveData<User> = _user
 
+    private lateinit var userReference: DatabaseReference
+    private lateinit var userDataListener: ValueEventListener
+
+    override fun onCleared() {
+        super.onCleared()
+        userReference.removeEventListener(userDataListener)
+    }
+
+    fun sendLoadUserDataRequest() {
+        if (_user.value == null || _user.value?.id == "") {
+            viewModelScope.launch {
+                userReference = databaseRepository.listenUserDataChanges()
+                userDataListener = AppValueEventListener { _user.postValue(it.toUser()) }
+                userReference.addValueEventListener(userDataListener)
+            }
+        }
+    }
+
     fun sendLogOutRequest(onComplete: () -> Unit) {
         viewModelScope.launch {
             authRepository.logOut {
@@ -31,44 +52,52 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun sendLoadUserDataRequest(onFailure: () -> Unit) {
-        if (_user.value == null || _user.value?.id == "") {
-            viewModelScope.launch {
-                databaseRepository.loadUserData { user, _ ->
-                    if (user != null) _user.postValue(user)
-                    else onFailure()
-                }
-            }
-        }
-    }
-
-    fun sendUpdateUserPhotoRequest(uri: Uri?) {
+    fun sendUpdateUserPhotoRequest(uri: Uri?, onComplete: (success: Boolean, error: String) -> Unit) {
         uri?.let {
             viewModelScope.launch {
-                storageRepository.saveUserPhoto(it) { url ->
-                    databaseRepository.updateUserPhoto(url) {
-                        val newUser = USER
-                        _user.postValue(newUser)
+                storageRepository.saveUserPhoto(it) { isStorageSuccess, url, storageError ->
+                    if (isStorageSuccess) {
+                        authRepository.updateUserPhoto(url) { isAuthSuccess, authError ->
+                            if (isAuthSuccess) {
+                                databaseRepository.updateUserPhoto(url) { isSuccess: Boolean, error ->
+                                    if (isSuccess) onComplete(true, "")
+                                    else onComplete(false, error)
+                                }
+                            } else {
+                                onComplete(false, authError)
+                            }
+                        }
+                    } else {
+                        onComplete(false, storageError)
                     }
                 }
             }
         }
     }
 
-    fun sendUpdatePassRequest(pass: String, onSuccess: () -> Unit) {
+    fun sendUpdatePassRequest(pass: String, onComplete: (success: Boolean, error: String) -> Unit) {
         viewModelScope.launch {
-            authRepository.updateUserPassword(pass) {
-                onSuccess()
+            authRepository.updateUserPassword(pass) { isSuccess, error ->
+                if (isSuccess) {
+                    onComplete(true, "")
+                } else {
+                    onComplete(false, error)
+                }
             }
         }
     }
 
-    fun sendUpdateUsernameRequest(name: String, onSuccess: () -> Unit) {
+    fun sendUpdateUsernameRequest(name: String, onComplete: (success: Boolean, error: String) -> Unit) {
         viewModelScope.launch {
-            databaseRepository.updateUsername(name) {
-                val newUser = USER
-                _user.postValue(newUser)
-                onSuccess()
+            authRepository.updateUsername(name) { isAuthSuccess, authError ->
+                if (isAuthSuccess) {
+                    databaseRepository.updateUsername(name) { isSuccess, error ->
+                        if (isSuccess) onComplete(true, "")
+                        else onComplete(false, error)
+                    }
+                } else {
+                    onComplete(false, authError)
+                }
             }
         }
     }

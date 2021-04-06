@@ -6,9 +6,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopUsersBinding
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.ACTIVITY
+import com.emikhalets.voteapp.utils.activity
 import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.toast
+import com.emikhalets.voteapp.utils.toastLong
 import com.emikhalets.voteapp.view.adapters.UsersAdapter
 import com.emikhalets.voteapp.view.base.WithDrawerFragment
 import com.emikhalets.voteapp.viewmodel.TopUsersViewModel
@@ -16,24 +16,20 @@ import com.emikhalets.voteapp.viewmodel.TopUsersViewModel
 class TopUsersFragment : WithDrawerFragment(R.layout.fragment_top_users) {
 
     private val binding: FragmentTopUsersBinding by viewBinding()
+    private lateinit var usersAdapter: UsersAdapter
     lateinit var viewModel: TopUsersViewModel
-
-    private val usersAdapter = UsersAdapter { onUserClick(it) }
-
-    private fun onUserClick(user: User) {
-        toast("clicked on ${user.username}")
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(ACTIVITY.viewModelFactory)
-        ACTIVITY.title = getString(R.string.top_users_title)
+        viewModel = injectViewModel(activity().viewModelFactory)
+        activity().title = getString(R.string.top_users_title)
         initRecyclerView()
         initListeners()
-        onViewLoaded()
+        if (savedInstanceState == null) onViewLoaded()
     }
 
     private fun initRecyclerView() {
+        usersAdapter = UsersAdapter { onUserClick(it) }
         binding.apply {
             listUsers.setHasFixedSize(true)
             listUsers.isNestedScrollingEnabled = false
@@ -49,5 +45,9 @@ class TopUsersFragment : WithDrawerFragment(R.layout.fragment_top_users) {
 
     private fun onViewLoaded() {
         viewModel.sendLoadTopUsersRequest()
+    }
+
+    private fun onUserClick(user: User) {
+        toastLong("clicked on ${user.username}")
     }
 }
