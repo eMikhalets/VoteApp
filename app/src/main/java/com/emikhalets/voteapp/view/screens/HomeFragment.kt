@@ -27,6 +27,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         if (savedInstanceState == null) onViewLoaded()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeUserListener()
+    }
+
     private fun initRecyclerView() {
         imagesAdapter = ImagesAdapter(true, { url, view -> onImageClick(url, view) })
         binding.apply {
@@ -36,20 +41,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initListeners() {
-        viewModel.images.observe(viewLifecycleOwner) {
-            imagesAdapter.submitList(it)
-            binding.apply {
-                layoutRefresh.isRefreshing = false
-                progress.visibility = View.GONE
-                listImages.visibility = View.VISIBLE
-                listImages.scrollToTop(this@HomeFragment)
+        viewModel.apply {
+            user.observe(viewLifecycleOwner) {
+                activity().drawer.updateHeader(it)
+            }
+            images.observe(viewLifecycleOwner) {
+                imagesAdapter.submitList(it)
+                binding.apply {
+                    layoutRefresh.isRefreshing = false
+                    progress.visibility = android.view.View.GONE
+                    listImages.visibility = android.view.View.VISIBLE
+                    listImages.scrollToTop(this@HomeFragment)
+                }
             }
         }
         binding.root.setOnRefreshListener { onRefreshInvoke() }
     }
 
     private fun onViewLoaded() {
-        viewModel.sendLatestImagesRequest()
+        viewModel.apply {
+            sendLatestImagesRequest()
+            sendLoadUserDataRequest()
+        }
     }
 
     private fun onRefreshInvoke() {

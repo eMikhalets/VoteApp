@@ -91,9 +91,9 @@ class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
         isVoteEnabled = false
         binding.btnVote.isEnabled = false
         viewModel.sendVoteRequest { isSuccess, error ->
+            isVoteEnabled = true
+            binding.btnVote.isEnabled = true
             if (isSuccess) {
-                isVoteEnabled = true
-                binding.btnVote.isEnabled = true
                 isFirstSelected = false
                 isSecondSelected = false
                 binding.imageVote1.setBackgroundResource(0)

@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.os.bundleOf
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
@@ -19,12 +20,9 @@ import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
 
     private val binding: FragmentUserImagesBinding by viewBinding()
+    private lateinit var takeImageResult: ActivityResultLauncher<Int>
     private lateinit var imagesAdapter: ImagesAdapter
     lateinit var viewModel: UserImagesViewModel
-
-    private val takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
-        onTakeImageResult(it)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,6 +73,9 @@ class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
     }
 
     private fun onViewLoaded() {
+        takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
+            onTakeImageResult(it)
+        }
         viewModel.sendLoadUserImagesRequest()
     }
 
