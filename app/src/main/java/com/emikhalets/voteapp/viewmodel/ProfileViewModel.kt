@@ -28,8 +28,7 @@ class ProfileViewModel @Inject constructor(
     private lateinit var userReference: DatabaseReference
     private lateinit var userDataListener: ValueEventListener
 
-    override fun onCleared() {
-        super.onCleared()
+    fun removeUserListener() {
         userReference.removeEventListener(userDataListener)
     }
 

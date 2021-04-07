@@ -5,7 +5,6 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.NavController
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.loadImage
@@ -22,10 +21,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 
-class AppDrawer(
-        private val activity: MainActivity,
-        private val navController: NavController,
-) {
+class AppDrawer(private val activity: MainActivity) {
 
     private lateinit var drawer: Drawer
     private lateinit var header: AccountHeader
@@ -35,11 +31,11 @@ class AppDrawer(
     private val itemClickListener = object : Drawer.OnDrawerItemClickListener {
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
             when (position) {
-                1 -> navigate(navController, R.id.action_home_to_profile)
-                2 -> navigate(navController, R.id.action_home_to_userImages)
-                3 -> navigate(navController, R.id.action_home_to_voting)
-                4 -> navigate(navController, R.id.action_home_to_topImages)
-                5 -> navigate(navController, R.id.action_home_to_topUsers)
+                1 -> navigate(activity, R.id.action_home_to_profile)
+                2 -> navigate(activity, R.id.action_home_to_userImages)
+                3 -> navigate(activity, R.id.action_home_to_voting)
+                4 -> navigate(activity, R.id.action_home_to_topImages)
+                5 -> navigate(activity, R.id.action_home_to_topUsers)
                 else -> {
                 }
             }
@@ -71,7 +67,7 @@ class AppDrawer(
         drawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        activity.toolbar.setNavigationOnClickListener { popBackStack(navController) }
+        activity.toolbar.setNavigationOnClickListener { popBackStack(activity) }
     }
 
     fun updateHeader(user: User) {

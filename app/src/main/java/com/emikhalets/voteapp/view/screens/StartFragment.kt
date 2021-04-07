@@ -30,8 +30,8 @@ class StartFragment : HideDrawerFragment(R.layout.fragment_start) {
         if (isExist) {
             navigate(R.id.action_start_to_home)
         } else {
-            navigate(R.id.action_start_to_authLogin)
             toastLong(error)
+            navigate(R.id.action_start_to_authLogin)
         }
     }
 }

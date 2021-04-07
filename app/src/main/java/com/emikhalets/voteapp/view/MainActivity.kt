@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         toolbar = binding.toolbar
         setSupportActionBar(toolbar)
-        drawer = AppDrawer(this, navController)
+        drawer = AppDrawer(this)
         drawer.create()
     }
 }

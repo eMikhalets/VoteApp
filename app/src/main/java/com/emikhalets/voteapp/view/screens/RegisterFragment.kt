@@ -44,7 +44,7 @@ class RegisterFragment : HideDrawerFragment(R.layout.fragment_auth_register) {
 
     private fun onRequestComplete(isSuccess: Boolean, error: String) {
         binding.progressBar.visibility = View.GONE
-        if (isSuccess) navigate(R.id.homeFragment)
+        if (isSuccess) navigate(R.id.action_authRegister_to_home)
         else toastLong(error)
     }
 }

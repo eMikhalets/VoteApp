@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -34,13 +35,17 @@ fun initLogger() {
     })
 }
 
-fun Fragment.activity() = requireActivity() as MainActivity
+fun Fragment.activity() = activity as MainActivity
 
 // Navigation Component
 
-fun navigate(navController: NavController, destination: Int) = navController.navigate(destination)
+fun navigate(activity: AppCompatActivity, destination: Int) {
+    Navigation.findNavController(activity, R.id.fragment_container).navigate(destination)
+}
 
-fun popBackStack(navController: NavController) = navController.popBackStack()
+fun popBackStack(activity: AppCompatActivity) {
+    Navigation.findNavController(activity, R.id.fragment_container).popBackStack()
+}
 
 fun Fragment.navigate(
         destination: Int,

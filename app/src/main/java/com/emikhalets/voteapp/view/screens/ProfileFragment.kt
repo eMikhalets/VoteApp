@@ -4,7 +4,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
@@ -18,20 +20,29 @@ import com.emikhalets.voteapp.viewmodel.ProfileViewModel
 class ProfileFragment : WithDrawerFragment(R.layout.fragment_profile) {
 
     private val binding: FragmentProfileBinding by viewBinding()
-    lateinit var viewModel: ProfileViewModel
+    private val viewModel by viewModels<ProfileViewModel>({ activity() }) { activity().viewModelFactory }
 
-    private val takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
-        onTakeImageResult(it)
+    private lateinit var takeImageResult: ActivityResultLauncher<Int>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
+            onTakeImageResult(it)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         sharedElementEnterTransition =
                 TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         activity().title = getString(R.string.profile_title)
         initListeners()
         if (savedInstanceState == null) onViewLoaded()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeUserListener()
     }
 
     private fun initListeners() {

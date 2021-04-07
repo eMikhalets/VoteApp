@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogChangeNameBinding
 import com.emikhalets.voteapp.utils.*
@@ -17,10 +18,9 @@ class ChangeNameDialog : DialogFragment() {
 
     private var _binding: DialogChangeNameBinding? = null
     private val binding get() = _binding!!
-    lateinit var viewModel: ProfileViewModel
+    private val viewModel by viewModels<ProfileViewModel>({ activity() }) { activity().viewModelFactory }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewModel = injectViewModel(activity().viewModelFactory)
         _binding = DialogChangeNameBinding.inflate(LayoutInflater.from(context))
         binding.btnApply.setOnClickListener { onApplyClick() }
         return MaterialAlertDialogBuilder(requireContext())
