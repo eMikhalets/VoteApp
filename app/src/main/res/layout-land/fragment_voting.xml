@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppScreen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_vote_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/placeholder_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_vote"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/background_selected_image"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/btn_vote"
+        android:layout_width="@dimen/voting_btn_landscape_width"
+        android:layout_height="0dp"
+        android:enabled="false"
+        android:text="@string/voting_btn_vote"
+        app:layout_constraintBottom_toBottomOf="@+id/image_vote_1"
+        app:layout_constraintEnd_toStartOf="@+id/image_vote_2"
+        app:layout_constraintStart_toEndOf="@+id/image_vote_1"
+        app:layout_constraintTop_toTopOf="@+id/image_vote_1" />
+
+    <ImageView
+        android:id="@+id/image_vote_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/placeholder_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_vote"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

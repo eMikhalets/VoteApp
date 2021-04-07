@@ -6,12 +6,20 @@
     <dimen name="app_margin">16dp</dimen>
     <dimen name="app_margin_small">8dp</dimen>
     <dimen name="app_margin_large">32dp</dimen>
+    <dimen name="app_margin_very_large">150dp</dimen>
     <dimen name="app_corner_radius">8dp</dimen>
     <dimen name="app_border_width">4dp</dimen>
     <dimen name="app_border_width_small">2dp</dimen>
     <dimen name="app_border_padding">2dp</dimen>
     <dimen name="app_card_elevation">8dp</dimen>
+    <dimen name="app_card_user_width">300dp</dimen>
 
     <!-- Top Users Dimensions -->
     <dimen name="item_user_photo_size">100dp</dimen>
+
+    <!-- Dialogs Dimensions -->
+    <dimen name="profile_change_name_btn_width">100dp</dimen>
+
+    <!-- Voting Dimensions -->
+    <dimen name="voting_btn_landscape_width">50dp</dimen>
 </resources>

@@ -51,6 +51,7 @@
         <item name="android:layout_marginEnd">@dimen/app_margin</item>
         <item name="android:background">@drawable/style_edittext</item>
         <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
         <item name="android:padding">@dimen/app_padding_mid</item>
     </style>
 
@@ -60,12 +61,6 @@
 
     <style name="AppEditTextPassword" parent="AppEditText">
         <item name="android:inputType">textPassword</item>
-    </style>
-
-    <style name="AppButton">
-        <item name="android:layout_marginStart">@dimen/app_margin</item>
-        <item name="android:layout_marginTop">@dimen/app_margin_large</item>
-        <item name="android:layout_marginEnd">@dimen/app_margin</item>
     </style>
 
     <style name="AppTextImage">
