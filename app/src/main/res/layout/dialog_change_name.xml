@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/text_name"
-        style="@style/AppTextInput"
+        style="@style/AppTextLabelInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/app_margin_small"
@@ -18,7 +18,7 @@
 
     <EditText
         android:id="@+id/input_name"
-        style="@style/AppEditText"
+        style="@style/AppEditTextAuth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""

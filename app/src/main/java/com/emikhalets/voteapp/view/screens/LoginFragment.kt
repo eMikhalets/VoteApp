@@ -2,16 +2,14 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentAuthLoginBinding
 import com.emikhalets.voteapp.utils.*
-import com.emikhalets.voteapp.view.base.HideDrawerFragment
+import com.emikhalets.voteapp.view.base.AuthFragment
 import com.emikhalets.voteapp.viewmodel.LoginViewModel
 
-class LoginFragment : HideDrawerFragment(R.layout.fragment_auth_login) {
+class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBinding::inflate) {
 
-    private val binding: FragmentAuthLoginBinding by viewBinding()
     lateinit var viewModel: LoginViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

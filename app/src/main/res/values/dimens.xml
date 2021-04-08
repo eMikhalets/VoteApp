@@ -3,16 +3,27 @@
     <dimen name="app_padding">16dp</dimen>
     <dimen name="app_padding_mid">12dp</dimen>
     <dimen name="app_padding_small">8dp</dimen>
+
     <dimen name="app_margin">16dp</dimen>
     <dimen name="app_margin_small">8dp</dimen>
     <dimen name="app_margin_large">32dp</dimen>
     <dimen name="app_margin_very_large">150dp</dimen>
+
+    <dimen name="app_text_size">16dp</dimen>
+    <dimen name="app_text_size_small">14dp</dimen>
+    <dimen name="app_text_size_large">32dp</dimen>
+
     <dimen name="app_corner_radius">8dp</dimen>
+
     <dimen name="app_border_width">4dp</dimen>
-    <dimen name="app_border_width_small">2dp</dimen>
+    <dimen name="app_border_width_small">1dp</dimen>
     <dimen name="app_border_padding">2dp</dimen>
+
     <dimen name="app_card_elevation">8dp</dimen>
     <dimen name="app_card_user_width">300dp</dimen>
+
+    <!-- Top Users Dimensions -->
+    <dimen name="app_btn_corner_radius">32dp</dimen>
 
     <!-- Top Users Dimensions -->
     <dimen name="item_user_photo_size">100dp</dimen>

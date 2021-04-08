@@ -35,6 +35,7 @@
     <string name="auth_text_login">Login</string>
     <string name="auth_text_pass">Password</string>
     <string name="auth_text_pass_conf">Confirm password</string>
+    <string name="auth_text_forgot_pass"><u>Forgot password?</u></string>
     <string name="auth_btn_login">Login</string>
     <string name="auth_btn_register">Register</string>
 

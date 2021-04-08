@@ -8,78 +8,82 @@
     </style>
 
     <style name="AppToolbar">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">?attr/backgroundMain</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
     <style name="AppActionMenu" parent="Theme.AppCompat.Light">
-        <item name="background">@color/colorAccent</item>
-        <item name="actionMenuTextColor">?attr/colorOnSecondary</item>
+        <item name="background">?attr/backgroundMain</item>
+        <item name="actionMenuTextColor">?attr/colorText</item>
     </style>
 
-    <style name="AppTextLabel">
+    <!-- Button Styles -->
+
+    <style name="AppButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:background">@drawable/style_button</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:textColor">?attr/colorText</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/app_text_size</item>
+        <item name="android:layout_marginStart">@dimen/app_margin_small</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin_small</item>
+    </style>
+
+    <!-- Text Styles -->
+
+    <style name="AppTextAuthLabel">
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">?attr/colorText</item>
+        <item name="android:textSize">@dimen/app_text_size_large</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginTop">@dimen/app_margin</item>
-        <item name="android:layout_marginStart">@dimen/app_margin</item>
-        <item name="android:layout_marginEnd">@dimen/app_margin</item>
     </style>
 
-    <style name="AppTextInput">
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textSize">16sp</item>
+    <style name="AppTextLabelInput">
+        <item name="android:textColor">?attr/colorText</item>
+        <item name="android:textSize">@dimen/app_text_size_small</item>
         <item name="android:layout_marginStart">@dimen/app_margin</item>
-        <item name="android:layout_marginTop">@dimen/app_margin</item>
+        <item name="android:layout_marginTop">@dimen/app_margin_small</item>
+    </style>
+
+    <style name="AppTextLink">
+        <item name="android:textColor">?attr/colorTextLink</item>
+        <item name="android:textSize">@dimen/app_text_size_small</item>
+        <item name="android:layout_marginTop">@dimen/app_margin_small</item>
     </style>
 
     <style name="AppTextDialog">
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">?attr/colorText</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_marginStart">@dimen/app_margin</item>
         <item name="android:layout_marginTop">@dimen/app_margin</item>
     </style>
 
-    <style name="AppScreen">
-        <item name="android:background">?attr/colorOnPrimary</item>
-    </style>
+    <!-- EditText Styles -->
 
-    <style name="AppEditText">
-        <item name="android:layout_marginStart">@dimen/app_margin</item>
-        <item name="android:layout_marginEnd">@dimen/app_margin</item>
-        <item name="android:background">@drawable/style_edittext</item>
-        <item name="android:inputType">text</item>
+    <style name="AppEditTextAuth">
+        <item name="android:ems">20</item>
         <item name="android:maxLines">1</item>
-        <item name="android:padding">@dimen/app_padding_mid</item>
     </style>
 
-    <style name="AppEditTextEmail" parent="AppEditText">
-        <item name="android:inputType">textEmailAddress</item>
-    </style>
-
-    <style name="AppEditTextPassword" parent="AppEditText">
-        <item name="android:inputType">textPassword</item>
-    </style>
 
     <style name="AppTextImage">
-        <item name="android:background">?attr/colorOnSecondary</item>
+        <item name="android:background">?attr/backgroundMain</item>
         <item name="android:padding">@dimen/app_padding_small</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">?attr/colorText</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTextUserPosition">
-        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textColor">?attr/colorText</item>
         <item name="android:textSize">50sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTextUser">
         <item name="android:padding">@dimen/app_padding_small</item>
-        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textColor">?attr/colorText</item>
         <item name="android:layout_marginStart">@dimen/app_margin</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>

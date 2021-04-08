@@ -35,6 +35,7 @@
     <string name="auth_text_login">Почта</string>
     <string name="auth_text_pass">Пароль</string>
     <string name="auth_text_pass_conf">Подтвердите пароль</string>
+    <string name="auth_text_forgot_pass"><u>Забыли пароль?</u></string>
     <string name="auth_btn_login">Войти</string>
     <string name="auth_btn_register">Регистрация</string>
 

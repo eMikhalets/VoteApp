@@ -2,6 +2,8 @@ package com.emikhalets.voteapp.utils
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
@@ -26,6 +28,8 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.delay
 import timber.log.Timber
+
+typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
 fun initLogger() {
     if (BuildConfig.DEBUG) Timber.plant(object : Timber.DebugTree() {
