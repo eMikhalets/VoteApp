@@ -3,16 +3,12 @@ package com.emikhalets.voteapp.view.screens
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.View
-import by.kirich1409.viewbindingdelegate.viewBinding
-import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentImageBinding
 import com.emikhalets.voteapp.utils.ARGS_PHOTO
 import com.emikhalets.voteapp.utils.loadImage
-import com.emikhalets.voteapp.view.base.WithDrawerFragment
+import com.emikhalets.voteapp.view.base.ContentFragment
 
-class ImageFragment : WithDrawerFragment(R.layout.fragment_image) {
-
-    private val binding: FragmentImageBinding by viewBinding()
+class ImageFragment : ContentFragment<FragmentImageBinding>(FragmentImageBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

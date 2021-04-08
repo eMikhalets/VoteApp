@@ -15,7 +15,6 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = injectViewModel(activity().viewModelFactory)
-        activity().title = getString(R.string.auth_title)
         binding.apply {
             btnLogin.setOnClickListener { onLoginClick() }
             btnRegister.setOnClickListener { onRegisterClick() }

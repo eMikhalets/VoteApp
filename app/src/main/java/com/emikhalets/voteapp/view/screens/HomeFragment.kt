@@ -3,23 +3,25 @@ package com.emikhalets.voteapp.view.screens
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentHomeBinding
 import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
+import com.emikhalets.voteapp.view.base.MainFragment
 import com.emikhalets.voteapp.viewmodel.HomeViewModel
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
-    private val binding: FragmentHomeBinding by viewBinding()
+    private lateinit var viewModel: HomeViewModel
     private lateinit var imagesAdapter: ImagesAdapter
-    lateinit var viewModel: HomeViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(activity().viewModelFactory)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         activity().title = getString(R.string.home_title)
         activity().drawer.enableDrawer()
         initRecyclerView()

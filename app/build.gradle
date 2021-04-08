@@ -62,7 +62,6 @@ dependencies {
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation "com.mikepenz:materialdrawer:$drawer_version"
     implementation "com.mikepenz:materialdrawer-nav:$drawer_version"
-    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.4'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
     // Navigation

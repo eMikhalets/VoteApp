@@ -3,7 +3,6 @@ package com.emikhalets.voteapp.view.screens
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopImagesBinding
 import com.emikhalets.voteapp.utils.ARGS_PHOTO
@@ -11,12 +10,11 @@ import com.emikhalets.voteapp.utils.activity
 import com.emikhalets.voteapp.utils.injectViewModel
 import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
-import com.emikhalets.voteapp.view.base.WithDrawerFragment
+import com.emikhalets.voteapp.view.base.ContentFragment
 import com.emikhalets.voteapp.viewmodel.TopImagesViewModel
 
-class TopImagesFragment : WithDrawerFragment(R.layout.fragment_top_images) {
+class TopImagesFragment : ContentFragment<FragmentTopImagesBinding>(FragmentTopImagesBinding::inflate) {
 
-    private val binding: FragmentTopImagesBinding by viewBinding()
     private lateinit var imagesAdapter: ImagesAdapter
     lateinit var viewModel: TopImagesViewModel
 

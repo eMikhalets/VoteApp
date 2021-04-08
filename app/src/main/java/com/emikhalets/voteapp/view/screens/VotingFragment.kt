@@ -2,16 +2,14 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentVotingBinding
 import com.emikhalets.voteapp.utils.*
-import com.emikhalets.voteapp.view.base.WithDrawerFragment
+import com.emikhalets.voteapp.view.base.ContentFragment
 import com.emikhalets.voteapp.viewmodel.VotingViewModel
 
-class VotingFragment : WithDrawerFragment(R.layout.fragment_voting) {
+class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBinding::inflate) {
 
-    private val binding: FragmentVotingBinding by viewBinding()
     lateinit var viewModel: VotingViewModel
 
     private var isVoteEnabled = false

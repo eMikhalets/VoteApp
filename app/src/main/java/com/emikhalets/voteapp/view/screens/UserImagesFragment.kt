@@ -8,18 +8,16 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.os.bundleOf
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
 import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.TakeImageContract
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
-import com.emikhalets.voteapp.view.base.WithDrawerFragment
+import com.emikhalets.voteapp.view.base.ContentFragment
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 
-class UserImagesFragment : WithDrawerFragment(R.layout.fragment_user_images) {
+class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUserImagesBinding::inflate) {
 
-    private val binding: FragmentUserImagesBinding by viewBinding()
     private lateinit var takeImageResult: ActivityResultLauncher<Int>
     private lateinit var imagesAdapter: ImagesAdapter
     lateinit var viewModel: UserImagesViewModel

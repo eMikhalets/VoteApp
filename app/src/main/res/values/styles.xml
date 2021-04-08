@@ -9,7 +9,7 @@
 
     <style name="AppToolbar">
         <item name="android:background">?attr/backgroundMain</item>
-        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
     </style>
 
     <style name="AppActionMenu" parent="Theme.AppCompat.Light">

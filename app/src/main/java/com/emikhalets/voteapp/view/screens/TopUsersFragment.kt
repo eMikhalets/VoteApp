@@ -2,7 +2,6 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopUsersBinding
 import com.emikhalets.voteapp.model.entities.User
@@ -10,12 +9,11 @@ import com.emikhalets.voteapp.utils.activity
 import com.emikhalets.voteapp.utils.injectViewModel
 import com.emikhalets.voteapp.utils.toastLong
 import com.emikhalets.voteapp.view.adapters.UsersAdapter
-import com.emikhalets.voteapp.view.base.WithDrawerFragment
+import com.emikhalets.voteapp.view.base.ContentFragment
 import com.emikhalets.voteapp.viewmodel.TopUsersViewModel
 
-class TopUsersFragment : WithDrawerFragment(R.layout.fragment_top_users) {
+class TopUsersFragment : ContentFragment<FragmentTopUsersBinding>(FragmentTopUsersBinding::inflate) {
 
-    private val binding: FragmentTopUsersBinding by viewBinding()
     private lateinit var usersAdapter: UsersAdapter
     lateinit var viewModel: TopUsersViewModel
 
