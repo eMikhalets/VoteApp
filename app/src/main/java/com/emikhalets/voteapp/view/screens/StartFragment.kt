@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentStartBinding
-import com.emikhalets.voteapp.utils.activity
 import com.emikhalets.voteapp.utils.injectViewModel
 import com.emikhalets.voteapp.utils.navigate
 import com.emikhalets.voteapp.utils.toastLong
@@ -13,11 +12,15 @@ import com.emikhalets.voteapp.viewmodel.StartViewModel
 
 class StartFragment : AuthFragment<FragmentStartBinding>(FragmentStartBinding::inflate) {
 
-    lateinit var viewModel: StartViewModel
+    private lateinit var viewModel: StartViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(viewModelFactory)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         if (savedInstanceState == null) onViewLoaded()
     }
 

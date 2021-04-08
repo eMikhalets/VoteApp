@@ -15,11 +15,15 @@ import com.emikhalets.voteapp.viewmodel.TopUsersViewModel
 class TopUsersFragment : ContentFragment<FragmentTopUsersBinding>(FragmentTopUsersBinding::inflate) {
 
     private lateinit var usersAdapter: UsersAdapter
-    lateinit var viewModel: TopUsersViewModel
+    private lateinit var viewModel: TopUsersViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(viewModelFactory)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         activity().title = getString(R.string.top_users_title)
         initRecyclerView()
         initListeners()

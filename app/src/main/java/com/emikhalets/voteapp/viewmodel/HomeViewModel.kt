@@ -27,7 +27,8 @@ class HomeViewModel @Inject constructor(
     private lateinit var userReference: DatabaseReference
     private lateinit var userDataListener: ValueEventListener
 
-    fun removeUserListener() {
+    override fun onCleared() {
+        super.onCleared()
         userReference.removeEventListener(userDataListener)
     }
 

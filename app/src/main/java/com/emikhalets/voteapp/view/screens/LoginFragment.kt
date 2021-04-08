@@ -10,11 +10,15 @@ import com.emikhalets.voteapp.viewmodel.LoginViewModel
 
 class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBinding::inflate) {
 
-    lateinit var viewModel: LoginViewModel
+    private lateinit var viewModel: LoginViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(viewModelFactory)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         binding.apply {
             btnLogin.setOnClickListener { onLoginClick() }
             btnRegister.setOnClickListener { onRegisterClick() }

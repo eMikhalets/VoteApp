@@ -1,6 +1,6 @@
 package com.emikhalets.voteapp.di.module
 
-import com.emikhalets.voteapp.di.scopes.ActivityScoped
+import com.emikhalets.voteapp.di.viewmodel.ViewModelModule
 import com.emikhalets.voteapp.view.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -8,7 +8,9 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBindingModule {
 
-    @ActivityScoped
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [
+        FragmentBindingModule::class,
+        ViewModelModule::class
+    ])
     abstract fun provideMainActivity(): MainActivity
 }

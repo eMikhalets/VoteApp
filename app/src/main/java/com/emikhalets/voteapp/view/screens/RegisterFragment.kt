@@ -12,9 +12,13 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
 
     lateinit var viewModel: RegisterViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(viewModelFactory)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         binding.btnRegister.setOnClickListener { onRegisterClick() }
     }
 

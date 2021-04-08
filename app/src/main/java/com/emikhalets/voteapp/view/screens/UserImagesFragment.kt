@@ -20,11 +20,15 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
 
     private lateinit var takeImageResult: ActivityResultLauncher<Int>
     private lateinit var imagesAdapter: ImagesAdapter
-    lateinit var viewModel: UserImagesViewModel
+    private lateinit var viewModel: UserImagesViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(viewModelFactory)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         activity().title = getString(R.string.images_title)
         setHasOptionsMenu(true)
         initRecyclerView()

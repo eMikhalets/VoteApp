@@ -16,11 +16,15 @@ import com.emikhalets.voteapp.viewmodel.TopImagesViewModel
 class TopImagesFragment : ContentFragment<FragmentTopImagesBinding>(FragmentTopImagesBinding::inflate) {
 
     private lateinit var imagesAdapter: ImagesAdapter
-    lateinit var viewModel: TopImagesViewModel
+    private lateinit var viewModel: TopImagesViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(viewModelFactory)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         activity().title = getString(R.string.top_images_title)
         initRecyclerView()
         initListeners()

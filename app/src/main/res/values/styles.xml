@@ -108,8 +108,8 @@
 
     <style name="AppEditTextDialog">
         <item name="android:background">@drawable/style_edit_text_dialog</item>
-        <item name="android:layout_marginStart">@dimen/app_margin_small</item>
-        <item name="android:layout_marginEnd">@dimen/app_margin_small</item>
+        <item name="android:layout_marginStart">@dimen/app_margin</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin</item>
         <item name="android:padding">@dimen/app_padding_small</item>
         <item name="android:ems">15</item>
         <item name="android:maxLines">1</item>
@@ -145,7 +145,7 @@
     <style name="AppContainerDialog">
         <item name="android:layout_margin">@dimen/app_margin</item>
         <item name="cardBackgroundColor">?attr/backgroundDialog</item>
-        <item name="cardCornerRadius">@dimen/app_corner_radius</item>
+        <item name="cardCornerRadius">@dimen/app_corner_radius_large</item>
         <item name="strokeColor">?attr/colorBorderDialog</item>
         <item name="strokeWidth">@dimen/app_border_width_small</item>
     </style>

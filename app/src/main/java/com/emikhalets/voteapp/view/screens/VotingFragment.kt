@@ -10,15 +10,19 @@ import com.emikhalets.voteapp.viewmodel.VotingViewModel
 
 class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBinding::inflate) {
 
-    lateinit var viewModel: VotingViewModel
+    private lateinit var viewModel: VotingViewModel
 
     private var isVoteEnabled = false
     private var isFirstSelected = false
     private var isSecondSelected = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = injectViewModel(viewModelFactory)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
         activity().title = getString(R.string.voting_title)
         if (savedInstanceState == null) onViewLoaded()
         else initViews(savedInstanceState)

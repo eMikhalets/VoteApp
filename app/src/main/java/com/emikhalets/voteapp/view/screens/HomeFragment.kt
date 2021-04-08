@@ -17,21 +17,15 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = injectViewModel(activity().viewModelFactory)
+        viewModel = injectViewModel(viewModelFactory)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity().title = getString(R.string.home_title)
-        activity().drawer.enableDrawer()
         initRecyclerView()
         initListeners()
         if (savedInstanceState == null) onViewLoaded()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.removeUserListener()
     }
 
     private fun initRecyclerView() {
@@ -51,8 +45,8 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 imagesAdapter.submitList(it)
                 binding.apply {
                     layoutRefresh.isRefreshing = false
-                    progress.visibility = android.view.View.GONE
-                    listImages.visibility = android.view.View.VISIBLE
+                    progress.visibility = View.GONE
+                    listImages.visibility = View.VISIBLE
                     listImages.scrollToTop(this@HomeFragment)
                 }
             }

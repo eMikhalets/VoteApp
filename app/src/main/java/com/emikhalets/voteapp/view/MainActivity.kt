@@ -2,24 +2,20 @@ package com.emikhalets.voteapp.view
 
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.ActivityMainBinding
-import com.emikhalets.voteapp.di.viewmodel.ViewModelFactory
 import com.emikhalets.voteapp.utils.CAMERA
 import dagger.android.AndroidInjection
-import javax.inject.Inject
+import dagger.android.support.DaggerAppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
     lateinit var drawer: AppDrawer
     lateinit var toolbar: Toolbar
 
