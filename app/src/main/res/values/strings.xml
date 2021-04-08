@@ -32,7 +32,7 @@
     <!-- Auth Screens -->
     <string name="auth_text_login_label">Authorization</string>
     <string name="auth_text_register_label">Registration</string>
-    <string name="auth_text_login">Login</string>
+    <string name="auth_text_login">E-mail</string>
     <string name="auth_text_pass">Password</string>
     <string name="auth_text_pass_conf">Confirm password</string>
     <string name="auth_text_forgot_pass"><u>Forgot password?</u></string>
@@ -44,10 +44,12 @@
     <string name="profile_btn_change_photo">Change Photo</string>
     <string name="profile_btn_change_name">Change Username</string>
     <string name="profile_btn_change_pass">Change Password</string>
+    <string name="profile_btn_change_pass_label">Change password</string>
     <string name="profile_btn_logout">LogOut</string>
     <string name="profile_text_new_pass">New password</string>
     <string name="profile_text_new_pass_conf">Confirm new password</string>
     <string name="profile_text_change_name">New username</string>
+    <string name="profile_text_change_name_label">Change username</string>
     <string name="profile_btn_apply">Apply</string>
     <string name="app_transition_name_image_zoom" translatable="false">image_zoom</string>
 

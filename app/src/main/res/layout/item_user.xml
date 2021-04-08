@@ -7,10 +7,9 @@
 
     <TextView
         android:id="@+id/text_position"
-        style="@style/AppTextUserPosition"
-        android:layout_width="65dp"
+        style="@style/AppTextTopPosition"
+        android:layout_width="@dimen/top_users_position_width"
         android:layout_height="match_parent"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/card_user"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -18,15 +17,11 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_user"
-        android:layout_width="@dimen/app_card_user_width"
+        style="@style/AppContainer"
+        android:layout_width="@dimen/top_users_card_user_width"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/app_margin_small"
-        android:layout_marginEnd="@dimen/app_margin_small"
-        android:layout_marginBottom="@dimen/app_margin_small"
-        app:cardBackgroundColor="?attr/colorSecondary"
-        app:cardCornerRadius="@dimen/app_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/text_position"
@@ -38,12 +33,9 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="@dimen/item_user_photo_size"
-                android:layout_height="@dimen/item_user_photo_size"
-                android:layout_gravity="center_horizontal"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/placeholder_user"
+                style="@style/AppImageUser"
+                android:layout_width="@dimen/top_users_photo_size"
+                android:layout_height="@dimen/top_users_photo_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +43,7 @@
 
             <TextView
                 android:id="@+id/text_username"
-                style="@style/AppTextUser"
+                style="@style/AppTextProfileName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@id/text_rating"
@@ -62,7 +54,7 @@
 
             <TextView
                 android:id="@+id/text_rating"
-                style="@style/AppTextUser"
+                style="@style/AppTextProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -73,6 +65,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

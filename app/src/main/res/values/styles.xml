@@ -27,6 +27,16 @@
         <item name="android:textSize">@dimen/app_text_size</item>
         <item name="android:layout_marginStart">@dimen/app_margin_small</item>
         <item name="android:layout_marginEnd">@dimen/app_margin_small</item>
+        <item name="android:layout_marginTop">@dimen/app_margin_small</item>
+    </style>
+
+    <style name="AppButtonDialog" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:background">@drawable/style_button_dialog</item>
+        <item name="android:layout_marginTop">@dimen/app_margin</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:textColor">?attr/colorTextDialog</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/app_text_size</item>
     </style>
 
     <!-- Text Styles -->
@@ -39,6 +49,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="AppTextLabelDialog">
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorText</item>
+        <item name="android:textSize">@dimen/app_text_size_mid</item>
+        <item name="android:layout_marginStart">@dimen/app_margin</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin</item>
+        <item name="android:layout_marginTop">@dimen/app_margin_small</item>
+    </style>
+
     <style name="AppTextLabelInput">
         <item name="android:textColor">?attr/colorText</item>
         <item name="android:textSize">@dimen/app_text_size_small</item>
@@ -49,14 +69,34 @@
     <style name="AppTextLink">
         <item name="android:textColor">?attr/colorTextLink</item>
         <item name="android:textSize">@dimen/app_text_size_small</item>
-        <item name="android:layout_marginTop">@dimen/app_margin_small</item>
+        <item name="android:layout_marginTop">@dimen/app_margin</item>
     </style>
 
-    <style name="AppTextDialog">
+    <style name="AppTextImage">
+        <item name="android:background">?attr/backgroundCard</item>
+        <item name="android:padding">@dimen/app_padding_small</item>
         <item name="android:textColor">?attr/colorText</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:layout_marginStart">@dimen/app_margin</item>
-        <item name="android:layout_marginTop">@dimen/app_margin</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTextProfile">
+        <item name="android:layout_marginStart">@dimen/app_margin_large</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin_small</item>
+        <item name="android:textColor">?attr/colorText</item>
+        <item name="android:textSize">@dimen/app_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTextProfileName" parent="AppTextProfile">
+        <item name="android:textSize">@dimen/app_text_size_mid</item>
+    </style>
+
+    <style name="AppTextTopPosition">
+        <item name="android:textColor">?attr/colorText</item>
+        <item name="android:textSize">50sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <!-- EditText Styles -->
@@ -66,30 +106,47 @@
         <item name="android:maxLines">1</item>
     </style>
 
-
-    <style name="AppTextImage">
-        <item name="android:background">?attr/backgroundMain</item>
+    <style name="AppEditTextDialog">
+        <item name="android:background">@drawable/style_edit_text_dialog</item>
+        <item name="android:layout_marginStart">@dimen/app_margin_small</item>
+        <item name="android:layout_marginEnd">@dimen/app_margin_small</item>
         <item name="android:padding">@dimen/app_padding_small</item>
-        <item name="android:textColor">?attr/colorText</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:ems">15</item>
+        <item name="android:maxLines">1</item>
     </style>
 
-    <style name="AppTextUserPosition">
-        <item name="android:textColor">?attr/colorText</item>
-        <item name="android:textSize">50sp</item>
-        <item name="android:textStyle">bold</item>
+    <!-- Image Styles -->
+
+    <style name="AppImage">
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:src">@drawable/placeholder_default</item>
     </style>
 
-    <style name="AppTextUser">
-        <item name="android:padding">@dimen/app_padding_small</item>
-        <item name="android:textColor">?attr/colorText</item>
-        <item name="android:layout_marginStart">@dimen/app_margin</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
+    <style name="AppImageUser" parent="AppImage">
+        <item name="android:src">@drawable/placeholder_user</item>
     </style>
 
-    <style name="AppTextUserBig" parent="AppTextUser">
-        <item name="android:textSize">20sp</item>
+    <style name="AppImageSingle">
+        <item name="android:background">?attr/colorPrimaryDark</item>
+        <item name="android:src">@drawable/placeholder_default</item>
+    </style>
+
+    <!-- Containers Styles -->
+
+    <style name="AppContainer">
+        <item name="android:layout_margin">@dimen/app_margin_small</item>
+        <item name="cardCornerRadius">@dimen/app_corner_radius</item>
+        <item name="cardBackgroundColor">?attr/backgroundCard</item>
+        <item name="strokeColor">?attr/colorBorder</item>
+        <item name="strokeWidth">@dimen/app_border_width_small</item>
+    </style>
+
+    <style name="AppContainerDialog">
+        <item name="android:layout_margin">@dimen/app_margin</item>
+        <item name="cardBackgroundColor">?attr/backgroundDialog</item>
+        <item name="cardCornerRadius">@dimen/app_corner_radius</item>
+        <item name="strokeColor">?attr/colorBorderDialog</item>
+        <item name="strokeWidth">@dimen/app_border_width_small</item>
     </style>
 </resources>

@@ -2,10 +2,13 @@
 <resources>
     <attr name="backgroundMain" format="reference" />
     <attr name="backgroundDisabled" format="reference" />
-    <attr name="backgroundPressed" format="reference" />
     <attr name="backgroundCard" format="reference" />
+    <attr name="backgroundDialog" format="reference" />
     <attr name="colorBorder" format="reference" />
+    <attr name="colorBorderDialog" format="reference" />
     <attr name="colorText" format="reference" />
     <attr name="colorTextDisabled" format="reference" />
     <attr name="colorTextLink" format="reference" />
+    <attr name="colorTextDialog" format="reference" />
+    <attr name="colorDialogRipple" format="reference" />
 </resources>

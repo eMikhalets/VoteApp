@@ -3,13 +3,16 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="yellow_pale">#FDF8EB</color>
-    <color name="yellow_pale_dark">#FFF7CD</color>
-    <color name="light_brilliant_amber">#F9C035 </color>
-    <color name="wild_sand">#DDDAD4</color>
     <color name="grey">#464543</color>
     <color name="grey_gull">#AAAFB3</color>
     <color name="gray_light">#F0ECE1</color>
     <color name="half_pearl_lusta">#F3E9D0</color>
     <color name="light_orangish_gray">#D5D0C6</color>
     <color name="hippie_blue">#5C9CB0</color>
+    <color name="light_grayish_orange">#E9E4D6</color>
+    <color name="corn_silk">#FFF9DF</color>
+    <color name="narvik">#E8E7E3</color>
+    <color name="vista_white">#DEDCD8</color>
+    <color name="shamrock">#4395EE</color>
+    <color name="blue">#6CABEF</color>
 </resources>

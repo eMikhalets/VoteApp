@@ -7,15 +7,17 @@
         <item name="colorControlActivated">@color/black</item>
         <item name="popupTheme">@style/AppActionMenu</item>
         <item name="android:windowBackground">?attr/backgroundMain</item>
-        <item name="android:buttonStyle">@style/AppButton</item>
         <!-- Custom attributes -->
         <item name="backgroundMain">@color/yellow_pale</item>
-        <item name="backgroundCard">@color/yellow_pale_dark</item>
+        <item name="backgroundCard">@color/corn_silk</item>
         <item name="backgroundDisabled">@color/gray_light</item>
-        <item name="backgroundPressed">@color/light_brilliant_amber</item>
-        <item name="colorBorder">@color/wild_sand</item>
+        <item name="backgroundDialog">@color/narvik</item>
+        <item name="colorBorder">@color/light_grayish_orange</item>
+        <item name="colorBorderDialog">@color/vista_white</item>
         <item name="colorText">@color/grey</item>
         <item name="colorTextDisabled">@color/grey_gull</item>
         <item name="colorTextLink">@color/hippie_blue</item>
+        <item name="colorTextDialog">@color/shamrock</item>
+        <item name="colorDialogRipple">@color/blue</item>
     </style>
 </resources>

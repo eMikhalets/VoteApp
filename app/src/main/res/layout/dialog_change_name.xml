@@ -1,43 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="AppScreen"
+    style="@style/AppContainerDialog"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_name"
-        style="@style/AppTextLabelInput"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/app_margin_small"
-        android:text="@string/profile_text_change_name"
-        app:layout_constraintStart_toStartOf="@id/input_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/input_name"
-        style="@style/AppEditTextAuth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:ems="15"
-        app:layout_constraintTop_toBottomOf="@id/text_name"
-        tools:ignore="LabelFor" />
+        <TextView
+            android:id="@+id/text_name_label"
+            style="@style/AppTextLabelDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_text_change_name_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_apply"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/app_margin_large"
-        android:layout_marginTop="@dimen/app_margin"
-        android:layout_marginEnd="@dimen/app_margin_large"
-        android:layout_marginBottom="@dimen/app_margin_small"
-        android:text="@string/profile_btn_apply"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/input_name"
-        app:layout_constraintStart_toStartOf="@+id/input_name"
-        app:layout_constraintTop_toBottomOf="@id/input_name" />
+        <TextView
+            android:id="@+id/text_name"
+            style="@style/AppTextLabelInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_text_change_name"
+            app:layout_constraintStart_toStartOf="@id/input_name"
+            app:layout_constraintTop_toBottomOf="@id/text_name_label" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/input_name"
+            style="@style/AppEditTextDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_name"
+            tools:ignore="LabelFor" />
+
+        <Button
+            android:id="@+id/btn_apply"
+            style="@style/AppButtonDialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_btn_apply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/input_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

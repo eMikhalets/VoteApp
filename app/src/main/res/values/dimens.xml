@@ -11,6 +11,7 @@
 
     <dimen name="app_text_size">16dp</dimen>
     <dimen name="app_text_size_small">14dp</dimen>
+    <dimen name="app_text_size_mid">20dp</dimen>
     <dimen name="app_text_size_large">32dp</dimen>
 
     <dimen name="app_corner_radius">8dp</dimen>
@@ -20,13 +21,18 @@
     <dimen name="app_border_padding">2dp</dimen>
 
     <dimen name="app_card_elevation">8dp</dimen>
-    <dimen name="app_card_user_width">300dp</dimen>
+
+    <!-- Profile Dimensions -->
+    <dimen name="profile_card_user_width">350dp</dimen>
+    <dimen name="profile_photo_size">100dp</dimen>
 
     <!-- Top Users Dimensions -->
     <dimen name="app_btn_corner_radius">32dp</dimen>
 
     <!-- Top Users Dimensions -->
-    <dimen name="item_user_photo_size">100dp</dimen>
+    <dimen name="top_users_card_user_width">300dp</dimen>
+    <dimen name="top_users_photo_size">100dp</dimen>
+    <dimen name="top_users_position_width">65dp</dimen>
 
     <!-- Dialogs Dimensions -->
     <dimen name="profile_change_name_btn_width">100dp</dimen>
