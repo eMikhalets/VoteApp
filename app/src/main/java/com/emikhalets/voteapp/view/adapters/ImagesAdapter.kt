@@ -14,7 +14,7 @@ import com.emikhalets.voteapp.utils.loadImage
 class ImagesAdapter(
         private val showOwner: Boolean = false,
         private val click: (String, View) -> Unit = { _, _ -> },
-        private val longClick: (String, Int) -> Unit = { _, _ -> },
+        private val longClick: (String) -> Unit = { _ -> },
 ) : ListAdapter<Image, ImagesAdapter.ImagesViewHolder>(ImagesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {
@@ -30,7 +30,7 @@ class ImagesAdapter(
             click.invoke(item.url, holder.itemView.findViewById(R.id.image))
         }
         holder.itemView.setOnLongClickListener {
-            longClick.invoke(item.name, holder.adapterPosition)
+            longClick.invoke(item.name)
             true
         }
     }

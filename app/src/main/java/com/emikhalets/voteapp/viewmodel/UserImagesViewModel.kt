@@ -52,9 +52,11 @@ class UserImagesViewModel @Inject constructor(
             viewModelScope.launch {
                 storageRepository.saveImage(it) { isSuccess, name, url, saveError ->
                     if (isSuccess) {
-                        databaseRepository.saveUserImage(name, url) { image, error ->
-                            if (image != null) onComplete(true, "")
-                            else onComplete(false, error)
+                        suspend {
+                            databaseRepository.saveUserImage(name, url) { image, error ->
+                                if (image != null) onComplete(true, "")
+                                else onComplete(false, error)
+                            }
                         }
                     } else {
                         onComplete(false, saveError)
@@ -64,14 +66,16 @@ class UserImagesViewModel @Inject constructor(
         }
     }
 
-    fun sendDeleteImageRequest(name: String, position: Int, onComplete: (success: Boolean, error: String) -> Unit) {
+    fun sendDeleteImageRequest(name: String, onComplete: (success: Boolean, error: String) -> Unit) {
         if (name.isEmpty()) onComplete(false, "Image name is empty")
         else viewModelScope.launch {
             storageRepository.deleteImage(name) { isStorageSuccess, storageError ->
                 if (isStorageSuccess) {
-                    databaseRepository.deleteImage(name) { isSuccess, error ->
-                        if (isSuccess) onComplete(true, "")
-                        else onComplete(false, error)
+                    suspend {
+                        databaseRepository.deleteImage(name) { isSuccess, error ->
+                            if (isSuccess) onComplete(true, "")
+                            else onComplete(false, error)
+                        }
                     }
                 } else {
                     onComplete(false, storageError)

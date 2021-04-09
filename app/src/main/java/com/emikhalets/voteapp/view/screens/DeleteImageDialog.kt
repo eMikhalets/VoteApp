@@ -38,8 +38,7 @@ class DeleteImageDialog : BaseDialog() {
         arguments?.let {
             setViewState(ViewState.LOADING)
             val name = it.getString(ARGS_NAME) ?: ""
-            val pos = it.getInt(ARGS_POS)
-            viewModel.sendDeleteImageRequest(name, pos) { success, error ->
+            viewModel.sendDeleteImageRequest(name) { success, error ->
                 setViewState(ViewState.LOADED)
                 if (success) popBackStack()
                 else toastLong(error)

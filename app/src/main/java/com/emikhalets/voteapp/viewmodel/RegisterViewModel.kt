@@ -16,8 +16,10 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.register(login, pass) { isSuccess, error ->
                 if (isSuccess) {
-                    databaseRepository.saveUser { isSaveSuccess, saveError ->
-                        complete(isSaveSuccess, saveError)
+                    suspend {
+                        databaseRepository.saveUser(login) { isSaveSuccess, saveError ->
+                            complete(isSaveSuccess, saveError)
+                        }
                     }
                 } else {
                     complete(false, error)

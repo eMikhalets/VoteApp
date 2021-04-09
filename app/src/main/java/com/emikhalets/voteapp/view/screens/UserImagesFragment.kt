@@ -56,7 +56,7 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
         imagesAdapter = ImagesAdapter(
                 false,
                 { url, v -> onImageClick(url, v) },
-                { name, pos -> onDeleteImageClick(name, pos) }
+                { name -> onDeleteImageClick(name) }
         )
         binding.listImages.apply {
             setHasFixedSize(true)
@@ -111,8 +111,8 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
         navigate(R.id.action_userImages_to_image, args)
     }
 
-    private fun onDeleteImageClick(name: String, pos: Int): Boolean {
-        val args = bundleOf(ARGS_NAME to name, ARGS_POS to pos)
+    private fun onDeleteImageClick(name: String): Boolean {
+        val args = bundleOf(ARGS_NAME to name)
         navigate(R.id.action_userImages_to_deleteImage, args)
         return true
     }

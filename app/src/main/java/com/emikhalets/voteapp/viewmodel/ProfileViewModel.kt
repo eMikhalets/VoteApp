@@ -58,14 +58,18 @@ class ProfileViewModel @Inject constructor(
             viewModelScope.launch {
                 storageRepository.saveUserPhoto(it) { isStorageSuccess, url, storageError ->
                     if (isStorageSuccess) {
-                        authRepository.updateUserPhoto(url) { isAuthSuccess, authError ->
-                            if (isAuthSuccess) {
-                                databaseRepository.updateUserPhoto(url) { isSuccess: Boolean, error ->
-                                    if (isSuccess) onComplete(true, "")
-                                    else onComplete(false, error)
+                        suspend {
+                            authRepository.updateUserPhoto(url) { isAuthSuccess, authError ->
+                                if (isAuthSuccess) {
+                                    suspend {
+                                        databaseRepository.updateUserPhoto(url) { isSuccess: Boolean, error ->
+                                            if (isSuccess) onComplete(true, "")
+                                            else onComplete(false, error)
+                                        }
+                                    }
+                                } else {
+                                    onComplete(false, authError)
                                 }
-                            } else {
-                                onComplete(false, authError)
                             }
                         }
                     } else {
@@ -92,9 +96,11 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.updateUsername(name) { isAuthSuccess, authError ->
                 if (isAuthSuccess) {
-                    databaseRepository.updateUsername(name) { isSuccess, error ->
-                        if (isSuccess) onComplete(true, "")
-                        else onComplete(false, error)
+                    suspend {
+                        databaseRepository.updateUsername(name) { isSuccess, error ->
+                            if (isSuccess) onComplete(true, "")
+                            else onComplete(false, error)
+                        }
                     }
                 } else {
                     onComplete(false, authError)

@@ -16,11 +16,13 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.login(login, pass) { isSuccess, error ->
                 if (isSuccess) {
-                    databaseRepository.loadUserData { user, userError ->
-                        if (user != null) {
-                            complete(true, "")
-                        } else {
-                            complete(false, userError)
+                    suspend {
+                        databaseRepository.loadUserData { user, userError ->
+                            if (user != null) {
+                                complete(true, "")
+                            } else {
+                                complete(false, userError)
+                            }
                         }
                     }
                 } else {

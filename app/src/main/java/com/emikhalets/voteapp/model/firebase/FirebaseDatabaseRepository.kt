@@ -6,6 +6,8 @@ import com.emikhalets.voteapp.utils.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
 import com.google.firebase.database.ServerValue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,7 +40,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * Else, callback returns null and a message about the absence of the user in the database
      * @param complete Callback
      */
-    fun loadUserData(complete: (user: User?, error: String) -> Unit) {
+    suspend fun loadUserData(complete: (user: User?, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadUserData: STARTED")
         refDatabase.child(NODE_USERS).child(userId()).singleDataChange { snapshot ->
             if (snapshot.exists()) {
@@ -56,7 +58,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * Called [complete] when the server responds to a request. Callback returns a [List]<[Image]>
      * @param complete Callback
      */
-    fun loadUserImages(complete: (images: List<Image>) -> Unit) {
+    suspend fun loadUserImages(complete: (images: List<Image>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadUserImages: STARTED")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_OWNER_ID).equalTo(userId())
                 .singleDataChange { snapshot ->
@@ -72,7 +74,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * Called [complete] when the server responds to a request. Callback returns a [List]<[Image]>
      * @param complete Callback
      */
-    fun loadLatestImages(complete: (images: List<Image>) -> Unit) {
+    suspend fun loadLatestImages(complete: (images: List<Image>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadLatestImages: STARTED")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_TIMESTAMP).singleDataChange { snapshot ->
             val list = mutableListOf<Image>()
@@ -87,7 +89,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * Called [complete] when the server responds to a request. Callback returns a [List]<[Image]>
      * @param complete Callback
      */
-    fun loadTopImages(complete: (images: List<Image>) -> Unit) {
+    suspend fun loadTopImages(complete: (images: List<Image>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadTopImages: STARTED")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_RATING).singleDataChange { snapshot ->
             val list = mutableListOf<Image>()
@@ -102,7 +104,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * Called [complete] when the server responds to a request. Callback returns a [List]<[Image]>
      * @param complete Callback
      */
-    fun loadAllImages(complete: (images: List<Image>) -> Unit) {
+    suspend fun loadAllImages(complete: (images: List<Image>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadAllImages: STARTED")
         refDatabase.child(NODE_IMAGES).singleDataChange { snapshot ->
             val list = mutableListOf<Image>()
@@ -117,7 +119,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * Called [complete] when the server responds to a request. Callback returns a [List]<[User]>
      * @param complete Callback
      */
-    fun loadTopUsers(complete: (users: List<User>) -> Unit) {
+    suspend fun loadTopUsers(complete: (users: List<User>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadTopUsers: STARTED")
         refDatabase.child(NODE_USERS).orderByChild(CHILD_RATING).limitToLast(30)
                 .singleDataChange { snapshot ->
@@ -136,7 +138,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * @param name Name of the loaded image
      * @param complete Callback
      */
-    private fun loadAddedUserImage(name: String, complete: (image: Image) -> Unit) {
+    private suspend fun loadAddedUserImage(name: String, complete: (image: Image) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadAddedUserImage: STARTED")
         refDatabase.child(NODE_IMAGES).child(name).singleDataChange { snapshot ->
             Timber.d("Database request: loadAddedUserImage: COMPLETE")
@@ -151,10 +153,11 @@ class FirebaseDatabaseRepository @Inject constructor(
      * Else, callback returns false and a exception message
      * @param complete Callback
      */
-    fun saveUser(complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun saveUser(email: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: saveUser: STARTED")
         val map = hashMapOf(
                 CHILD_ID to userId(),
+                CHILD_EMAIL to email,
                 CHILD_USERNAME to username(),
                 CHILD_PHOTO to "null",
                 CHILD_RATING to 0
@@ -180,7 +183,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * @param url Url of the saved image in Firebase Cloud Storage
      * @param complete Callback
      */
-    fun saveUserImage(name: String, url: String, complete: (image: Image?, error: String) -> Unit) {
+    suspend fun saveUserImage(name: String, url: String, complete: (image: Image?, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: saveImage: STARTED")
         val map = hashMapOf(
                 CHILD_NAME to name,
@@ -193,8 +196,10 @@ class FirebaseDatabaseRepository @Inject constructor(
         refDatabase.child(NODE_IMAGES).child(name).setValue(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: saveImage: SUCCESS")
-                    loadAddedUserImage(name) { image ->
-                        complete(image, "")
+                    suspend {
+                        loadAddedUserImage(name) { image ->
+                            complete(image, "")
+                        }
                     }
                 }
                 .addOnFailureListener {
@@ -212,7 +217,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * @param url Url of the updated profile photo in Firebase Cloud Storage
      * @param complete Callback
      */
-    fun updateUserPhoto(url: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun updateUserPhoto(url: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: updateUserPhoto: STARTED")
         val map = hashMapOf<String, Any>(CHILD_PHOTO to url)
         refDatabase.child(NODE_USERS).child(userId()).updateChildren(map)
@@ -235,7 +240,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * @param name New name of the current user
      * @param complete Callback
      */
-    fun updateUsername(name: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun updateUsername(name: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: updateUsername: STARTED")
         val map = hashMapOf<String, Any>(CHILD_USERNAME to name)
         refDatabase.child(NODE_USERS).child(userId()).updateChildren(map)
@@ -258,7 +263,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * @param name Image name
      * @param complete Callback
      */
-    fun updateImageRating(name: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun updateImageRating(name: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: updateImageRating: STARTED")
         refDatabase.child(NODE_IMAGES).child(name).singleDataChange { snapshot ->
             val image = snapshot.toImage()
@@ -266,9 +271,11 @@ class FirebaseDatabaseRepository @Inject constructor(
             snapshot.ref.child(CHILD_RATING).setValue(image.rating)
                     .addOnSuccessListener {
                         Timber.d("Database request: updateImageRating: SUCCESS")
-                        updateUserRating(image.owner_id) { isSuccess, error ->
-                            if (isSuccess) complete(true, "")
-                            else complete(false, error)
+                        suspend {
+                            updateUserRating(image.owner_id) { isSuccess, error ->
+                                if (isSuccess) complete(true, "")
+                                else complete(false, error)
+                            }
                         }
                     }
                     .addOnFailureListener {
@@ -287,7 +294,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * @param id ID of the user who uploaded the image
      * @param complete Callback
      */
-    private fun updateUserRating(id: String, complete: (success: Boolean, error: String) -> Unit) {
+    private suspend fun updateUserRating(id: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: updateUserRating: STARTED")
         refDatabase.child(NODE_USERS).child(id).singleDataChange { snapshot ->
             val user = snapshot.toUser()
@@ -313,7 +320,7 @@ class FirebaseDatabaseRepository @Inject constructor(
      * @param name Image name
      * @param complete Callback
      */
-    fun deleteImage(name: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun deleteImage(name: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: deleteImage: STARTED")
         refDatabase.child(NODE_IMAGES).child(name).setValue(null)
                 .addOnSuccessListener {
@@ -336,7 +343,7 @@ class FirebaseDatabaseRepository @Inject constructor(
         const val CHILD_OWNER_ID = "owner_id"
         const val CHILD_USERNAME = "username"
         const val CHILD_RATING = "rating"
-        const val CHILD_LOGIN = "login"
+        const val CHILD_EMAIL = "email"
         const val CHILD_PHOTO = "photo"
         const val CHILD_NAME = "name"
         const val CHILD_URL = "url"

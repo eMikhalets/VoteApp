@@ -3,6 +3,8 @@ package com.emikhalets.voteapp.model.firebase
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -19,7 +21,7 @@ class FirebaseAuthRepository @Inject constructor(
      * @param pass User password
      * @param complete Callback
      */
-    fun login(login: String, pass: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun login(login: String, pass: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         auth.signInWithEmailAndPassword(login, pass)
                 .addOnSuccessListener {
@@ -42,15 +44,17 @@ class FirebaseAuthRepository @Inject constructor(
      * @param pass User password
      * @param complete Callback
      */
-    fun register(login: String, pass: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun register(login: String, pass: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Authentication request: createUserWithEmailAndPassword: STARTED")
         val username = login.split("@")[0]
         auth.createUserWithEmailAndPassword(login, pass)
                 .addOnSuccessListener {
-                    updateUsername(username) { isSuccess, error ->
-                        Timber.d("Authentication request: createUserWithEmailAndPassword: SUCCESS")
-                        if (isSuccess) complete(true, "")
-                        else complete(false, error)
+                    suspend {
+                        updateUsername(username) { isSuccess, error ->
+                            Timber.d("Authentication request: createUserWithEmailAndPassword: SUCCESS")
+                            if (isSuccess) complete(true, "")
+                            else complete(false, error)
+                        }
                     }
                 }
                 .addOnFailureListener {
@@ -65,7 +69,7 @@ class FirebaseAuthRepository @Inject constructor(
      * Called [complete] when the server responds to a request
      * @param complete Callback
      */
-    fun logOut(complete: () -> Unit) {
+    suspend fun logOut(complete: () -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Authentication request: signOut: STARTED")
         auth.signOut()
         Timber.d("Authentication request: signOut: COMPLETE")
@@ -80,7 +84,7 @@ class FirebaseAuthRepository @Inject constructor(
      * @param pass New password of the current user
      * @param complete Callback
      */
-    fun updateUserPassword(pass: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun updateUserPassword(pass: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Authentication request: signInWithEmailAndPassword: STARTED")
         auth.currentUser?.updatePassword(pass)
                 ?.addOnSuccessListener {
@@ -102,7 +106,7 @@ class FirebaseAuthRepository @Inject constructor(
      * @param name New name of the current user
      * @param complete Callback
      */
-    fun updateUsername(name: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun updateUsername(name: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Authentication request: updateUsername: STARTED")
         val profile = UserProfileChangeRequest.Builder().setDisplayName(name).build()
         auth.currentUser?.updateProfile(profile)
@@ -125,7 +129,7 @@ class FirebaseAuthRepository @Inject constructor(
      * @param url Url of the profile photo in Firebase Cloud Storage
      * @param complete Callback
      */
-    fun updateUserPhoto(url: String, complete: (success: Boolean, error: String) -> Unit) {
+    suspend fun updateUserPhoto(url: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Authentication request: updateUserPhoto: STARTED")
         val profile = UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(url)).build()
         auth.currentUser?.updateProfile(profile)
