@@ -22,7 +22,7 @@
     <style name="AppButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:background">@drawable/style_button</item>
         <item name="backgroundTint">@null</item>
-        <item name="android:textColor">?attr/colorText</item>
+        <item name="android:textColor">@drawable/style_button_text</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/app_text_size</item>
         <item name="android:layout_marginStart">@dimen/app_margin_small</item>
@@ -37,6 +37,16 @@
         <item name="android:textColor">?attr/colorTextDialog</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/app_text_size</item>
+    </style>
+
+    <style name="AppButtonVote" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:background">@drawable/style_button_vote</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:textColor">@drawable/style_button_vote_text</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/app_text_size</item>
+        <item name="android:enabled">false</item>
     </style>
 
     <!-- Text Styles -->

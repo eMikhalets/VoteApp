@@ -26,6 +26,7 @@ class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBind
         activity().title = getString(R.string.voting_title)
         if (savedInstanceState == null) onViewLoaded()
         else initViews(savedInstanceState)
+        binding.btnVote.isEnabled = false
         initListeners()
     }
 

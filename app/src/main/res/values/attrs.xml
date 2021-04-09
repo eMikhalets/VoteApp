@@ -4,6 +4,7 @@
     <attr name="backgroundDisabled" format="reference" />
     <attr name="backgroundCard" format="reference" />
     <attr name="backgroundDialog" format="reference" />
+    <attr name="backgroundVote" format="reference" />
     <attr name="colorBorder" format="reference" />
     <attr name="colorBorderDialog" format="reference" />
     <attr name="colorText" format="reference" />
@@ -11,4 +12,5 @@
     <attr name="colorTextLink" format="reference" />
     <attr name="colorTextDialog" format="reference" />
     <attr name="colorDialogRipple" format="reference" />
+    <attr name="colorVoteRipple" format="reference" />
 </resources>

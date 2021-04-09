@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white_darker">#FFF5F5</color>
     <color name="yellow_pale">#FDF8EB</color>
     <color name="grey">#464543</color>
     <color name="grey_gull">#AAAFB3</color>
@@ -15,4 +16,6 @@
     <color name="vista_white">#DEDCD8</color>
     <color name="shamrock">#4395EE</color>
     <color name="blue">#6CABEF</color>
+    <color name="saffron">#F0B931</color>
+    <color name="saffron_dark">#C89A29</color>
 </resources>

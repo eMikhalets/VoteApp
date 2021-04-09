@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="?attr/backgroundCard">
-
     <item>
-
         <selector>
 
-            <item
-                android:state_enabled="false"
-                android:textColor="?attr/colorTextDisabled">
+            <item android:state_enabled="false">
                 <shape android:shape="rectangle">
                     <solid android:color="?attr/backgroundDisabled" />
                     <corners android:radius="@dimen/app_btn_corner_radius" />
@@ -29,7 +25,5 @@
             </item>
 
         </selector>
-
     </item>
-
 </ripple>

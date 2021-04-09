@@ -7,11 +7,9 @@
 
     <ImageView
         android:id="@+id/image_vote_1"
+        style="@style/AppImage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/placeholder_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_vote"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,9 +19,11 @@
 
     <Button
         android:id="@+id/btn_vote"
+        style="@style/AppButtonVote"
         android:layout_width="@dimen/voting_btn_landscape_width"
         android:layout_height="0dp"
-        android:enabled="false"
+        android:layout_marginTop="@dimen/app_margin_small"
+        android:layout_marginBottom="@dimen/app_margin_small"
         android:text="@string/voting_btn_vote"
         app:layout_constraintBottom_toBottomOf="@+id/image_vote_1"
         app:layout_constraintEnd_toStartOf="@+id/image_vote_2"
@@ -32,11 +32,9 @@
 
     <ImageView
         android:id="@+id/image_vote_2"
+        style="@style/AppImage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/placeholder_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_vote"
