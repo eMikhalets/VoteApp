@@ -3,7 +3,9 @@ package com.emikhalets.voteapp.utils
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
@@ -73,6 +75,8 @@ fun Fragment.popBackStack(destination: Int? = null, inclusive: Boolean = false) 
 
 fun Fragment.toast(stringRes: Int) = Toast.makeText(requireContext(), stringRes, Toast.LENGTH_SHORT).show()
 
+fun Fragment.toast(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
 fun Fragment.toastLong(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
 //fun toastException(exception: Exception?) {
@@ -111,6 +115,24 @@ fun RecyclerView.scrollToTop(fragment: Fragment) {
         delay(100)
         this@scrollToTop.smoothScrollToPosition(0)
     }
+}
+
+fun View.animShow(duration: Long = 400, start: () -> Unit = {}) {
+    alpha = 0f
+    scaleX = 0f
+    scaleY = 0f
+    val listener = AppAnimatorListener(start = { start() })
+    animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(duration)
+            .setInterpolator(AccelerateInterpolator()).start()
+}
+
+fun View.animHide(duration: Long = 400, end: () -> Unit = {}) {
+    alpha = 1f
+    scaleX = 1f
+    scaleY = 1f
+    val listener = AppAnimatorListener(end = { end() })
+    animate().alpha(0f).scaleX(0f).scaleY(0f).setDuration(duration)
+            .setInterpolator(AccelerateInterpolator()).setListener(listener).start()
 }
 
 // Dependency injection

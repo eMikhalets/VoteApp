@@ -41,13 +41,19 @@ class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBind
         isVoteEnabled = savedInstanceState.getBoolean(VOTE_ENABLE)
         isFirstSelected = savedInstanceState.getBoolean(FIRST_SELECTED)
         isSecondSelected = savedInstanceState.getBoolean(SECOND_SELECTED)
-        binding.btnVote.isEnabled = isVoteEnabled
-        if (isFirstSelected) binding.imageVote1.setBackgroundResource(R.drawable.background_selected_image)
-        if (isSecondSelected) binding.imageVote2.setBackgroundResource(R.drawable.background_selected_image)
+        binding.apply {
+            btnVote.isEnabled = isVoteEnabled
+            if (isFirstSelected) imageVote1.setBackgroundResource(R.drawable.background_selected_image)
+            else imageVote1.setBackgroundResource(R.drawable.background_unselected_image)
+            if (isSecondSelected) imageVote2.setBackgroundResource(R.drawable.background_selected_image)
+            else imageVote2.setBackgroundResource(R.drawable.background_unselected_image)
+        }
     }
 
     private fun onViewLoaded() {
+        setViewState(ViewState.LOADING)
         viewModel.sendPrepareVotingRequest {
+            setViewState(ViewState.LOADED)
             isVoteEnabled = true
             binding.btnVote.isEnabled = true
         }
@@ -77,13 +83,13 @@ class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBind
         when (image) {
             ImageNumber.FIRST -> {
                 binding.imageVote1.setBackgroundResource(R.drawable.background_selected_image)
-                binding.imageVote2.setBackgroundResource(0)
+                binding.imageVote2.setBackgroundResource(R.drawable.background_unselected_image)
                 isFirstSelected = true
                 isSecondSelected = false
             }
             ImageNumber.SECOND -> {
+                binding.imageVote1.setBackgroundResource(R.drawable.background_unselected_image)
                 binding.imageVote2.setBackgroundResource(R.drawable.background_selected_image)
-                binding.imageVote1.setBackgroundResource(0)
                 isFirstSelected = false
                 isSecondSelected = true
             }
@@ -104,6 +110,13 @@ class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBind
             } else {
                 toastLong(error)
             }
+        }
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
         }
     }
 

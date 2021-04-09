@@ -21,7 +21,10 @@
     <dimen name="app_border_width_small">1dp</dimen>
     <dimen name="app_border_padding">2dp</dimen>
 
-    <dimen name="app_card_elevation">8dp</dimen>
+    <dimen name="app_card_elevation">100dp</dimen>
+
+    <dimen name="app_progress_bar_size">100dp</dimen>
+    <dimen name="app_dialog_progress_bar_size">60dp</dimen>
 
     <!-- Profile Dimensions -->
     <dimen name="profile_card_user_width">350dp</dimen>

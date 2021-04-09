@@ -17,5 +17,6 @@
     <color name="shamrock">#4395EE</color>
     <color name="blue">#6CABEF</color>
     <color name="saffron">#F0B931</color>
+    <color name="saffron_transparent">#B3FFC73D</color>
     <color name="saffron_dark">#C89A29</color>
 </resources>

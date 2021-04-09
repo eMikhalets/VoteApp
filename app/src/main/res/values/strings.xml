@@ -9,6 +9,7 @@
     <string name="app_toast_invalid_pass">Password must be 6 characters</string>
     <string name="app_toast_login_busy">An account has already been registered by this mail</string>
     <string name="app_toast_need_relog_change_pass">Your user session is too long, you are required to log in again to change your password</string>
+    <string name="app_toast_initialization">Initialization</string>
 
     <string name="app_login_to_email">%s@roflomail.com</string>
 
@@ -64,6 +65,7 @@
 
     <!-- Voting Screen -->
     <string name="voting_btn_vote">Vote</string>
+    <string name="voting_btn_vote_land">V\no\nt\ne</string>
 
     <!-- Users List Adapter -->
     <string name="item_users_text_rating">Rating: %d</string>

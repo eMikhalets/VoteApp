@@ -25,8 +25,11 @@ class ProfileViewModel @Inject constructor(
     private val _user = MutableLiveData<User>()
     val user get():LiveData<User> = _user
 
-    private lateinit var userReference: DatabaseReference
-    private lateinit var userDataListener: ValueEventListener
+    private val userReference: DatabaseReference = databaseRepository.listenUserDataChanges()
+
+    private val userDataListener: ValueEventListener = AppValueEventListener {
+        _user.postValue(it.toUser())
+    }
 
     override fun onCleared() {
         super.onCleared()
@@ -36,8 +39,6 @@ class ProfileViewModel @Inject constructor(
     fun sendLoadUserDataRequest() {
         if (_user.value == null || _user.value?.id == "") {
             viewModelScope.launch {
-                userReference = databaseRepository.listenUserDataChanges()
-                userDataListener = AppValueEventListener { _user.postValue(it.toUser()) }
                 userReference.addValueEventListener(userDataListener)
             }
         }

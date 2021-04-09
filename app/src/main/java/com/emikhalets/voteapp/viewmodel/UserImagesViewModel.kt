@@ -8,7 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
+import com.emikhalets.voteapp.utils.AppValueEventListener
+import com.emikhalets.voteapp.utils.toImage
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel.SortState.*
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,17 +24,25 @@ class UserImagesViewModel @Inject constructor(
     private val _images = MutableLiveData<List<Image>>()
     val images get():LiveData<List<Image>> = _images
 
+    private val userReference: Query = databaseRepository.listenUserImagesChanges()
     private var imageSortingState = DATE_DEC
+
+    private val userDataListener: ValueEventListener = AppValueEventListener {
+        var imagesList = mutableListOf<Image>()
+        it.children.forEach { item -> imagesList.add(item.toImage()) }
+        imagesList = sortImagesWhenAdding(imagesList).toMutableList()
+        _images.postValue(imagesList)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        userReference.removeEventListener(userDataListener)
+    }
 
     fun sendLoadUserImagesRequest() {
         if (_images.value.isNullOrEmpty()) {
             viewModelScope.launch {
-                databaseRepository.loadUserImages {
-                    if (it.isNotEmpty()) {
-                        val imagesList = sortImagesWhenAdding(it)
-                        _images.postValue(imagesList)
-                    }
-                }
+                userReference.addValueEventListener(userDataListener)
             }
         }
     }
@@ -41,15 +53,8 @@ class UserImagesViewModel @Inject constructor(
                 storageRepository.saveImage(it) { isSuccess, name, url, saveError ->
                     if (isSuccess) {
                         databaseRepository.saveUserImage(name, url) { image, error ->
-                            if (image != null) {
-                                var imagesList = _images.value?.toMutableList() ?: mutableListOf()
-                                imagesList.add(image)
-                                imagesList = sortImagesWhenAdding(imagesList).toMutableList()
-                                _images.postValue(imagesList)
-                                onComplete(true, "")
-                            } else {
-                                onComplete(false, error)
-                            }
+                            if (image != null) onComplete(true, "")
+                            else onComplete(false, error)
                         }
                     } else {
                         onComplete(false, saveError)
@@ -65,14 +70,8 @@ class UserImagesViewModel @Inject constructor(
             storageRepository.deleteImage(name) { isStorageSuccess, storageError ->
                 if (isStorageSuccess) {
                     databaseRepository.deleteImage(name) { isSuccess, error ->
-                        if (isSuccess) {
-                            val imagesList = _images.value?.toMutableList() ?: mutableListOf()
-                            imagesList.removeAt(position)
-                            _images.postValue(imagesList)
-                            onComplete(true, "")
-                        } else {
-                            onComplete(false, error)
-                        }
+                        if (isSuccess) onComplete(true, "")
+                        else onComplete(false, error)
                     }
                 } else {
                     onComplete(false, storageError)

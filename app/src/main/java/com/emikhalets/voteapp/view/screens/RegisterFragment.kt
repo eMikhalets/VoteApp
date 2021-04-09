@@ -30,7 +30,7 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
         validateRegister(login, pass, passConf) {
             when (it) {
                 RegisterToast.SUCCESS -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    setViewState(ViewState.LOADING)
                     viewModel.sendRegisterRequest(login, pass) { isSuccess, error ->
                         onRequestComplete(isSuccess, error)
                     }
@@ -44,8 +44,15 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
     }
 
     private fun onRequestComplete(isSuccess: Boolean, error: String) {
-        binding.progressBar.visibility = View.GONE
+        setViewState(ViewState.LOADED)
         if (isSuccess) navigate(R.id.action_authRegister_to_home)
         else toastLong(error)
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
+        }
     }
 }

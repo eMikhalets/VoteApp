@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/image_vote_1"
-        style="@style/AppImage"
+        style="@style/AppImageVoting"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/btn_vote"
@@ -32,7 +32,7 @@
 
     <ImageView
         android:id="@+id/image_vote_2"
-        style="@style/AppImage"
+        style="@style/AppImageVoting"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,5 +40,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_vote"
         tools:ignore="ContentDescription" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/AppProgressBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

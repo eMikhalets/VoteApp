@@ -5,9 +5,7 @@ import android.view.View
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopUsersBinding
 import com.emikhalets.voteapp.model.entities.User
-import com.emikhalets.voteapp.utils.activity
-import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.toastLong
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.adapters.UsersAdapter
 import com.emikhalets.voteapp.view.base.ContentFragment
 import com.emikhalets.voteapp.viewmodel.TopUsersViewModel
@@ -41,15 +39,24 @@ class TopUsersFragment : ContentFragment<FragmentTopUsersBinding>(FragmentTopUse
 
     private fun initListeners() {
         viewModel.users.observe(viewLifecycleOwner) {
+            setViewState(ViewState.LOADED)
             usersAdapter.submitList(it)
         }
     }
 
     private fun onViewLoaded() {
+        setViewState(ViewState.LOADING)
         viewModel.sendLoadTopUsersRequest()
     }
 
     private fun onUserClick(user: User) {
         toastLong("clicked on ${user.username}")
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
+        }
     }
 }

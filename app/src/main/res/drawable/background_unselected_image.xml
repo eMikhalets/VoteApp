@@ -9,6 +9,6 @@
 
     <stroke
         android:width="@dimen/app_border_width"
-        android:color="?attr/colorSecondary" />
+        android:color="?attr/backgroundMain" />
 
 </shape>

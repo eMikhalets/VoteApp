@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentStartBinding
-import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.navigate
-import com.emikhalets.voteapp.utils.toastLong
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.base.AuthFragment
 import com.emikhalets.voteapp.viewmodel.StartViewModel
 
@@ -25,17 +23,23 @@ class StartFragment : AuthFragment<FragmentStartBinding>(FragmentStartBinding::i
     }
 
     private fun onViewLoaded() {
+        setViewState(ViewState.LOADING)
+        toast(R.string.app_toast_initialization)
         viewModel.sendLoadUserDataRequest { isExist, error ->
-            onRequestComplete(isExist, error)
+            setViewState(ViewState.LOADED)
+            if (isExist) {
+                navigate(R.id.action_start_to_home)
+            } else {
+                toastLong(error)
+                navigate(R.id.action_start_to_authLogin)
+            }
         }
     }
 
-    private fun onRequestComplete(isExist: Boolean, error: String) {
-        if (isExist) {
-            navigate(R.id.action_start_to_home)
-        } else {
-            toastLong(error)
-            navigate(R.id.action_start_to_authLogin)
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
         }
     }
 }

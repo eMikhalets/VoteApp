@@ -133,6 +133,10 @@
         <item name="android:src">@drawable/placeholder_default</item>
     </style>
 
+    <style name="AppImageVoting" parent="AppImage">
+        <item name="android:background">@drawable/background_unselected_image</item>
+    </style>
+
     <style name="AppImageUser" parent="AppImage">
         <item name="android:src">@drawable/placeholder_user</item>
     </style>
@@ -158,5 +162,21 @@
         <item name="cardCornerRadius">@dimen/app_corner_radius_large</item>
         <item name="strokeColor">?attr/colorBorderDialog</item>
         <item name="strokeWidth">@dimen/app_border_width_small</item>
+    </style>
+
+    <!-- Progress bar Styles -->
+
+    <style name="AppProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:background">@drawable/background_progress_bar</item>
+        <item name="android:layout_width">@dimen/app_progress_bar_size</item>
+        <item name="android:layout_height">@dimen/app_progress_bar_size</item>
+    </style>
+
+    <style name="AppProgressBarDialog" parent="AppProgressBar">
+        <item name="android:layout_width">@dimen/app_dialog_progress_bar_size</item>
+        <item name="android:layout_height">@dimen/app_dialog_progress_bar_size</item>
+        <item name="android:alpha">0</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
     </style>
 </resources>

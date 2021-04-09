@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogChangeNameBinding
-import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.popBackStack
-import com.emikhalets.voteapp.utils.toast
-import com.emikhalets.voteapp.utils.toastLong
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.base.BaseDialog
 import com.emikhalets.voteapp.viewmodel.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -40,12 +37,21 @@ class ChangeNameDialog : BaseDialog() {
     private fun onApplyClick() {
         val name = binding.inputName.text.toString()
         if (name.isNotEmpty()) {
+            setViewState(ViewState.LOADING)
             viewModel.sendUpdateUsernameRequest(name) { isSuccess, error ->
+                setViewState(ViewState.LOADED)
                 if (isSuccess) popBackStack()
                 else toastLong(error)
             }
         } else {
             toast(R.string.app_toast_fill_fields)
+        }
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
         }
     }
 }

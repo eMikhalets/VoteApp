@@ -32,7 +32,7 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
         validateLogIn(login, pass) {
             when (it) {
                 LoginToast.SUCCESS -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    setViewState(ViewState.LOADING)
                     viewModel.sendLoginRequest(login, pass) { isSuccess, error ->
                         onRequestComplete(isSuccess, error)
                     }
@@ -45,7 +45,7 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
     }
 
     private fun onRequestComplete(isSuccess: Boolean, error: String) {
-        binding.progressBar.visibility = View.GONE
+        setViewState(ViewState.LOADED)
         if (isSuccess) navigate(R.id.action_authLogin_to_home)
         else toastLong(error)
     }
@@ -53,5 +53,12 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
     private fun onRegisterClick() {
         hideKeyboard()
         navigate(R.id.action_authLogin_to_authRegister)
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
+        }
     }
 }

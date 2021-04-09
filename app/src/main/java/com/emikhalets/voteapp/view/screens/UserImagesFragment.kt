@@ -25,6 +25,9 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = injectViewModel(viewModelFactory)
+        takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
+            onTakeImageResult(it)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +70,7 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
     //            positionViewHolder (positions of holders not updated)
     private fun initListeners() {
         viewModel.images.observe(viewLifecycleOwner) {
+            setViewState(ViewState.LOADED)
             if (imagesAdapter.currentList.isEmpty()) imagesAdapter.submitList(null)
             imagesAdapter.submitList(it)
             imagesAdapter.notifyDataSetChanged()
@@ -75,9 +79,7 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
     }
 
     private fun onViewLoaded() {
-        takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
-            onTakeImageResult(it)
-        }
+        setViewState(ViewState.LOADING)
         viewModel.sendLoadUserImagesRequest()
     }
 
@@ -97,7 +99,9 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
     }
 
     private fun onTakeImageResult(uri: Uri?) {
+        setViewState(ViewState.LOADING)
         viewModel.sendSaveImageRequest(uri) { success, error ->
+            setViewState(ViewState.LOADED)
             if (!success) toastLong(error)
         }
     }
@@ -111,5 +115,12 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
         val args = bundleOf(ARGS_NAME to name, ARGS_POS to pos)
         navigate(R.id.action_userImages_to_deleteImage, args)
         return true
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar?.animShow()
+            ViewState.LOADED -> binding.progressBar?.animHide()
+        }
     }
 }

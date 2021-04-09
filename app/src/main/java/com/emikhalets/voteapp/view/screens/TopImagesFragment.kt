@@ -5,10 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopImagesBinding
-import com.emikhalets.voteapp.utils.ARGS_PHOTO
-import com.emikhalets.voteapp.utils.activity
-import com.emikhalets.voteapp.utils.injectViewModel
-import com.emikhalets.voteapp.utils.navigate
+import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.adapters.ImagesAdapter
 import com.emikhalets.voteapp.view.base.ContentFragment
 import com.emikhalets.voteapp.viewmodel.TopImagesViewModel
@@ -42,16 +39,25 @@ class TopImagesFragment : ContentFragment<FragmentTopImagesBinding>(FragmentTopI
 
     private fun initListeners() {
         viewModel.images.observe(viewLifecycleOwner) {
+            setViewState(ViewState.LOADED)
             imagesAdapter.submitList(it)
         }
     }
 
     private fun onViewLoaded() {
+        setViewState(ViewState.LOADING)
         viewModel.sendLoadTopImagesRequest()
     }
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
         navigate(R.id.action_topImages_to_image, args)
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
+        }
     }
 }

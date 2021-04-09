@@ -36,12 +36,21 @@ class DeleteImageDialog : BaseDialog() {
 
     private fun onYesClick() {
         arguments?.let {
+            setViewState(ViewState.LOADING)
             val name = it.getString(ARGS_NAME) ?: ""
             val pos = it.getInt(ARGS_POS)
             viewModel.sendDeleteImageRequest(name, pos) { success, error ->
+                setViewState(ViewState.LOADED)
                 if (success) popBackStack()
                 else toastLong(error)
             }
+        }
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
         }
     }
 }

@@ -42,19 +42,16 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 activity().drawer.updateHeader(it)
             }
             images.observe(viewLifecycleOwner) {
+                setViewState(ViewState.LOADED)
                 imagesAdapter.submitList(it)
-                binding.apply {
-                    layoutRefresh.isRefreshing = false
-                    progress.visibility = View.GONE
-                    listImages.visibility = View.VISIBLE
-                    listImages.scrollToTop(this@HomeFragment)
-                }
+                binding.listImages.scrollToTop(this@HomeFragment)
             }
         }
         binding.root.setOnRefreshListener { onRefreshInvoke() }
     }
 
     private fun onViewLoaded() {
+        setViewState(ViewState.LOADING)
         viewModel.apply {
             sendLatestImagesRequest()
             sendLoadUserDataRequest()
@@ -62,11 +59,22 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun onRefreshInvoke() {
+        setViewState(ViewState.LOADING)
         viewModel.sendLatestImagesRequest(true)
     }
 
     private fun onImageClick(url: String, view: View) {
         val args = bundleOf(ARGS_PHOTO to url)
         navigate(R.id.action_home_to_image, args)
+    }
+
+    private fun setViewState(state: ViewState) {
+        binding.apply {
+            layoutRefresh.isRefreshing = false
+            when (state) {
+                ViewState.LOADING -> progressBar?.animShow()
+                ViewState.LOADED -> progressBar?.animHide()
+            }
+        }
     }
 }

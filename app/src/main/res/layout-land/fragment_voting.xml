@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/image_vote_1"
-        style="@style/AppImage"
+        style="@style/AppImageVoting"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/app_margin_small"
         android:layout_marginBottom="@dimen/app_margin_small"
-        android:text="@string/voting_btn_vote"
+        android:text="@string/voting_btn_vote_land"
         app:layout_constraintBottom_toBottomOf="@+id/image_vote_1"
         app:layout_constraintEnd_toStartOf="@+id/image_vote_2"
         app:layout_constraintStart_toEndOf="@+id/image_vote_1"
@@ -32,7 +32,7 @@
 
     <ImageView
         android:id="@+id/image_vote_2"
-        style="@style/AppImage"
+        style="@style/AppImageVoting"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,5 +40,13 @@
         app:layout_constraintStart_toEndOf="@id/btn_vote"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/AppProgressBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

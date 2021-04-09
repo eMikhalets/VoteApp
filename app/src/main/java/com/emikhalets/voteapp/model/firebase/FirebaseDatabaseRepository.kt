@@ -4,6 +4,7 @@ import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.utils.*
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.Query
 import com.google.firebase.database.ServerValue
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,6 +20,15 @@ class FirebaseDatabaseRepository @Inject constructor(
     fun listenUserDataChanges(): DatabaseReference {
         Timber.d("Database request: listenUserDataChanges: STARTED")
         return refDatabase.child(NODE_USERS).child(userId())
+    }
+
+    /**
+     * Method for adding a listener for changes to the data of the current user images
+     * @return Link to the user images in the database
+     */
+    fun listenUserImagesChanges(): Query {
+        Timber.d("Database request: listenUserImagesChanges: STARTED")
+        return refDatabase.child(NODE_IMAGES).orderByChild(CHILD_OWNER_ID).equalTo(userId())
     }
 
     /**

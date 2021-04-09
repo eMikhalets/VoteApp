@@ -39,6 +39,7 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
 
     private fun initListeners() {
         viewModel.user.observe(viewLifecycleOwner) {
+            setViewState(ViewState.LOADED)
             setData(it)
         }
         binding.apply {
@@ -59,6 +60,7 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
     }
 
     private fun onViewLoaded() {
+        setViewState(ViewState.LOADING)
         viewModel.sendLoadUserDataRequest()
     }
 
@@ -75,7 +77,9 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
     }
 
     private fun onTakeImageResult(uri: Uri?) {
+        setViewState(ViewState.LOADING)
         viewModel.sendUpdateUserPhotoRequest(uri) { isSuccess, error ->
+            setViewState(ViewState.LOADED)
             if (isSuccess) binding.image.loadImage(userPhoto(), R.drawable.placeholder_user)
             else toastLong(error)
         }
@@ -92,6 +96,13 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
     private fun onLogoutClick() {
         viewModel.sendLogOutRequest {
             navigate(R.id.authLoginFragment)
+        }
+    }
+
+    private fun setViewState(state: ViewState) {
+        when (state) {
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
         }
     }
 }
