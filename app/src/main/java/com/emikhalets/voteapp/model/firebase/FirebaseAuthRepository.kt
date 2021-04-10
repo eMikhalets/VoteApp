@@ -1,6 +1,7 @@
 package com.emikhalets.voteapp.model.firebase
 
 import android.net.Uri
+import com.emikhalets.voteapp.utils.AppResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,22 @@ import javax.inject.Inject
 class FirebaseAuthRepository @Inject constructor(
         private val auth: FirebaseAuth,
 ) {
+
+    /**
+     * Checks if the user is equal to zero or if his id is empty.
+     * If check passed returns true, else returns error message in callback.
+     * @param complete Callback
+     */
+    suspend fun checkAuth(complete: (result: AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
+        Timber.d("Authentication request: checkAuth: STARTED")
+        if (auth.currentUser == null || auth.currentUser?.uid.toString().isEmpty()) {
+            Timber.d("Authentication request: checkAuth: FAILURE")
+            complete(AppResult.Error("You need to sign in"))
+        } else {
+            Timber.d("Authentication request: checkAuth: SUCCESS")
+            complete(AppResult.Success(true))
+        }
+    }
 
     /**
      * Log in a user.

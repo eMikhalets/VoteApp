@@ -36,19 +36,19 @@ class FirebaseDatabaseRepository @Inject constructor(
     /**
      * Loads the data of the current user.
      * Called [complete] when the server responds to a request.
-     * If the user exists in the database, callback returns a [User] and an empty error message.
-     * Else, callback returns null and a message about the absence of the user in the database
+     * If the user exists in the database, callback returns a [Result.Success(true)].
+     * Else, it returns [Result.Success(true)]
      * @param complete Callback
      */
-    suspend fun loadUserData(complete: (user: User?, error: String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun loadUserData(complete: (result: AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadUserData: STARTED")
         refDatabase.child(NODE_USERS).child(userId()).singleDataChange { snapshot ->
             if (snapshot.exists()) {
                 Timber.d("Database request: loadUserData: COMPLETE (User exist)")
-                complete(snapshot.toUser(), "")
+                complete(AppResult.Success(true))
             } else {
                 Timber.d("Database request: loadUserData: COMPLETE (User not exist)")
-                complete(null, "User not exist in database")
+                complete(AppResult.Error("User not exist in database"))
             }
         }
     }

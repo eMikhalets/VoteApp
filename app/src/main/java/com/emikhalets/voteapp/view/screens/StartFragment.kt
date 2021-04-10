@@ -19,21 +19,27 @@ class StartFragment : AuthFragment<FragmentStartBinding>(FragmentStartBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initListeners()
         if (savedInstanceState == null) onViewLoaded()
+    }
+
+    private fun initListeners() {
+        viewModel.userExisting.observe(viewLifecycleOwner, {
+            setViewState(ViewState.LOADED)
+            navigate(R.id.action_start_to_home)
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver { error ->
+            setViewState(ViewState.LOADED)
+            toastLong(error)
+            navigate(R.id.action_start_to_authLogin)
+        })
     }
 
     private fun onViewLoaded() {
         setViewState(ViewState.LOADING)
         toast(R.string.app_toast_initialization)
-        viewModel.sendLoadUserDataRequest { isExist, error ->
-            setViewState(ViewState.LOADED)
-            if (isExist) {
-                navigate(R.id.action_start_to_home)
-            } else {
-                toastLong(error)
-                navigate(R.id.action_start_to_authLogin)
-            }
-        }
+        viewModel.checkUserExistingRequest()
     }
 
     private fun setViewState(state: ViewState) {
