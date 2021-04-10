@@ -16,6 +16,7 @@ import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
+@Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
 class StartViewModelTest {
 

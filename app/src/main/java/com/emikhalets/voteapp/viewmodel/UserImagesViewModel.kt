@@ -1,6 +1,5 @@
 package com.emikhalets.voteapp.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +27,9 @@ class UserImagesViewModel @Inject constructor(
 
     private val _images = MutableLiveData<List<Image>>()
     val images get(): LiveData<List<Image>> = _images
+
+    private val _saveImageState = MutableLiveData<Boolean>()
+    val saveImageState get(): LiveData<Boolean> = _saveImageState
 
     private val _deleteState = MutableLiveData<Boolean>()
     val deleteState get(): LiveData<Boolean> = _deleteState
@@ -63,15 +65,14 @@ class UserImagesViewModel @Inject constructor(
         }
     }
 
-    fun sendSaveImageRequest(uri: Uri?) {
-        uri?.let {
-            viewModelScope.launch {
-                saveImageInStorage(it)
-            }
+    fun sendSaveImageRequest(uri: String) {
+        viewModelScope.launch {
+            if (uri.isNotEmpty()) saveImageInStorage(uri)
+            else _error.postValue(Event("Image Uri is empty"))
         }
     }
 
-    private fun saveImageInStorage(uri: Uri) {
+    private fun saveImageInStorage(uri: String) {
         viewModelScope.launch {
             val imageName = UUID.randomUUID().toString()
             storageRepository.saveImage(imageName, uri) { result ->
@@ -86,7 +87,10 @@ class UserImagesViewModel @Inject constructor(
     private fun saveImageInDatabase(name: String, url: String) {
         viewModelScope.launch {
             databaseRepository.saveUserImage(name, url) { result ->
-                if (result is AppResult.Error) _error.postValue(Event(result.message))
+                when (result) {
+                    is AppResult.Success -> _saveImageState.postValue(true)
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                }
             }
         }
     }

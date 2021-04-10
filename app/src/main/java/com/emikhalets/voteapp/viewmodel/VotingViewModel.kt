@@ -14,7 +14,7 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 class VotingViewModel @Inject constructor(
-        private val databaseRepository: FirebaseDatabaseRepository,
+        private val databaseRepository: FirebaseDatabaseRepository
 ) : ViewModel() {
 
     private val _prepareState = MutableLiveData<Event<Boolean>>()
@@ -66,6 +66,7 @@ class VotingViewModel @Inject constructor(
                         is AppResult.Success -> {
                             selectedName = ""
                             setNextRandomImages()
+                            _voteState.postValue(true)
                         }
                     }
                 }

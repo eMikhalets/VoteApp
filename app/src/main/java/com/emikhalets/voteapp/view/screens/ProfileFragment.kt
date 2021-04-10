@@ -93,7 +93,7 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
 
     private fun onTakeImageResult(uri: Uri?) {
         setViewState(ViewState.LOADING)
-        viewModel.sendUpdateUserPhotoRequest(uri)
+        viewModel.sendUpdateUserPhotoRequest(uri.toString())
     }
 
     private fun onChangeUsernameClick() {

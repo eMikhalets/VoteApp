@@ -1,6 +1,5 @@
 package com.emikhalets.voteapp.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +25,9 @@ class ProfileViewModel @Inject constructor(
 
     private val _user = MutableLiveData<User>()
     val user get(): LiveData<User> = _user
+
+    private val _saveImageState = MutableLiveData<String>()
+    val saveImageState get(): LiveData<String> = _saveImageState
 
     private val _usernameState = MutableLiveData<Boolean>()
     val usernameState get(): LiveData<Boolean> = _usernameState
@@ -68,18 +70,16 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun sendUpdateUserPhotoRequest(uri: Uri?) {
-        uri?.let {
-            viewModelScope.launch {
-                saveUserPhotoInStorage(uri)
-            }
+    fun sendUpdateUserPhotoRequest(uri: String) {
+        viewModelScope.launch {
+            if (uri.isNotEmpty()) saveUserPhotoInStorage(uri)
+            else _error.postValue(Event("Image Uri is empty"))
         }
     }
 
-    private fun saveUserPhotoInStorage(uri: Uri) {
+    private fun saveUserPhotoInStorage(uri: String) {
         viewModelScope.launch {
             storageRepository.saveUserPhoto(uri) { result ->
-                if (result is AppResult.Error) _error.postValue(Event(result.message))
                 when (result) {
                     is AppResult.Error -> _error.postValue(Event(result.message))
                     is AppResult.Success -> updateUserPhotoInAuth(result.data)
@@ -91,7 +91,6 @@ class ProfileViewModel @Inject constructor(
     private fun updateUserPhotoInAuth(url: String) {
         viewModelScope.launch {
             authRepository.updateUserPhoto(url) { result ->
-                if (result is AppResult.Error) _error.postValue(Event(result.message))
                 when (result) {
                     is AppResult.Error -> _error.postValue(Event(result.message))
                     is AppResult.Success -> updateUserPhotoInDatabase(url)
@@ -103,7 +102,10 @@ class ProfileViewModel @Inject constructor(
     private fun updateUserPhotoInDatabase(url: String) {
         viewModelScope.launch {
             databaseRepository.updateUserPhoto(url) { result ->
-                if (result is AppResult.Error) _error.postValue(Event(result.message))
+                when (result) {
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                    is AppResult.Success -> _saveImageState.postValue(url)
+                }
             }
         }
     }

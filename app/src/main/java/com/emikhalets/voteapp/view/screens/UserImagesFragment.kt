@@ -105,7 +105,7 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
 
     private fun onTakeImageResult(uri: Uri?) {
         setViewState(ViewState.LOADING)
-        viewModel.sendSaveImageRequest(uri)
+        viewModel.sendSaveImageRequest(uri.toString())
     }
 
     private fun onImageClick(url: String, view: View) {

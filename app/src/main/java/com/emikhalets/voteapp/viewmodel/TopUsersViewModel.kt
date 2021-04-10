@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TopUsersViewModel @Inject constructor(
-        private val databaseRepository: FirebaseDatabaseRepository,
+        private val databaseRepository: FirebaseDatabaseRepository
 ) : ViewModel() {
 
     private val _users = MutableLiveData<List<User>>()
@@ -29,7 +29,7 @@ class TopUsersViewModel @Inject constructor(
                         val list = result.data.sortedByDescending { it.rating }
                         _users.postValue(list)
                     }
-                    is AppResult.Error -> _error.postValue(Event(""))
+                    is AppResult.Error -> _error.postValue(Event(result.message))
                 }
             }
         }

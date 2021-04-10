@@ -19,9 +19,9 @@ class FirebaseStorageRepository @Inject constructor(
      * @param uri Image uri
      * @param complete Callback
      */
-    suspend fun saveImage(name: String, uri: Uri, complete: (AppResult<String>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun saveImage(name: String, uri: String, complete: (AppResult<String>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Storage request: saveImage: STARTED")
-        refStorage.child(FOLDER_IMAGES).child(name).putFile(uri)
+        refStorage.child(FOLDER_IMAGES).child(name).putFile(Uri.parse(uri))
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveImage: SUCCESS")
                     refStorage.child(FOLDER_IMAGES).child(name).downloadUrl
@@ -48,9 +48,9 @@ class FirebaseStorageRepository @Inject constructor(
      * @param uri Image uri
      * @param complete Callback
      */
-    suspend fun saveUserPhoto(uri: Uri, complete: (AppResult<String>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun saveUserPhoto(uri: String, complete: (AppResult<String>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Storage request: saveUserPhoto: STARTED")
-        refStorage.child(FOLDER_PROFILES).child(userId()).putFile(uri)
+        refStorage.child(FOLDER_PROFILES).child(userId()).putFile(Uri.parse(uri))
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveUserPhoto: SUCCESS")
                     refStorage.child(FOLDER_PROFILES).child(userId()).downloadUrl
