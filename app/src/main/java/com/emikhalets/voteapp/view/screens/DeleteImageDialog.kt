@@ -22,8 +22,18 @@ class DeleteImageDialog : BaseDialog() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogDeleteImageBinding.inflate(LayoutInflater.from(context))
+
+        viewModel.deleteState.observe(viewLifecycleOwner, { popBackStack() })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+            setViewState(ViewState.LOADED)
+            toastLong(message)
+        })
+
         binding.btnYes.setOnClickListener { onYesClick() }
+
         binding.btnNo.setOnClickListener { dismiss() }
+
         return MaterialAlertDialogBuilder(requireContext())
                 .setView(binding.root)
                 .create()
@@ -38,11 +48,7 @@ class DeleteImageDialog : BaseDialog() {
         arguments?.let {
             setViewState(ViewState.LOADING)
             val name = it.getString(ARGS_NAME) ?: ""
-            viewModel.sendDeleteImageRequest(name) { success, error ->
-                setViewState(ViewState.LOADED)
-                if (success) popBackStack()
-                else toastLong(error)
-            }
+            viewModel.sendDeleteImageRequest(name)
         }
     }
 

@@ -42,6 +42,11 @@ class TopImagesFragment : ContentFragment<FragmentTopImagesBinding>(FragmentTopI
             setViewState(ViewState.LOADED)
             imagesAdapter.submitList(it)
         }
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver {
+            setViewState(ViewState.LOADED)
+            toast(R.string.app_toast_no_images_on_server)
+        })
     }
 
     private fun onViewLoaded() {

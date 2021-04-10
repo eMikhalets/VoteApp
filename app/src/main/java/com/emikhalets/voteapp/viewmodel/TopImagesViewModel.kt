@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
+import com.emikhalets.voteapp.utils.AppResult
+import com.emikhalets.voteapp.utils.Event
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,12 +18,18 @@ class TopImagesViewModel @Inject constructor(
     private val _images = MutableLiveData<List<Image>>()
     val images get():LiveData<List<Image>> = _images
 
+    private val _error = MutableLiveData<Event<String>>()
+    val error get(): LiveData<Event<String>> = _error
+
     fun sendLoadTopImagesRequest() {
         viewModelScope.launch {
-            databaseRepository.loadTopImages {
-                if (it.isNotEmpty()) {
-                    val images = it.sortedByDescending { item -> item.rating }
-                    _images.postValue(images)
+            databaseRepository.loadTopImages { result ->
+                when (result) {
+                    is AppResult.Success -> {
+                        val list = result.data.sortedByDescending { it.rating }
+                        _images.postValue(list)
+                    }
+                    is AppResult.Error -> _error.postValue(Event(result.message))
                 }
             }
         }

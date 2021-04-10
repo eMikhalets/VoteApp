@@ -52,18 +52,29 @@ class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBind
 
     private fun onViewLoaded() {
         setViewState(ViewState.LOADING)
-        viewModel.sendPrepareVotingRequest {
-            setViewState(ViewState.LOADED)
-            isVoteEnabled = true
-            binding.btnVote.isEnabled = true
-        }
+        viewModel.sendPrepareVotingRequest()
     }
 
     private fun initListeners() {
         viewModel.apply {
             image1.observe(viewLifecycleOwner) { onImageLoaded(it.url, ImageNumber.FIRST) }
             image2.observe(viewLifecycleOwner) { onImageLoaded(it.url, ImageNumber.SECOND) }
+            error.observe(viewLifecycleOwner, EventObserver { toast(it) })
+            prepareState.observe(viewLifecycleOwner, EventObserver {
+                setViewState(ViewState.LOADED)
+                isVoteEnabled = true
+                binding.btnVote.isEnabled = true
+            })
+            voteState.observe(viewLifecycleOwner, {
+                isVoteEnabled = true
+                binding.btnVote.isEnabled = true
+                isFirstSelected = false
+                isSecondSelected = false
+                binding.imageVote1.setBackgroundResource(0)
+                binding.imageVote2.setBackgroundResource(0)
+            })
         }
+
         binding.apply {
             imageVote1.setOnClickListener { onImageClick(ImageNumber.FIRST) }
             imageVote2.setOnClickListener { onImageClick(ImageNumber.SECOND) }
@@ -99,18 +110,7 @@ class VotingFragment : ContentFragment<FragmentVotingBinding>(FragmentVotingBind
     private fun onVoteClick() {
         isVoteEnabled = false
         binding.btnVote.isEnabled = false
-        viewModel.sendVoteRequest { isSuccess, error ->
-            isVoteEnabled = true
-            binding.btnVote.isEnabled = true
-            if (isSuccess) {
-                isFirstSelected = false
-                isSecondSelected = false
-                binding.imageVote1.setBackgroundResource(0)
-                binding.imageVote2.setBackgroundResource(0)
-            } else {
-                toastLong(error)
-            }
-        }
+        viewModel.sendVoteRequest()
     }
 
     private fun setViewState(state: ViewState) {

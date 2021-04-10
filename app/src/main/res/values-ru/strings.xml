@@ -12,6 +12,7 @@
     <string name="app_toast_initialization">Инициализация</string>
     <string name="app_toast_no_internet">Нет интернет соединения</string>
     <string name="app_toast_no_images_on_server">На сервере нет изображений</string>
+    <string name="app_toast_no_users_on_server">На сервере нет пользователей</string>
     <string name="app_toast_no_images_user">Загрузите изображения!</string>
 
     <string name="app_login_to_email">%s@roflomail.com</string>

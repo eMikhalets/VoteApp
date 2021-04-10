@@ -7,7 +7,6 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class FirebaseStorageRepository @Inject constructor(
@@ -16,29 +15,30 @@ class FirebaseStorageRepository @Inject constructor(
 
     /**
      * Saves user image in storage and returns image url in callback.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true, image name, url and an empty error message.
-     * Else, callback returns false and a exception message
+     * If request is successful, callback returns image url, else returns exception message
      * @param uri Image uri
      * @param complete Callback
      */
-    suspend fun saveImage(uri: Uri, complete: (success: Boolean, name: String, url: String, error: String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun saveImage(name: String, uri: Uri, complete: (AppResult<String>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Storage request: saveImage: STARTED")
-        val imageName = UUID.randomUUID().toString()
-        refStorage.child(FOLDER_IMAGES).child(imageName).putFile(uri)
+        refStorage.child(FOLDER_IMAGES).child(name).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveImage: SUCCESS")
-                    suspend {
-                        loadImageUrl(imageName) { isSuccess, url, error ->
-                            if (isSuccess) complete(true, imageName, url, "")
-                            else complete(false, "", "", error)
-                        }
-                    }
+                    refStorage.child(FOLDER_IMAGES).child(name).downloadUrl
+                            .addOnSuccessListener {
+                                Timber.d("Storage request: downloadImageUrl: SUCCESS")
+                                complete(AppResult.Success(it.toString()))
+                            }
+                            .addOnFailureListener {
+                                Timber.d("Storage request: downloadImageUrl: FAILURE")
+                                it.printStackTrace()
+                                complete(AppResult.Error(it.message.toString()))
+                            }
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: saveImage: FAILURE")
                     it.printStackTrace()
-                    complete(false, "", "", it.message.toString())
+                    complete(AppResult.Error(it.message.toString()))
                 }
     }
 
@@ -73,45 +73,21 @@ class FirebaseStorageRepository @Inject constructor(
 
     /**
      * Deleted image from cloud storage.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true and an empty error message.
-     * Else, callback returns false and a exception message
+     * If request is successful, callback returns true, else returns exception message
      * @param name Image name
      * @param complete Callback
      */
-    suspend fun deleteImage(name: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun deleteImage(name: String, complete: (AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Storage request: deleteImage: STARTED")
         refStorage.child(FOLDER_IMAGES).child(name).delete()
                 .addOnSuccessListener {
                     Timber.d("Storage request: deleteImage: SUCCESS")
-                    complete(true, "")
+                    complete(AppResult.Success(true))
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: deleteImage: FAILURE")
                     it.printStackTrace()
-                    complete(false, it.message.toString())
-                }
-    }
-
-    /**
-     * Uploads an image to cloud storage.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true, image url and an empty error message.
-     * Else, callback returns false, empty image url and a exception message
-     * @param name Image name
-     * @param complete Callback
-     */
-    private suspend fun loadImageUrl(name: String, complete: (success: Boolean, url: String, error: String) -> Unit) = withContext(Dispatchers.IO) {
-        Timber.d("Storage request: loadImageUrl: STARTED")
-        refStorage.child(FOLDER_IMAGES).child(name).downloadUrl
-                .addOnSuccessListener {
-                    Timber.d("Storage request: loadImageUrl: SUCCESS")
-                    complete(true, it.toString(), "")
-                }
-                .addOnFailureListener {
-                    Timber.d("Storage request: loadImageUrl: FAILURE")
-                    it.printStackTrace()
-                    complete(false, "", it.message.toString())
+                    complete(AppResult.Error(it.message.toString()))
                 }
     }
 

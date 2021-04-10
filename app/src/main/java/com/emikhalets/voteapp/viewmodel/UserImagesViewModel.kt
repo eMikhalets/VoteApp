@@ -8,30 +8,46 @@ import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.entities.Image
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
+import com.emikhalets.voteapp.utils.AppResult
 import com.emikhalets.voteapp.utils.AppValueEventListener
+import com.emikhalets.voteapp.utils.Event
 import com.emikhalets.voteapp.utils.toImage
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel.SortState.*
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 
 class UserImagesViewModel @Inject constructor(
         private val databaseRepository: FirebaseDatabaseRepository,
-        private val storageRepository: FirebaseStorageRepository,
+        private val storageRepository: FirebaseStorageRepository
 ) : ViewModel() {
 
     private val _images = MutableLiveData<List<Image>>()
-    val images get():LiveData<List<Image>> = _images
+    val images get(): LiveData<List<Image>> = _images
 
-    private val userReference: Query = databaseRepository.listenUserImagesChanges()
+    private val _deleteState = MutableLiveData<Boolean>()
+    val deleteState get(): LiveData<Boolean> = _deleteState
+
+    private val _error = MutableLiveData<Event<String>>()
+    val error get(): LiveData<Event<String>> = _error
+
     private var imageSortingState = DATE_DEC
 
+    // Требуется инициализация этих преременных, так как в диалоге используется эта же вьюмодель,
+    // а при выходе из диалога идет обращение в onCleared к неинициализированной userReference,
+    // и делать отдельные вьюмодели для кажного диалога мне лень
+    private val userReference: Query = databaseRepository.listenUserImagesChanges()
     private val userDataListener: ValueEventListener = AppValueEventListener {
-        var imagesList = mutableListOf<Image>()
-        it.children.forEach { item -> imagesList.add(item.toImage()) }
-        imagesList = sortImagesWhenAdding(imagesList).toMutableList()
-        _images.postValue(imagesList)
+        viewModelScope.launch {
+            var imagesList = mutableListOf<Image>()
+            it.children.forEach { item -> imagesList.add(item.toImage()) }
+            imagesList = sortImagesWhenAdding(imagesList).toMutableList()
+            _images.postValue(imagesList)
+        }
     }
 
     override fun onCleared() {
@@ -47,38 +63,51 @@ class UserImagesViewModel @Inject constructor(
         }
     }
 
-    fun sendSaveImageRequest(uri: Uri?, onComplete: (success: Boolean, error: String) -> Unit) {
+    fun sendSaveImageRequest(uri: Uri?) {
         uri?.let {
             viewModelScope.launch {
-                storageRepository.saveImage(it) { isSuccess, name, url, saveError ->
-                    if (isSuccess) {
-                        suspend {
-                            databaseRepository.saveUserImage(name, url) { image, error ->
-                                if (image != null) onComplete(true, "")
-                                else onComplete(false, error)
-                            }
-                        }
-                    } else {
-                        onComplete(false, saveError)
-                    }
+                saveImageInStorage(it)
+            }
+        }
+    }
+
+    private fun saveImageInStorage(uri: Uri) {
+        viewModelScope.launch {
+            val imageName = UUID.randomUUID().toString()
+            storageRepository.saveImage(imageName, uri) { result ->
+                when (result) {
+                    is AppResult.Success -> saveImageInDatabase(imageName, result.data)
+                    is AppResult.Error -> _error.postValue(Event(result.message))
                 }
             }
         }
     }
 
-    fun sendDeleteImageRequest(name: String, onComplete: (success: Boolean, error: String) -> Unit) {
-        if (name.isEmpty()) onComplete(false, "Image name is empty")
-        else viewModelScope.launch {
-            storageRepository.deleteImage(name) { isStorageSuccess, storageError ->
-                if (isStorageSuccess) {
-                    suspend {
-                        databaseRepository.deleteImage(name) { isSuccess, error ->
-                            if (isSuccess) onComplete(true, "")
-                            else onComplete(false, error)
-                        }
-                    }
-                } else {
-                    onComplete(false, storageError)
+    private fun saveImageInDatabase(name: String, url: String) {
+        viewModelScope.launch {
+            databaseRepository.saveUserImage(name, url) { result ->
+                if (result is AppResult.Error) _error.postValue(Event(result.message))
+            }
+        }
+    }
+
+    fun sendDeleteImageRequest(name: String) {
+        viewModelScope.launch {
+            storageRepository.deleteImage(name) { result ->
+                when (result) {
+                    is AppResult.Success -> deleteImageInDatabase(name)
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                }
+            }
+        }
+    }
+
+    private fun deleteImageInDatabase(name: String) {
+        viewModelScope.launch {
+            databaseRepository.deleteImage(name) { result ->
+                when (result) {
+                    is AppResult.Success -> _deleteState.postValue(true)
+                    is AppResult.Error -> _error.postValue(Event(result.message))
                 }
             }
         }
@@ -120,14 +149,15 @@ class UserImagesViewModel @Inject constructor(
         }
     }
 
-    private fun sortImagesWhenAdding(list: List<Image>): List<Image> {
-        return when (imageSortingState) {
-            DATE_DEC -> list.sortedByDescending { it.timestamp }.toMutableList()
-            DATE_ASC -> list.sortedBy { it.timestamp }.toMutableList()
-            RATING_DEC -> list.sortedByDescending { it.rating }.toMutableList()
-            RATING_ASC -> list.sortedBy { it.rating }.toMutableList()
-        }
-    }
+    private suspend fun sortImagesWhenAdding(list: List<Image>): List<Image> =
+            withContext(Dispatchers.IO) {
+                when (imageSortingState) {
+                    DATE_DEC -> list.sortedByDescending { it.timestamp }.toMutableList()
+                    DATE_ASC -> list.sortedBy { it.timestamp }.toMutableList()
+                    RATING_DEC -> list.sortedByDescending { it.rating }.toMutableList()
+                    RATING_ASC -> list.sortedBy { it.rating }.toMutableList()
+                }
+            }
 
     private enum class SortState {
         RATING_DEC,

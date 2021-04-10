@@ -69,13 +69,18 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
     // Exception: IndexOutOfBoundsException: Inconsistency detected. Invalid view holder adapter
     //            positionViewHolder (positions of holders not updated)
     private fun initListeners() {
-        viewModel.images.observe(viewLifecycleOwner) {
+        viewModel.images.observe(viewLifecycleOwner, {
             setViewState(ViewState.LOADED)
             if (imagesAdapter.currentList.isEmpty()) imagesAdapter.submitList(null)
             imagesAdapter.submitList(it)
             imagesAdapter.notifyDataSetChanged()
             binding.listImages.scrollToTop(this)
-        }
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver {
+            setViewState(ViewState.LOADED)
+            toast(R.string.app_toast_no_images_on_server)
+        })
     }
 
     private fun onViewLoaded() {
@@ -100,10 +105,7 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
 
     private fun onTakeImageResult(uri: Uri?) {
         setViewState(ViewState.LOADING)
-        viewModel.sendSaveImageRequest(uri) { success, error ->
-            setViewState(ViewState.LOADED)
-            if (!success) toastLong(error)
-        }
+        viewModel.sendSaveImageRequest(uri)
     }
 
     private fun onImageClick(url: String, view: View) {
@@ -119,8 +121,8 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
 
     private fun setViewState(state: ViewState) {
         when (state) {
-            ViewState.LOADING -> binding.progressBar?.animShow()
-            ViewState.LOADED -> binding.progressBar?.animHide()
+            ViewState.LOADING -> binding.progressBar.animShow()
+            ViewState.LOADED -> binding.progressBar.animHide()
         }
     }
 }

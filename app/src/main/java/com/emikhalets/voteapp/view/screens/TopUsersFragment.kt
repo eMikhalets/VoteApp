@@ -42,6 +42,11 @@ class TopUsersFragment : ContentFragment<FragmentTopUsersBinding>(FragmentTopUse
             setViewState(ViewState.LOADED)
             usersAdapter.submitList(it)
         }
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver {
+            setViewState(ViewState.LOADED)
+            toast(R.string.app_toast_no_users_on_server)
+        })
     }
 
     private fun onViewLoaded() {
