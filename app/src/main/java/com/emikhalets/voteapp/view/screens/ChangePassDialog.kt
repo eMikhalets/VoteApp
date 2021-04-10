@@ -43,19 +43,19 @@ class ChangePassDialog : BaseDialog() {
         _binding = null
     }
 
-    // TODO вынести проверки строк в валидатор, написать тесты
     private fun onApplyClick() {
         val newPass = binding.inputNew.text.toString()
         val newConf = binding.inputNewConf.text.toString()
-        if (newPass.isNotEmpty() && newConf.isNotEmpty()) {
-            if (newPass == newConf) {
-                setViewState(ViewState.LOADING)
-                viewModel.sendUpdatePassRequest(newPass)
-            } else {
-                toast(R.string.app_toast_pass_not_confirm)
+        validateChangePass(newPass, newConf) {
+            when (it) {
+                ChangePassToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
+                ChangePassToast.INVALID_PASS -> toast(R.string.app_toast_invalid_pass)
+                ChangePassToast.PASS_MISMATCH -> toast(R.string.app_toast_pass_not_confirm)
+                ChangePassToast.SUCCESS -> {
+                    setViewState(ViewState.LOADING)
+                    viewModel.sendUpdatePassRequest(newPass)
+                }
             }
-        } else {
-            toast(R.string.app_toast_fill_fields)
         }
     }
 

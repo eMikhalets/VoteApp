@@ -44,14 +44,14 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
         val passConf = binding.inputPassConf.text.toString()
         validateRegister(login, pass, passConf) {
             when (it) {
-                RegisterToast.SUCCESS -> {
-                    setViewState(ViewState.LOADING)
-                    viewModel.sendRegisterRequest(login, pass)
-                }
                 RegisterToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
                 RegisterToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
                 RegisterToast.INVALID_PASS -> toast(R.string.app_toast_invalid_pass)
                 RegisterToast.PASS_MISMATCH -> toast(R.string.app_toast_pass_not_confirm)
+                RegisterToast.SUCCESS -> {
+                    setViewState(ViewState.LOADING)
+                    viewModel.sendRegisterRequest(login, pass)
+                }
             }
         }
     }

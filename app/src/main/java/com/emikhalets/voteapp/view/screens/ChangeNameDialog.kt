@@ -43,14 +43,16 @@ class ChangeNameDialog : BaseDialog() {
         _binding = null
     }
 
-    // TODO вынести проверки строк в валидатор, написать тесты
     private fun onApplyClick() {
         val name = binding.inputName.text.toString()
-        if (name.isNotEmpty()) {
-            setViewState(ViewState.LOADING)
-            viewModel.sendUpdateUsernameRequest(name)
-        } else {
-            toast(R.string.app_toast_fill_fields)
+        validateChangeName(name) {
+            when (it) {
+                ChangeNameToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
+                ChangeNameToast.SUCCESS -> {
+                    setViewState(ViewState.LOADING)
+                    viewModel.sendUpdateUsernameRequest(name)
+                }
+            }
         }
     }
 

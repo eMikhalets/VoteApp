@@ -14,3 +14,15 @@ enum class RegisterToast {
     INVALID_PASS,
     PASS_MISMATCH
 }
+
+enum class ChangePassToast {
+    SUCCESS,
+    EMPTY_FIELDS,
+    INVALID_PASS,
+    PASS_MISMATCH
+}
+
+enum class ChangeNameToast {
+    SUCCESS,
+    EMPTY_FIELDS
+}

@@ -45,13 +45,13 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
         val pass = binding.inputPass.text.toString()
         validateLogIn(login, pass) {
             when (it) {
+                LoginToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
+                LoginToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
+                LoginToast.INVALID_PASS -> toast(R.string.app_toast_invalid_pass)
                 LoginToast.SUCCESS -> {
                     setViewState(ViewState.LOADING)
                     viewModel.sendLoginRequest(login, pass)
                 }
-                LoginToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
-                LoginToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
-                LoginToast.INVALID_PASS -> toast(R.string.app_toast_invalid_pass)
             }
         }
     }
