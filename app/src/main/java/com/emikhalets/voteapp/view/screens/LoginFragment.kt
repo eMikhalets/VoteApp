@@ -19,6 +19,20 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initListener()
+    }
+
+    private fun initListener() {
+        viewModel.loginState.observe(viewLifecycleOwner, {
+            setViewState(ViewState.LOADED)
+            navigate(R.id.action_authLogin_to_home)
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+            setViewState(ViewState.LOADED)
+            toastLong(message)
+        })
+
         binding.apply {
             btnLogin.setOnClickListener { onLoginClick() }
             btnRegister.setOnClickListener { onRegisterClick() }
@@ -33,21 +47,13 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
             when (it) {
                 LoginToast.SUCCESS -> {
                     setViewState(ViewState.LOADING)
-                    viewModel.sendLoginRequest(login, pass) { isSuccess, error ->
-                        onRequestComplete(isSuccess, error)
-                    }
+                    viewModel.sendLoginRequest(login, pass)
                 }
                 LoginToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
                 LoginToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
                 LoginToast.INVALID_PASS -> toast(R.string.app_toast_invalid_pass)
             }
         }
-    }
-
-    private fun onRequestComplete(isSuccess: Boolean, error: String) {
-        setViewState(ViewState.LOADED)
-        if (isSuccess) navigate(R.id.action_authLogin_to_home)
-        else toastLong(error)
     }
 
     private fun onRegisterClick() {

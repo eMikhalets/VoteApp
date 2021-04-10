@@ -23,7 +23,16 @@ class ChangePassDialog : BaseDialog() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogChangePassBinding.inflate(LayoutInflater.from(context))
+
+        viewModel.passwordState.observe(viewLifecycleOwner, { popBackStack() })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+            setViewState(ViewState.LOADED)
+            toastLong(message)
+        })
+
         binding.btnApply.setOnClickListener { onApplyClick() }
+
         return MaterialAlertDialogBuilder(requireContext())
                 .setView(binding.root)
                 .create()
@@ -41,11 +50,7 @@ class ChangePassDialog : BaseDialog() {
         if (newPass.isNotEmpty() && newConf.isNotEmpty()) {
             if (newPass == newConf) {
                 setViewState(ViewState.LOADING)
-                viewModel.sendUpdatePassRequest(newPass) { isSuccess, error ->
-                    setViewState(ViewState.LOADED)
-                    if (isSuccess) popBackStack()
-                    else toastLong(error)
-                }
+                viewModel.sendUpdatePassRequest(newPass)
             } else {
                 toast(R.string.app_toast_pass_not_confirm)
             }

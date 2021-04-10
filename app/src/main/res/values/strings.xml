@@ -10,6 +10,9 @@
     <string name="app_toast_login_busy">An account has already been registered by this mail</string>
     <string name="app_toast_need_relog_change_pass">Your user session is too long, you are required to log in again to change your password</string>
     <string name="app_toast_initialization">Initialization</string>
+    <string name="app_toast_no_internet">No internet connection</string>
+    <string name="app_toast_no_images_on_server">No images on server</string>
+    <string name="app_toast_no_images_user">Upload images!</string>
 
     <string name="app_login_to_email">%s@roflomail.com</string>
 

@@ -38,10 +38,25 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
     }
 
     private fun initListeners() {
-        viewModel.user.observe(viewLifecycleOwner) {
+        viewModel.user.observe(viewLifecycleOwner, {
             setViewState(ViewState.LOADED)
             setData(it)
-        }
+        })
+
+        viewModel.passwordState.observe(viewLifecycleOwner, {
+            setViewState(ViewState.LOADED)
+        })
+
+        viewModel.logoutState.observe(viewLifecycleOwner, {
+            setViewState(ViewState.LOADED)
+            navigate(R.id.authLoginFragment)
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+            setViewState(ViewState.LOADED)
+            toastLong(message)
+        })
+
         binding.apply {
             image.setOnClickListener { onPhotoClick() }
             btnChangePhoto.setOnClickListener { onChangePhotoClick() }
@@ -78,11 +93,7 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
 
     private fun onTakeImageResult(uri: Uri?) {
         setViewState(ViewState.LOADING)
-        viewModel.sendUpdateUserPhotoRequest(uri) { isSuccess, error ->
-            setViewState(ViewState.LOADED)
-            if (isSuccess) binding.image.loadImage(userPhoto(), R.drawable.placeholder_user)
-            else toastLong(error)
-        }
+        viewModel.sendUpdateUserPhotoRequest(uri)
     }
 
     private fun onChangeUsernameClick() {
@@ -94,9 +105,8 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
     }
 
     private fun onLogoutClick() {
-        viewModel.sendLogOutRequest {
-            navigate(R.id.authLoginFragment)
-        }
+        setViewState(ViewState.LOADING)
+        viewModel.sendLogOutRequest()
     }
 
     private fun setViewState(state: ViewState) {

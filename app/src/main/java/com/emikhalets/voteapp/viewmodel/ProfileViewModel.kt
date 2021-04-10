@@ -9,7 +9,9 @@ import com.emikhalets.voteapp.model.entities.User
 import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
 import com.emikhalets.voteapp.model.firebase.FirebaseStorageRepository
+import com.emikhalets.voteapp.utils.AppResult
 import com.emikhalets.voteapp.utils.AppValueEventListener
+import com.emikhalets.voteapp.utils.Event
 import com.emikhalets.voteapp.utils.toUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
@@ -19,14 +21,28 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
         private val authRepository: FirebaseAuthRepository,
         private val databaseRepository: FirebaseDatabaseRepository,
-        private val storageRepository: FirebaseStorageRepository,
+        private val storageRepository: FirebaseStorageRepository
 ) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
-    val user get():LiveData<User> = _user
+    val user get(): LiveData<User> = _user
 
+    private val _usernameState = MutableLiveData<Boolean>()
+    val usernameState get(): LiveData<Boolean> = _usernameState
+
+    private val _passwordState = MutableLiveData<Boolean>()
+    val passwordState get(): LiveData<Boolean> = _passwordState
+
+    private val _logoutState = MutableLiveData<Boolean>()
+    val logoutState get(): LiveData<Boolean> = _logoutState
+
+    private val _error = MutableLiveData<Event<String>>()
+    val error get(): LiveData<Event<String>> = _error
+
+    // Требуется инициализация этих преременных, так как в диалоге используется эта же вьюмодель,
+    // а при выходе из диалога идет обращение в onCleared к неинициализированной userReference,
+    // и делать отдельные вьюмодели для кажного диалога мне лень
     private val userReference: DatabaseReference = databaseRepository.listenUserDataChanges()
-
     private val userDataListener: ValueEventListener = AppValueEventListener {
         _user.postValue(it.toUser())
     }
@@ -44,66 +60,82 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun sendLogOutRequest(onComplete: () -> Unit) {
+    fun sendLogOutRequest() {
         viewModelScope.launch {
             authRepository.logOut {
-                _user.value = User()
-                onComplete()
+                _logoutState.postValue(true)
             }
         }
     }
 
-    fun sendUpdateUserPhotoRequest(uri: Uri?, onComplete: (success: Boolean, error: String) -> Unit) {
+    fun sendUpdateUserPhotoRequest(uri: Uri?) {
         uri?.let {
             viewModelScope.launch {
-                storageRepository.saveUserPhoto(it) { isStorageSuccess, url, storageError ->
-                    if (isStorageSuccess) {
-                        suspend {
-                            authRepository.updateUserPhoto(url) { isAuthSuccess, authError ->
-                                if (isAuthSuccess) {
-                                    suspend {
-                                        databaseRepository.updateUserPhoto(url) { isSuccess: Boolean, error ->
-                                            if (isSuccess) onComplete(true, "")
-                                            else onComplete(false, error)
-                                        }
-                                    }
-                                } else {
-                                    onComplete(false, authError)
-                                }
-                            }
-                        }
-                    } else {
-                        onComplete(false, storageError)
-                    }
+                saveUserPhotoInStorage(uri)
+            }
+        }
+    }
+
+    private fun saveUserPhotoInStorage(uri: Uri) {
+        viewModelScope.launch {
+            storageRepository.saveUserPhoto(uri) { result ->
+                if (result is AppResult.Error) _error.postValue(Event(result.message))
+                when (result) {
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                    is AppResult.Success -> updateUserPhotoInAuth(result.data)
                 }
             }
         }
     }
 
-    fun sendUpdatePassRequest(pass: String, onComplete: (success: Boolean, error: String) -> Unit) {
+    private fun updateUserPhotoInAuth(url: String) {
         viewModelScope.launch {
-            authRepository.updateUserPassword(pass) { isSuccess, error ->
-                if (isSuccess) {
-                    onComplete(true, "")
-                } else {
-                    onComplete(false, error)
+            authRepository.updateUserPhoto(url) { result ->
+                if (result is AppResult.Error) _error.postValue(Event(result.message))
+                when (result) {
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                    is AppResult.Success -> updateUserPhotoInDatabase(url)
                 }
             }
         }
     }
 
-    fun sendUpdateUsernameRequest(name: String, onComplete: (success: Boolean, error: String) -> Unit) {
+    private fun updateUserPhotoInDatabase(url: String) {
         viewModelScope.launch {
-            authRepository.updateUsername(name) { isAuthSuccess, authError ->
-                if (isAuthSuccess) {
-                    suspend {
-                        databaseRepository.updateUsername(name) { isSuccess, error ->
-                            if (isSuccess) onComplete(true, "")
-                            else onComplete(false, error)
-                        }
-                    }
-                } else {
-                    onComplete(false, authError)
+            databaseRepository.updateUserPhoto(url) { result ->
+                if (result is AppResult.Error) _error.postValue(Event(result.message))
+            }
+        }
+    }
+
+    fun sendUpdatePassRequest(pass: String) {
+        viewModelScope.launch {
+            authRepository.updateUserPassword(pass) { result ->
+                when (result) {
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                    is AppResult.Success -> _passwordState.postValue(true)
+                }
+            }
+        }
+    }
+
+    fun sendUpdateUsernameRequest(name: String) {
+        viewModelScope.launch {
+            authRepository.updateUsername(name) { result ->
+                when (result) {
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                    is AppResult.Success -> updateUsernameInDatabase(name)
+                }
+            }
+        }
+    }
+
+    private fun updateUsernameInDatabase(name: String) {
+        viewModelScope.launch {
+            databaseRepository.updateUsername(name) { result ->
+                when (result) {
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                    is AppResult.Success -> _usernameState.postValue(true)
                 }
             }
         }

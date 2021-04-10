@@ -23,7 +23,16 @@ class ChangeNameDialog : BaseDialog() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogChangeNameBinding.inflate(LayoutInflater.from(context))
+
+        viewModel.usernameState.observe(viewLifecycleOwner, { popBackStack() })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+            setViewState(ViewState.LOADED)
+            toastLong(message)
+        })
+
         binding.btnApply.setOnClickListener { onApplyClick() }
+
         return MaterialAlertDialogBuilder(requireContext())
                 .setView(binding.root)
                 .create()
@@ -34,15 +43,12 @@ class ChangeNameDialog : BaseDialog() {
         _binding = null
     }
 
+    // TODO вынести проверки строк в валидатор, написать тесты
     private fun onApplyClick() {
         val name = binding.inputName.text.toString()
         if (name.isNotEmpty()) {
             setViewState(ViewState.LOADING)
-            viewModel.sendUpdateUsernameRequest(name) { isSuccess, error ->
-                setViewState(ViewState.LOADED)
-                if (isSuccess) popBackStack()
-                else toastLong(error)
-            }
+            viewModel.sendUpdateUsernameRequest(name)
         } else {
             toast(R.string.app_toast_fill_fields)
         }

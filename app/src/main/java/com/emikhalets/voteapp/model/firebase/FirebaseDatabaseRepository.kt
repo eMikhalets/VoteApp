@@ -35,12 +35,11 @@ class FirebaseDatabaseRepository @Inject constructor(
 
     /**
      * Loads the data of the current user.
-     * Called [complete] when the server responds to a request.
      * If the user exists in the database, callback returns a [Result.Success(true)].
      * Else, it returns [Result.Success(true)]
      * @param complete Callback
      */
-    suspend fun loadUserData(complete: (result: AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun loadUserData(complete: (AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadUserData: STARTED")
         refDatabase.child(NODE_USERS).child(userId()).singleDataChange { snapshot ->
             if (snapshot.exists()) {
@@ -71,16 +70,17 @@ class FirebaseDatabaseRepository @Inject constructor(
 
     /**
      * Loads information from the database for all images and sorts by upload date.
-     * Called [complete] when the server responds to a request. Callback returns a [List]<[Image]>
+     * Callback returns a [List]<[Image]>
      * @param complete Callback
      */
-    suspend fun loadLatestImages(complete: (images: List<Image>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun loadLatestImages(complete: (AppResult<List<Image>>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: loadLatestImages: STARTED")
         refDatabase.child(NODE_IMAGES).orderByChild(CHILD_TIMESTAMP).singleDataChange { snapshot ->
             val list = mutableListOf<Image>()
             snapshot.children.forEach { list.add(it.toImage()) }
             Timber.d("Database request: loadLatestImages: COMPLETE")
-            complete(list)
+            if (list.isEmpty()) complete(AppResult.Error(""))
+            else complete(AppResult.Success(list))
         }
     }
 
@@ -147,13 +147,12 @@ class FirebaseDatabaseRepository @Inject constructor(
     }
 
     /**
-     * Saves the user to the database.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true and an empty error message.
-     * Else, callback returns false and a exception message
+     * Saves the user info to the database.
+     * If request is successful, callback returns true, else returns exception message
+     * @param email User email
      * @param complete Callback
      */
-    suspend fun saveUser(email: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun saveUser(email: String, complete: (result: AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: saveUser: STARTED")
         val map = hashMapOf(
                 CHILD_ID to userId(),
@@ -165,12 +164,12 @@ class FirebaseDatabaseRepository @Inject constructor(
         refDatabase.child(NODE_USERS).child(userId()).setValue(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: saveUser: SUCCESS")
-                    complete(true, "")
+                    complete(AppResult.Success(true))
                 }
                 .addOnFailureListener {
                     Timber.d("Database request: saveUser: FAILURE")
                     it.printStackTrace()
-                    complete(false, it.message.toString())
+                    complete(AppResult.Error(it.message.toString()))
                 }
     }
 
@@ -211,47 +210,43 @@ class FirebaseDatabaseRepository @Inject constructor(
 
     /**
      * Updates the link to the current user's profile photo in the database.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true and an empty error message.
-     * Else, callback returns false and a exception message
+     * If request is successful, callback returns true, else returns exception message
      * @param url Url of the updated profile photo in Firebase Cloud Storage
      * @param complete Callback
      */
-    suspend fun updateUserPhoto(url: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun updateUserPhoto(url: String, complete: (AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: updateUserPhoto: STARTED")
         val map = hashMapOf<String, Any>(CHILD_PHOTO to url)
         refDatabase.child(NODE_USERS).child(userId()).updateChildren(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: updateUserPhoto: SUCCESS")
-                    complete(true, "")
+                    complete(AppResult.Success(true))
                 }
                 .addOnFailureListener {
                     Timber.d("Database request: updateUserPhoto: FAILURE")
                     it.printStackTrace()
-                    complete(false, it.message.toString())
+                    complete(AppResult.Error(it.message.toString()))
                 }
     }
 
     /**
      * Updates the username of the current user in the database.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true and an empty error message.
-     * Else, callback returns false and a exception message
+     * If request is successful, callback returns true, else returns exception message
      * @param name New name of the current user
      * @param complete Callback
      */
-    suspend fun updateUsername(name: String, complete: (success: Boolean, error: String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun updateUsername(name: String, complete: (AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Database request: updateUsername: STARTED")
         val map = hashMapOf<String, Any>(CHILD_USERNAME to name)
         refDatabase.child(NODE_USERS).child(userId()).updateChildren(map)
                 .addOnSuccessListener {
                     Timber.d("Database request: updateUsername: SUCCESS")
-                    complete(true, "")
+                    complete(AppResult.Success(true))
                 }
                 .addOnFailureListener {
                     Timber.d("Database request: updateUsername: FAILURE")
                     it.printStackTrace()
-                    complete(false, it.message.toString())
+                    complete(AppResult.Error(it.message.toString()))
                 }
     }
 

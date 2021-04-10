@@ -1,6 +1,7 @@
 package com.emikhalets.voteapp.model.firebase
 
 import android.net.Uri
+import com.emikhalets.voteapp.utils.AppResult
 import com.emikhalets.voteapp.utils.userId
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
@@ -43,28 +44,30 @@ class FirebaseStorageRepository @Inject constructor(
 
     /**
      * Saves user profile photo in storage and returns photo url in callback.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true, photo url and an empty error message.
-     * Else, callback returns false, empty photo url and a exception message
+     * If request is successful, callback returns photo url, else returns exception message
      * @param uri Image uri
      * @param complete Callback
      */
-    suspend fun saveUserPhoto(uri: Uri, complete: (success: Boolean, url: String, error: String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun saveUserPhoto(uri: Uri, complete: (AppResult<String>) -> Unit) = withContext(Dispatchers.IO) {
         Timber.d("Storage request: saveUserPhoto: STARTED")
         refStorage.child(FOLDER_PROFILES).child(userId()).putFile(uri)
                 .addOnSuccessListener {
                     Timber.d("Storage request: saveUserPhoto: SUCCESS")
-                    suspend {
-                        loadUserPhotoUrl { isSuccess, url, error ->
-                            if (isSuccess) complete(true, url, "")
-                            else complete(false, "", error)
-                        }
-                    }
+                    refStorage.child(FOLDER_PROFILES).child(userId()).downloadUrl
+                            .addOnSuccessListener {
+                                Timber.d("Storage request: downloadUserPhotoUrl: SUCCESS")
+                                complete(AppResult.Success(it.toString()))
+                            }
+                            .addOnFailureListener {
+                                Timber.d("Storage request: downloadUserPhotoUrl: FAILURE")
+                                it.printStackTrace()
+                                complete(AppResult.Error(it.message.toString()))
+                            }
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: saveUserPhoto: FAILURE")
                     it.printStackTrace()
-                    complete(false, "", it.message.toString())
+                    complete(AppResult.Error(it.message.toString()))
                 }
     }
 
@@ -107,27 +110,6 @@ class FirebaseStorageRepository @Inject constructor(
                 }
                 .addOnFailureListener {
                     Timber.d("Storage request: loadImageUrl: FAILURE")
-                    it.printStackTrace()
-                    complete(false, "", it.message.toString())
-                }
-    }
-
-    /**
-     * Uploads a profile photo to cloud storage.
-     * Called [complete] when the server responds to a request.
-     * If request is successful, callback returns a true, photo url and an empty error message.
-     * Else, callback returns false, empty photo url and a exception message
-     * @param complete Callback
-     */
-    private suspend fun loadUserPhotoUrl(complete: (success: Boolean, url: String, error: String) -> Unit) = withContext(Dispatchers.IO) {
-        Timber.d("Storage request: loadUserPhotoUrl: STARTED")
-        refStorage.child(FOLDER_PROFILES).child(userId()).downloadUrl
-                .addOnSuccessListener {
-                    Timber.d("Storage request: loadUserPhotoUrl: SUCCESS")
-                    complete(true, it.toString(), "")
-                }
-                .addOnFailureListener {
-                    Timber.d("Storage request: loadUserPhotoUrl: FAILURE")
                     it.printStackTrace()
                     complete(false, "", it.message.toString())
                 }

@@ -10,6 +10,9 @@
     <string name="app_toast_login_busy">По данной почте уже зарегистрирован аккаунт</string>
     <string name="app_toast_need_relog_change_pass">Ваша пользовательская сессия длится слишком долго, вам терубется снова войти в систему, чтобы изменить свой пароль</string>
     <string name="app_toast_initialization">Инициализация</string>
+    <string name="app_toast_no_internet">Нет интернет соединения</string>
+    <string name="app_toast_no_images_on_server">На сервере нет изображений</string>
+    <string name="app_toast_no_images_user">Загрузите изображения!</string>
 
     <string name="app_login_to_email">%s@roflomail.com</string>
 

@@ -38,15 +38,22 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private fun initListeners() {
         viewModel.apply {
-            user.observe(viewLifecycleOwner) {
+            user.observe(viewLifecycleOwner, {
                 activity().drawer.updateHeader(it)
-            }
-            images.observe(viewLifecycleOwner) {
+            })
+
+            images.observe(viewLifecycleOwner, {
                 setViewState(ViewState.LOADED)
                 imagesAdapter.submitList(it)
                 binding.listImages.scrollToTop(this@HomeFragment)
-            }
+            })
+
+            error.observe(viewLifecycleOwner, EventObserver {
+                setViewState(ViewState.LOADED)
+                toast(R.string.app_toast_no_images_on_server)
+            })
         }
+
         binding.root.setOnRefreshListener { onRefreshInvoke() }
     }
 
@@ -72,8 +79,8 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         binding.apply {
             layoutRefresh.isRefreshing = false
             when (state) {
-                ViewState.LOADING -> progressBar?.animShow()
-                ViewState.LOADED -> progressBar?.animHide()
+                ViewState.LOADING -> progressBar.animShow()
+                ViewState.LOADED -> progressBar.animHide()
             }
         }
     }

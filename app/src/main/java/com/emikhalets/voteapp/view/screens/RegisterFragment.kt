@@ -19,6 +19,21 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initListeners()
+        binding.btnRegister.setOnClickListener { onRegisterClick() }
+    }
+
+    private fun initListeners() {
+        viewModel.registerState.observe(viewLifecycleOwner, {
+            setViewState(ViewState.LOADED)
+            navigate(R.id.action_authRegister_to_home)
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+            setViewState(ViewState.LOADED)
+            toastLong(message)
+        })
+
         binding.btnRegister.setOnClickListener { onRegisterClick() }
     }
 
@@ -31,9 +46,7 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
             when (it) {
                 RegisterToast.SUCCESS -> {
                     setViewState(ViewState.LOADING)
-                    viewModel.sendRegisterRequest(login, pass) { isSuccess, error ->
-                        onRequestComplete(isSuccess, error)
-                    }
+                    viewModel.sendRegisterRequest(login, pass)
                 }
                 RegisterToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
                 RegisterToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
@@ -41,12 +54,6 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
                 RegisterToast.PASS_MISMATCH -> toast(R.string.app_toast_pass_not_confirm)
             }
         }
-    }
-
-    private fun onRequestComplete(isSuccess: Boolean, error: String) {
-        setViewState(ViewState.LOADED)
-        if (isSuccess) navigate(R.id.action_authRegister_to_home)
-        else toastLong(error)
     }
 
     private fun setViewState(state: ViewState) {

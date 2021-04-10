@@ -1,32 +1,31 @@
 package com.emikhalets.voteapp.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.voteapp.model.firebase.FirebaseAuthRepository
-import com.emikhalets.voteapp.model.firebase.FirebaseDatabaseRepository
+import com.emikhalets.voteapp.utils.AppResult
+import com.emikhalets.voteapp.utils.Event
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-        private val authRepository: FirebaseAuthRepository,
-        private val databaseRepository: FirebaseDatabaseRepository,
+        private val authRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
-    fun sendLoginRequest(login: String, pass: String, complete: (Boolean, String) -> Unit) {
+    private val _loginState = MutableLiveData<Boolean>()
+    val loginState get(): LiveData<Boolean> = _loginState
+
+    private val _error = MutableLiveData<Event<String>>()
+    val error get(): LiveData<Event<String>> = _error
+
+    fun sendLoginRequest(login: String, pass: String) {
         viewModelScope.launch {
-            authRepository.login(login, pass) { isSuccess, error ->
-                if (isSuccess) {
-                    suspend {
-//                        databaseRepository.loadUserData { user, userError ->
-//                            if (user != null) {
-//                                complete(true, "")
-//                            } else {
-//                                complete(false, userError)
-//                            }
-//                        }
-                    }
-                } else {
-                    complete(false, error)
+            authRepository.login(login, pass) { result ->
+                when (result) {
+                    is AppResult.Success -> _loginState.postValue(true)
+                    is AppResult.Error -> _error.postValue(Event(result.message))
                 }
             }
         }

@@ -1,5 +1,8 @@
 package com.emikhalets.voteapp.view.screens
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.View
 import com.emikhalets.voteapp.R
@@ -39,7 +42,8 @@ class StartFragment : AuthFragment<FragmentStartBinding>(FragmentStartBinding::i
     private fun onViewLoaded() {
         setViewState(ViewState.LOADING)
         toast(R.string.app_toast_initialization)
-        viewModel.checkUserExistingRequest()
+        if (checkInternet()) viewModel.checkUserExistingRequest()
+        else toast(R.string.app_toast_no_internet)
     }
 
     private fun setViewState(state: ViewState) {
@@ -47,5 +51,12 @@ class StartFragment : AuthFragment<FragmentStartBinding>(FragmentStartBinding::i
             ViewState.LOADING -> binding.progressBar.animShow()
             ViewState.LOADED -> binding.progressBar.animHide()
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkInternet(): Boolean {
+        val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        return activeNetwork?.isConnectedOrConnecting == true
     }
 }
