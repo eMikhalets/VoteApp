@@ -17,6 +17,9 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableLiveData<Boolean>()
     val loginState get(): LiveData<Boolean> = _loginState
 
+    private val _passResetState = MutableLiveData<Boolean>()
+    val passResetState get(): LiveData<Boolean> = _passResetState
+
     private val _error = MutableLiveData<Event<String>>()
     val error get(): LiveData<Event<String>> = _error
 
@@ -25,6 +28,17 @@ class LoginViewModel @Inject constructor(
             authRepository.login(login, pass) { result ->
                 when (result) {
                     is AppResult.Success -> _loginState.postValue(true)
+                    is AppResult.Error -> _error.postValue(Event(result.message))
+                }
+            }
+        }
+    }
+
+    fun sendResetPassRequest(email: String) {
+        viewModelScope.launch {
+            authRepository.resetPassword(email) { result ->
+                when (result) {
+                    is AppResult.Success -> _passResetState.postValue(true)
                     is AppResult.Error -> _error.postValue(Event(result.message))
                 }
             }

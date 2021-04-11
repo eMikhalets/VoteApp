@@ -45,4 +45,7 @@ abstract class FragmentBindingModule {
 
     @ContributesAndroidInjector
     abstract fun provideDeleteImageDialog(): DeleteImageDialog
+
+    @ContributesAndroidInjector
+    abstract fun provideResetPassDialog(): ResetPassDialog
 }

@@ -5,15 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.emikhalets.voteapp.R
-import com.emikhalets.voteapp.databinding.DialogChangeNameBinding
+import com.emikhalets.voteapp.databinding.DialogResetPassBinding
 import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.base.BaseDialog
-import com.emikhalets.voteapp.viewmodel.ProfileViewModel
+import com.emikhalets.voteapp.viewmodel.LoginViewModel
 
-class ChangeNameDialog : BaseDialog() {
+class ResetPassDialog : BaseDialog() {
 
-    private lateinit var viewModel: ProfileViewModel
-    private var _binding: DialogChangeNameBinding? = null
+    private lateinit var viewModel: LoginViewModel
+    private var _binding: DialogResetPassBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,16 +27,19 @@ class ChangeNameDialog : BaseDialog() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = DialogChangeNameBinding.inflate(LayoutInflater.from(context))
+        _binding = DialogResetPassBinding.inflate(LayoutInflater.from(context))
 
-        viewModel.usernameState.observe(activity(), { popBackStack() })
+        viewModel.passResetState.observe(activity(), {
+            toastLong(R.string.app_toast_reset_pass_email_send)
+            popBackStack()
+        })
 
         viewModel.error.observe(activity(), EventObserver { message ->
             setViewState(ViewState.LOADED)
             toastLong(message)
         })
 
-        binding.btnApply.setOnClickListener { onApplyClick() }
+        binding.btnReset.setOnClickListener { onResetClick() }
 
         return AlertDialog.Builder(requireContext())
                 .setView(binding.root)
@@ -48,15 +51,16 @@ class ChangeNameDialog : BaseDialog() {
         _binding = null
     }
 
-    private fun onApplyClick() {
+    private fun onResetClick() {
         hideKeyboard()
-        val name = binding.inputName.text.toString()
-        validateChangeName(name) {
+        val email = binding.inputEmail.text.toString()
+        validateResetPass(email) {
             when (it) {
-                ChangeNameToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
-                ChangeNameToast.SUCCESS -> {
+                ResetPassToast.EMPTY_FIELDS -> toast(R.string.app_toast_fill_fields)
+                ResetPassToast.INVALID_EMAIL -> toast(R.string.app_toast_invalid_email)
+                ResetPassToast.SUCCESS -> {
                     setViewState(ViewState.LOADING)
-                    viewModel.sendUpdateUsernameRequest(name)
+                    viewModel.sendResetPassRequest(email)
                 }
             }
         }

@@ -26,3 +26,9 @@ enum class ChangeNameToast {
     SUCCESS,
     EMPTY_FIELDS
 }
+
+enum class ResetPassToast {
+    SUCCESS,
+    INVALID_EMAIL,
+    EMPTY_FIELDS
+}

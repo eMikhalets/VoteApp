@@ -2,6 +2,7 @@ package com.emikhalets.voteapp.model.firebase
 
 import android.net.Uri
 import com.emikhalets.voteapp.utils.AppResult
+import com.emikhalets.voteapp.utils.userEmail
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.Dispatchers
@@ -151,6 +152,25 @@ class FirebaseAuthRepository @Inject constructor(
                 }
                 ?.addOnFailureListener {
                     Timber.d("Authentication request: updateUserPhoto: FAILURE")
+                    it.printStackTrace()
+                    complete(AppResult.Error(it.message.toString()))
+                }
+    }
+
+    /**
+     * Send a password reset email.
+     * If request is successful, callback returns true, else returns exception message
+     * @param complete Callback
+     */
+    suspend fun resetPassword(email: String, complete: (AppResult<Boolean>) -> Unit) = withContext(Dispatchers.IO) {
+        Timber.d("Authentication request: resetPassword: STARTED")
+        auth.sendPasswordResetEmail(email)
+                .addOnSuccessListener {
+                    Timber.d("Authentication request: resetPassword: SUCCESS")
+                    complete(AppResult.Success(true))
+                }
+                .addOnFailureListener {
+                    Timber.d("Authentication request: createUserWithEmailAndPassword: FAILURE")
                     it.printStackTrace()
                     complete(AppResult.Error(it.message.toString()))
                 }

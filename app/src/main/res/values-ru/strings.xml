@@ -14,8 +14,7 @@
     <string name="app_toast_no_images_on_server">На сервере нет изображений</string>
     <string name="app_toast_no_users_on_server">На сервере нет пользователей</string>
     <string name="app_toast_no_images_user">Загрузите изображения!</string>
-
-    <string name="app_login_to_email">%s@roflomail.com</string>
+    <string name="app_toast_reset_pass_email_send">На Вашу почту было отправлено письмо со ссылкой для сброса пароля</string>
 
     <!-- Toolbar Titles -->
     <string name="home_title">Последние Фото</string>
@@ -43,6 +42,9 @@
     <string name="auth_text_forgot_pass"><u>Забыли пароль?</u></string>
     <string name="auth_btn_login">Войти</string>
     <string name="auth_btn_register">Регистрация</string>
+    <string name="auth_reset_pass_text_label">Сбросить пароль</string>
+    <string name="auth_reset_pass_text_email">Почта</string>
+    <string name="auth_reset_pass_btn_reset">Сбросить</string>
 
     <!-- Profile Screen -->
     <string name="profile_text_rating">Рейтинг: %d</string>

@@ -35,3 +35,11 @@ inline fun validateChangeName(name: String, crossinline onComplete: (ChangeNameT
     if (name.isNotEmpty()) onComplete(ChangeNameToast.SUCCESS)
     else onComplete(ChangeNameToast.EMPTY_FIELDS)
 }
+
+inline fun validateResetPass(email: String, crossinline onComplete: (ResetPassToast) -> Unit) {
+    if (email.isNotEmpty()) {
+        val pattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$".toRegex()
+        if (email.matches(pattern)) onComplete(ResetPassToast.SUCCESS)
+        else onComplete(ResetPassToast.INVALID_EMAIL)
+    } else onComplete(ResetPassToast.EMPTY_FIELDS)
+}

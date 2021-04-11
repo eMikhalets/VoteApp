@@ -14,8 +14,7 @@
     <string name="app_toast_no_images_on_server">No images on server</string>
     <string name="app_toast_no_users_on_server">No users on server</string>
     <string name="app_toast_no_images_user">Upload images!</string>
-
-    <string name="app_login_to_email">%s@roflomail.com</string>
+    <string name="app_toast_reset_pass_email_send">An email was sent to your email with a link to reset your password</string>
 
     <!-- Toolbar Titles -->
     <string name="home_title">Latest Images</string>
@@ -43,6 +42,9 @@
     <string name="auth_text_forgot_pass"><u>Forgot password?</u></string>
     <string name="auth_btn_login">Login</string>
     <string name="auth_btn_register">Register</string>
+    <string name="auth_reset_pass_text_label">Reset password</string>
+    <string name="auth_reset_pass_text_email">E-mail</string>
+    <string name="auth_reset_pass_btn_reset">Reset</string>
 
     <!-- Profile Screen -->
     <string name="profile_text_rating">Rating: %d</string>

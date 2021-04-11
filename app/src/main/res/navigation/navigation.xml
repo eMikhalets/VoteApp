@@ -90,6 +90,9 @@
             app:exitAnim="@anim/slide_out"
             app:popEnterAnim="@anim/slide_pop_in"
             app:popExitAnim="@anim/slide_pop_out" />
+        <action
+            android:id="@+id/action_authLogin_to_resetPass"
+            app:destination="@id/resetPassDialog" />
     </fragment>
 
     <fragment
@@ -180,5 +183,11 @@
         android:name="com.emikhalets.voteapp.view.screens.DeleteImageDialog"
         android:label="DeleteImageDialog"
         tools:layout="@layout/dialog_delete_image" />
+
+    <dialog
+        android:id="@+id/resetPassDialog"
+        android:name="com.emikhalets.voteapp.view.screens.ResetPassDialog"
+        android:label="ResetPassDialog"
+        tools:layout="@layout/dialog_reset_pass" />
 
 </navigation>

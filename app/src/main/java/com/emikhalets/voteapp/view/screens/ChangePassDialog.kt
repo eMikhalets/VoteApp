@@ -50,6 +50,7 @@ class ChangePassDialog : BaseDialog() {
     }
 
     private fun onApplyClick() {
+        hideKeyboard()
         val newPass = binding.inputNew.text.toString()
         val newConf = binding.inputNewConf.text.toString()
         validateChangePass(newPass, newConf) {

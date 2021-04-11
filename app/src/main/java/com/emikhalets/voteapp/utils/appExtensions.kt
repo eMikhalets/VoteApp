@@ -77,6 +77,8 @@ fun Fragment.toast(stringRes: Int) = Toast.makeText(requireContext(), stringRes,
 
 fun Fragment.toast(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
+fun Fragment.toastLong(stringRes: Int) = Toast.makeText(requireContext(), stringRes, Toast.LENGTH_LONG).show()
+
 fun Fragment.toastLong(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
 //fun toastException(exception: Exception?) {
@@ -152,3 +154,5 @@ fun userId(): String = Firebase.auth.currentUser?.uid.toString()
 fun username(): String = Firebase.auth.currentUser?.displayName.toString()
 
 fun userPhoto(): String = Firebase.auth.currentUser?.photoUrl.toString()
+
+fun userEmail(): String = Firebase.auth.currentUser?.email.toString()

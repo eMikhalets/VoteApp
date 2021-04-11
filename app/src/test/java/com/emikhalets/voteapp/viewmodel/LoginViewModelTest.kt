@@ -59,4 +59,30 @@ class LoginViewModelTest {
             assertEquals(viewModel.error.getOrAwaitValue().getContentIfNotHandled(), "login error")
         }
     }
+
+    @Test
+    fun sendResetPassRequestTest() = testCoroutineRule.runBlockingTest {
+        `when`(authRepository.resetPassword(anyString(), any())).thenAnswer {
+            (it.arguments[1] as ((AppResult<Boolean>) -> Unit)).invoke(AppResult.Success(true))
+        }
+
+        viewModel.sendResetPassRequest("login@mail.com")
+
+        viewModel.passResetState.observeForTesting {
+            assertEquals(viewModel.passResetState.getOrAwaitValue(), true)
+        }
+    }
+
+    @Test
+    fun sendResetPassRequestTestError() = testCoroutineRule.runBlockingTest {
+        `when`(authRepository.resetPassword(anyString(), any())).thenAnswer {
+            (it.arguments[1] as ((AppResult<Boolean>) -> Unit)).invoke(AppResult.Error("reset pass error"))
+        }
+
+        viewModel.sendResetPassRequest("login@mail.com")
+
+        viewModel.error.observeForTesting {
+            assertEquals(viewModel.error.getOrAwaitValue().getContentIfNotHandled(), "reset pass error")
+        }
+    }
 }

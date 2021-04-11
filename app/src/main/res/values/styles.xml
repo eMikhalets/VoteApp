@@ -82,9 +82,11 @@
     </style>
 
     <style name="AppTextLink">
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:textColor">?attr/colorTextLink</item>
         <item name="android:textSize">@dimen/app_text_size_small</item>
-        <item name="android:layout_marginTop">@dimen/app_margin</item>
+        <item name="android:padding">@dimen/app_padding_small</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="AppTextImage">
