@@ -40,10 +40,13 @@ class StartFragment : AuthFragment<FragmentStartBinding>(FragmentStartBinding::i
     }
 
     private fun onViewLoaded() {
-        setViewState(ViewState.LOADING)
-        toast(R.string.app_toast_initialization)
-        if (checkInternet()) viewModel.checkUserExistingRequest()
-        else toast(R.string.app_toast_no_internet)
+        if (checkInternet()) {
+            setViewState(ViewState.LOADING)
+            toast(R.string.app_toast_initialization)
+            viewModel.checkUserExistingRequest()
+        } else {
+            toast(R.string.app_toast_no_internet)
+        }
     }
 
     private fun setViewState(state: ViewState) {

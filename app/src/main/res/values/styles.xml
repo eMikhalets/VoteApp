@@ -1,5 +1,10 @@
 <resources>
 
+    <style name="DialogAnim">
+        <item name="android:windowEnterAnimation">@anim/scale_in</item>
+        <item name="android:windowExitAnimation">@anim/scale_out</item>
+    </style>
+
     <style name="BezelImageView">
         <item name="biv_maskDrawable">@drawable/material_drawer_rectangle_mask</item>
         <item name="biv_drawCircularShadow">false</item>
@@ -170,6 +175,9 @@
         <item name="android:background">@drawable/background_progress_bar</item>
         <item name="android:layout_width">@dimen/app_progress_bar_size</item>
         <item name="android:layout_height">@dimen/app_progress_bar_size</item>
+        <item name="android:alpha">0</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
     </style>
 
     <style name="AppProgressBarDialog" parent="AppProgressBar">

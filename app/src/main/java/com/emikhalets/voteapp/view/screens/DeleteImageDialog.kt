@@ -3,11 +3,12 @@ package com.emikhalets.voteapp.view.screens
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
+import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogDeleteImageBinding
 import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.base.BaseDialog
 import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DeleteImageDialog : BaseDialog() {
 
@@ -20,12 +21,18 @@ class DeleteImageDialog : BaseDialog() {
         viewModel = injectViewModel(viewModelFactory)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnim
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogDeleteImageBinding.inflate(LayoutInflater.from(context))
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnim
 
-        viewModel.deleteState.observe(viewLifecycleOwner, { popBackStack() })
+        viewModel.deleteState.observe(activity(), { popBackStack() })
 
-        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+        viewModel.error.observe(activity(), EventObserver { message ->
             setViewState(ViewState.LOADED)
             toastLong(message)
         })
@@ -34,7 +41,7 @@ class DeleteImageDialog : BaseDialog() {
 
         binding.btnNo.setOnClickListener { dismiss() }
 
-        return MaterialAlertDialogBuilder(requireContext())
+        return AlertDialog.Builder(requireContext())
                 .setView(binding.root)
                 .create()
     }

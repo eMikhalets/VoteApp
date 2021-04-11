@@ -3,12 +3,12 @@ package com.emikhalets.voteapp.view.screens
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogChangePassBinding
 import com.emikhalets.voteapp.utils.*
 import com.emikhalets.voteapp.view.base.BaseDialog
 import com.emikhalets.voteapp.viewmodel.ProfileViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ChangePassDialog : BaseDialog() {
 
@@ -21,19 +21,25 @@ class ChangePassDialog : BaseDialog() {
         viewModel = injectViewModel(viewModelFactory)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnim
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogChangePassBinding.inflate(LayoutInflater.from(context))
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnim
 
-        viewModel.passwordState.observe(viewLifecycleOwner, { popBackStack() })
+        viewModel.passwordState.observe(activity(), { popBackStack() })
 
-        viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
+        viewModel.error.observe(activity(), EventObserver { message ->
             setViewState(ViewState.LOADED)
             toastLong(message)
         })
 
         binding.btnApply.setOnClickListener { onApplyClick() }
 
-        return MaterialAlertDialogBuilder(requireContext())
+        return AlertDialog.Builder(requireContext())
                 .setView(binding.root)
                 .create()
     }
