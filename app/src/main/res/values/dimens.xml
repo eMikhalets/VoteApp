@@ -40,6 +40,7 @@
 
     <!-- Dialogs Dimensions -->
     <dimen name="profile_change_name_btn_width">100dp</dimen>
+    <dimen name="dialog_corner_radius">16dp</dimen>
 
     <!-- Voting Dimensions -->
     <dimen name="voting_btn_landscape_width">50dp</dimen>
