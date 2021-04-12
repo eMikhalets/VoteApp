@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -45,7 +46,7 @@ android {
 }
 
 dependencies {
-    def nav_version = "2.3.4"
+    def nav_version = "2.3.5"
     def dagger_version = "2.33"
     def drawer_version = "7.0.0"
     def activity_version = "1.2.2"
@@ -65,6 +66,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation "com.mikepenz:materialdrawer:$drawer_version"
     implementation "com.mikepenz:materialdrawer-nav:$drawer_version"
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
     // Navigation

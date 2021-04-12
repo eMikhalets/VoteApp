@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.os.bundleOf
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentUserImagesBinding
 import com.emikhalets.voteapp.utils.*
@@ -62,6 +61,7 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
             setHasFixedSize(true)
             isNestedScrollingEnabled = false
             adapter = imagesAdapter
+            handleTransition(this@UserImagesFragment)
         }
     }
 
@@ -109,13 +109,11 @@ class UserImagesFragment : ContentFragment<FragmentUserImagesBinding>(FragmentUs
     }
 
     private fun onImageClick(url: String, view: View) {
-        val args = bundleOf(ARGS_PHOTO to url)
-        navigate(R.id.action_userImages_to_image, args)
+        navigate(UserImagesFragmentDirections.actionUserImagesToImage(url), view to url)
     }
 
     private fun onDeleteImageClick(name: String): Boolean {
-        val args = bundleOf(ARGS_NAME to name)
-        navigate(R.id.action_userImages_to_deleteImage, args)
+        navigate(UserImagesFragmentDirections.actionUserImagesToDeleteImage(name))
         return true
     }
 

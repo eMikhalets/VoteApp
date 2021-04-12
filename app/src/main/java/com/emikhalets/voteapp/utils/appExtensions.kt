@@ -1,7 +1,6 @@
 package com.emikhalets.voteapp.utils
 
 import android.app.Activity
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
-import androidx.navigation.Navigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.emikhalets.voteapp.BuildConfig
@@ -45,41 +44,37 @@ fun Fragment.activity() = activity as MainActivity
 
 // Navigation Component
 
-fun navigate(activity: AppCompatActivity, destination: Int) {
-    Navigation.findNavController(activity, R.id.fragment_container).navigate(destination)
-}
+fun navigate(activity: AppCompatActivity, direction: NavDirections) =
+        Navigation.findNavController(activity, R.id.fragment_container).navigate(direction)
 
-fun popBackStack(activity: AppCompatActivity) {
-    Navigation.findNavController(activity, R.id.fragment_container).popBackStack()
-}
+fun popBackStack(activity: AppCompatActivity) =
+        Navigation.findNavController(activity, R.id.fragment_container).popBackStack()
 
-fun Fragment.navigate(
-        destination: Int,
-        args: Bundle? = null,
-        options: NavOptions? = null,
-        extras: Navigator.Extras? = null,
-) {
-    lifecycleScope.launchWhenResumed {
-        findNavController().navigate(destination, args, options, extras)
-    }
+fun Fragment.navigate(direction: NavDirections) = findNavController().navigate(direction)
+
+fun Fragment.navigate(direction: NavDirections, sharedElement: Pair<View, String>) {
+    val extras = FragmentNavigatorExtras(sharedElement)
+    findNavController().navigate(direction, extras)
 }
 
 fun Fragment.popBackStack(destination: Int? = null, inclusive: Boolean = false) {
-    lifecycleScope.launchWhenResumed {
-        if (destination == null) findNavController().popBackStack()
-        else findNavController().popBackStack(destination, inclusive)
-    }
+    if (destination == null) findNavController().popBackStack()
+    else findNavController().popBackStack(destination, inclusive)
 }
 
 // Toasts
 
-fun Fragment.toast(stringRes: Int) = Toast.makeText(requireContext(), stringRes, Toast.LENGTH_SHORT).show()
+fun Fragment.toast(stringRes: Int) =
+        Toast.makeText(requireContext(), stringRes, Toast.LENGTH_SHORT).show()
 
-fun Fragment.toast(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+fun Fragment.toast(message: String) =
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-fun Fragment.toastLong(stringRes: Int) = Toast.makeText(requireContext(), stringRes, Toast.LENGTH_LONG).show()
+fun Fragment.toastLong(stringRes: Int) =
+        Toast.makeText(requireContext(), stringRes, Toast.LENGTH_LONG).show()
 
-fun Fragment.toastLong(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+fun Fragment.toastLong(message: String) =
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
 //fun toastException(exception: Exception?) {
 //    when (exception) {
@@ -119,16 +114,24 @@ fun RecyclerView.scrollToTop(fragment: Fragment) {
     }
 }
 
+fun RecyclerView.handleTransition(fragment: Fragment) {
+    fragment.postponeEnterTransition()
+    viewTreeObserver.addOnPreDrawListener {
+        fragment.startPostponedEnterTransition()
+        true
+    }
+}
+
 fun View.animShow(duration: Long = 400, start: () -> Unit = {}) {
     alpha = 0f
     scaleX = 0f
     scaleY = 0f
     val listener = AppAnimatorListener(start = { start() })
     animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(duration)
-            .setInterpolator(AccelerateInterpolator()).start()
+            .setInterpolator(AccelerateInterpolator()).setListener(listener).start()
 }
 
-fun View.animHide(duration: Long = 400, end: () -> Unit = {}) {
+fun View.animHide(duration: Long = 0, end: () -> Unit = {}) {
     alpha = 1f
     scaleX = 1f
     scaleY = 1f

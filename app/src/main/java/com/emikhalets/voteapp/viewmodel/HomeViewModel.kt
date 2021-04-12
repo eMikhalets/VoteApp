@@ -38,10 +38,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun sendLoadUserDataRequest() {
-        viewModelScope.launch {
-            userReference = databaseRepository.listenUserDataChanges()
-            userDataListener = AppValueEventListener { _user.postValue(it.toUser()) }
-            userReference.addValueEventListener(userDataListener)
+        if (_user.value == null) {
+            viewModelScope.launch {
+                userReference = databaseRepository.listenUserDataChanges()
+                userDataListener = AppValueEventListener { _user.postValue(it.toUser()) }
+                userReference.addValueEventListener(userDataListener)
+            }
         }
     }
 

@@ -26,7 +26,7 @@ class RegisterFragment : AuthFragment<FragmentAuthRegisterBinding>(FragmentAuthR
     private fun initListeners() {
         viewModel.registerState.observe(viewLifecycleOwner, {
             setViewState(ViewState.LOADED)
-            navigate(R.id.action_authRegister_to_home)
+            navigate(RegisterFragmentDirections.actionAuthRegisterToHome())
         })
 
         viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->

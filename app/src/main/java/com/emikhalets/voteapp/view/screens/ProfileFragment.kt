@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.core.view.ViewCompat
+import androidx.navigation.fragment.findNavController
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentProfileBinding
 import com.emikhalets.voteapp.model.entities.User
@@ -23,18 +23,18 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = injectViewModel(viewModelFactory)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         takeImageResult = registerForActivityResult(TakeImageContract(activity())) {
             onTakeImageResult(it)
         }
-        sharedElementEnterTransition =
-                TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity().title = getString(R.string.profile_title)
-        initListeners()
         if (savedInstanceState == null) onViewLoaded()
+        if (userPhoto().isNotEmpty() && userPhoto() != "null") ViewCompat.setTransitionName(binding.image, userPhoto())
+        initListeners()
     }
 
     private fun initListeners() {
@@ -49,7 +49,7 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
 
         viewModel.logoutState.observe(viewLifecycleOwner, {
             setViewState(ViewState.LOADED)
-            navigate(R.id.authLoginFragment)
+            findNavController().navigate(R.id.authLoginFragment)
         })
 
         viewModel.error.observe(viewLifecycleOwner, EventObserver { message ->
@@ -81,9 +81,8 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
 
     private fun onPhotoClick() {
         if (userPhoto().isNotEmpty() && userPhoto() != "null") {
-            val args = bundleOf(ARGS_PHOTO to userPhoto())
-            val extras = FragmentNavigatorExtras(binding.image to getString(R.string.app_transition_name_image_zoom))
-            navigate(R.id.action_profile_to_image, args, extras = extras)
+            navigate(ProfileFragmentDirections.actionProfileToImage(userPhoto()),
+                    binding.image to userPhoto())
         }
     }
 
@@ -97,11 +96,11 @@ class ProfileFragment : ContentFragment<FragmentProfileBinding>(FragmentProfileB
     }
 
     private fun onChangeUsernameClick() {
-        navigate(R.id.action_profile_to_changeName)
+        navigate(ProfileFragmentDirections.actionProfileToChangeName())
     }
 
     private fun onChangePassClick() {
-        navigate(R.id.action_profile_to_changePass)
+        navigate(ProfileFragmentDirections.actionProfileToChangePass())
     }
 
     private fun onLogoutClick() {

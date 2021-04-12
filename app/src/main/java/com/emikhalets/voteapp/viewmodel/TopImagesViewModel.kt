@@ -22,14 +22,16 @@ class TopImagesViewModel @Inject constructor(
     val error get(): LiveData<Event<String>> = _error
 
     fun sendLoadTopImagesRequest() {
-        viewModelScope.launch {
-            databaseRepository.loadTopImages { result ->
-                when (result) {
-                    is AppResult.Success -> {
-                        val list = result.data.sortedByDescending { it.rating }
-                        _images.postValue(list)
+        if (_images.value == null) {
+            viewModelScope.launch {
+                databaseRepository.loadTopImages { result ->
+                    when (result) {
+                        is AppResult.Success -> {
+                            val list = result.data.sortedByDescending { it.rating }
+                            _images.postValue(list)
+                        }
+                        is AppResult.Error -> _error.postValue(Event(result.message))
                     }
-                    is AppResult.Error -> _error.postValue(Event(result.message))
                 }
             }
         }

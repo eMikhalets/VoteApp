@@ -25,8 +25,9 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
     private fun initListener() {
         viewModel.loginState.observe(viewLifecycleOwner, {
             setViewState(ViewState.LOADED)
-            navigate(R.id.action_authLogin_to_home)
+            navigate(LoginFragmentDirections.actionAuthLoginToHome())
         })
+
         viewModel.passResetState.observe(viewLifecycleOwner, {
             setViewState(ViewState.LOADED)
             toast("Reset pass request success")
@@ -63,12 +64,12 @@ class LoginFragment : AuthFragment<FragmentAuthLoginBinding>(FragmentAuthLoginBi
 
     private fun onRegisterClick() {
         hideKeyboard()
-        navigate(R.id.action_authLogin_to_authRegister)
+        navigate(LoginFragmentDirections.actionAuthLoginToAuthRegister())
     }
 
     private fun onResetPassClick() {
         hideKeyboard()
-        navigate(R.id.action_authLogin_to_resetPass)
+        navigate(LoginFragmentDirections.actionAuthLoginToResetPass())
     }
 
     private fun setViewState(state: ViewState) {

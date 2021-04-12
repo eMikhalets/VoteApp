@@ -2,7 +2,6 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentHomeBinding
 import com.emikhalets.voteapp.utils.*
@@ -23,16 +22,17 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity().title = getString(R.string.home_title)
+        if (savedInstanceState == null) onViewLoaded()
         initRecyclerView()
         initListeners()
-        if (savedInstanceState == null) onViewLoaded()
     }
 
     private fun initRecyclerView() {
         imagesAdapter = ImagesAdapter(true, { url, view -> onImageClick(url, view) })
-        binding.apply {
-            listImages.setHasFixedSize(true)
-            listImages.adapter = imagesAdapter
+        binding.listImages.apply {
+            setHasFixedSize(true)
+            adapter = imagesAdapter
+            handleTransition(this@HomeFragment)
         }
     }
 
@@ -45,7 +45,6 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             images.observe(viewLifecycleOwner, {
                 setViewState(ViewState.LOADED)
                 imagesAdapter.submitList(it)
-                binding.listImages.scrollToTop(this@HomeFragment)
             })
 
             error.observe(viewLifecycleOwner, EventObserver {
@@ -60,8 +59,8 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun onViewLoaded() {
         setViewState(ViewState.LOADING)
         viewModel.apply {
-            sendLatestImagesRequest()
-            sendLoadUserDataRequest()
+            viewModel.sendLatestImagesRequest()
+            viewModel.sendLoadUserDataRequest()
         }
     }
 
@@ -71,8 +70,7 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun onImageClick(url: String, view: View) {
-        val args = bundleOf(ARGS_PHOTO to url)
-        navigate(R.id.action_home_to_image, args)
+        navigate(HomeFragmentDirections.actionHomeToImage(url), view to url)
     }
 
     private fun setViewState(state: ViewState) {

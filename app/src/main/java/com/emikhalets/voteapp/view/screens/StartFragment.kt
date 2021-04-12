@@ -29,13 +29,13 @@ class StartFragment : AuthFragment<FragmentStartBinding>(FragmentStartBinding::i
     private fun initListeners() {
         viewModel.userExisting.observe(viewLifecycleOwner, {
             setViewState(ViewState.LOADED)
-            navigate(R.id.action_start_to_home)
+            navigate(StartFragmentDirections.actionStartToHome())
         })
 
         viewModel.error.observe(viewLifecycleOwner, EventObserver { error ->
             setViewState(ViewState.LOADED)
             toastLong(error)
-            navigate(R.id.action_start_to_authLogin)
+            navigate(StartFragmentDirections.actionStartToAuthLogin())
         })
     }
 

@@ -17,8 +17,8 @@ class VotingViewModel @Inject constructor(
         private val databaseRepository: FirebaseDatabaseRepository
 ) : ViewModel() {
 
-    private val _prepareState = MutableLiveData<Event<Boolean>>()
-    val prepareState get(): LiveData<Event<Boolean>> = _prepareState
+    private val _prepareState = MutableLiveData<Boolean>()
+    val prepareState get(): LiveData<Boolean> = _prepareState
 
     private val _voteState = MutableLiveData<Boolean>()
     val voteState get(): LiveData<Boolean> = _voteState
@@ -36,25 +36,29 @@ class VotingViewModel @Inject constructor(
     private var selectedName = ""
 
     fun sendPrepareVotingRequest() {
-        viewModelScope.launch {
-            databaseRepository.loadAllImages { result ->
-                when (result) {
-                    is AppResult.Error -> _error.postValue(Event(result.message))
-                    is AppResult.Success -> {
-                        images = result.data
-                        setNextRandomImages()
-                        _prepareState.postValue(Event(true))
+        if (images.isEmpty()) {
+            viewModelScope.launch {
+                databaseRepository.loadAllImages { result ->
+                    when (result) {
+                        is AppResult.Error -> _error.postValue(Event(result.message))
+                        is AppResult.Success -> {
+                            images = result.data
+                            setNextRandomImages()
+                            _prepareState.postValue(true)
+                        }
                     }
                 }
             }
         }
     }
 
-    fun setSelectedImage(image: ImageNumber) {
-        selectedName = when (image) {
-            ImageNumber.FIRST -> _image1.value?.name ?: ""
-            ImageNumber.SECOND -> _image2.value?.name ?: ""
-        }
+    fun setSelectedImage(image: ImageNumber?) {
+        selectedName = if (image != null) {
+            when (image) {
+                ImageNumber.FIRST -> _image1.value?.name ?: ""
+                ImageNumber.SECOND -> _image2.value?.name ?: ""
+            }
+        } else ""
     }
 
     fun sendVoteRequest() {

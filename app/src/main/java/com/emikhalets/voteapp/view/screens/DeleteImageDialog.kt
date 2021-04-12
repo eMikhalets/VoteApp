@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.fragment.navArgs
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.DialogDeleteImageBinding
 import com.emikhalets.voteapp.utils.*
@@ -13,6 +14,7 @@ import com.emikhalets.voteapp.viewmodel.UserImagesViewModel
 class DeleteImageDialog : BaseDialog() {
 
     private lateinit var viewModel: UserImagesViewModel
+    private val args: DeleteImageDialogArgs by navArgs()
     private var _binding: DialogDeleteImageBinding? = null
     private val binding get() = _binding!!
 
@@ -52,11 +54,9 @@ class DeleteImageDialog : BaseDialog() {
     }
 
     private fun onYesClick() {
-        arguments?.let {
-            setViewState(ViewState.LOADING)
-            val name = it.getString(ARGS_NAME) ?: ""
-            viewModel.sendDeleteImageRequest(name)
-        }
+        setViewState(ViewState.LOADING)
+        val name = args.name
+        viewModel.sendDeleteImageRequest(name)
     }
 
     private fun setViewState(state: ViewState) {

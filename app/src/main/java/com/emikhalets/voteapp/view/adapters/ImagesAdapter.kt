@@ -3,6 +3,7 @@ package com.emikhalets.voteapp.view.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,10 +26,8 @@ class ImagesAdapter(
 
     override fun onViewAttachedToWindow(holder: ImagesViewHolder) {
         super.onViewAttachedToWindow(holder)
-        val item = getItem(holder.adapterPosition)
-        holder.itemView.setOnClickListener {
-            click.invoke(item.url, holder.itemView.findViewById(R.id.image))
-        }
+        val item = getItem(holder.bindingAdapterPosition)
+        holder.itemView.setOnClickListener { click.invoke(item.url, holder.itemView) }
         holder.itemView.setOnLongClickListener {
             longClick.invoke(item.name)
             true
@@ -49,6 +48,8 @@ class ImagesAdapter(
             RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Image) {
+            ViewCompat.setTransitionName(itemView, item.url)
+
             binding.apply {
                 image.loadImage(item.url)
                 textRating.text = root.context.getString(

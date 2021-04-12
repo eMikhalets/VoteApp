@@ -2,7 +2,6 @@ package com.emikhalets.voteapp.view.screens
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import com.emikhalets.voteapp.R
 import com.emikhalets.voteapp.databinding.FragmentTopImagesBinding
 import com.emikhalets.voteapp.utils.*
@@ -23,17 +22,17 @@ class TopImagesFragment : ContentFragment<FragmentTopImagesBinding>(FragmentTopI
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity().title = getString(R.string.top_images_title)
+        if (savedInstanceState == null) onViewLoaded()
         initRecyclerView()
         initListeners()
-        if (savedInstanceState == null) onViewLoaded()
     }
 
     private fun initRecyclerView() {
         imagesAdapter = ImagesAdapter(true, { url, v -> onImageClick(url, v) })
-        binding.apply {
-            listImages.setHasFixedSize(true)
-            listImages.isNestedScrollingEnabled = false
-            listImages.adapter = imagesAdapter
+        binding.listImages.apply {
+            setHasFixedSize(true)
+            adapter = imagesAdapter
+            handleTransition(this@TopImagesFragment)
         }
     }
 
@@ -55,8 +54,7 @@ class TopImagesFragment : ContentFragment<FragmentTopImagesBinding>(FragmentTopI
     }
 
     private fun onImageClick(url: String, view: View) {
-        val args = bundleOf(ARGS_PHOTO to url)
-        navigate(R.id.action_topImages_to_image, args)
+        navigate(TopImagesFragmentDirections.actionTopImagesToImage(url), view to url)
     }
 
     private fun setViewState(state: ViewState) {
