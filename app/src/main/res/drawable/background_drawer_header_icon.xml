@@ -2,5 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <solid android:color="?attr/backgroundCard" />
+    <stroke
+        android:width="@dimen/app_border_width_small"
+        android:color="?attr/colorBorder" />
 
 </shape>

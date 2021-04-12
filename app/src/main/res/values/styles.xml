@@ -10,6 +10,7 @@
         <item name="biv_drawCircularShadow">false</item>
         <item name="biv_selectorOnPress">@color/material_drawer_primary</item>
         <item name="android:scaleType">fitXY</item>
+        <item name="android:background">@drawable/background_drawer_header_icon</item>
     </style>
 
     <style name="AppToolbar">
@@ -18,8 +19,9 @@
     </style>
 
     <style name="AppActionMenu" parent="Theme.AppCompat.Light">
-        <item name="background">?attr/backgroundMain</item>
+        <item name="android:background">?attr/backgroundMain</item>
         <item name="actionMenuTextColor">?attr/colorText</item>
+        <item name="android:textColor">?attr/colorText</item>
     </style>
 
     <!-- Button Styles -->

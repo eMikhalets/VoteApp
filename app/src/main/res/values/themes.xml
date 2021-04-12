@@ -26,5 +26,11 @@
         <item name="colorTextDialog">@color/shamrock</item>
         <item name="colorDialogRipple">@color/blue</item>
         <item name="colorVoteRipple">@color/saffron_dark</item>
+        <!-- Material Drawer attributes -->
+        <item name="material_drawer_background">?attr/backgroundMain</item>
+        <item name="material_drawer_primary_text">?attr/colorText</item>
+        <item name="material_drawer_secondary_text">?attr/colorText</item>
+        <item name="material_drawer_header_selection_text">?attr/colorText</item>
+        <item name="material_drawer_header_selection_subtext">?attr/colorText</item>
     </style>
 </resources>
