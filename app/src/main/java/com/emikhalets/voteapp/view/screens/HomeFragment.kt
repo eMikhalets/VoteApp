@@ -44,12 +44,13 @@ class HomeFragment : MainFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
             images.observe(viewLifecycleOwner, {
                 setViewState(ViewState.LOADED)
-                imagesAdapter.submitList(it)
+                if (it.isEmpty()) toast(R.string.app_toast_no_images_on_server)
+                else imagesAdapter.submitList(it)
             })
 
             error.observe(viewLifecycleOwner, EventObserver {
                 setViewState(ViewState.LOADED)
-                toast(R.string.app_toast_no_images_on_server)
+                toast(it)
             })
         }
 
