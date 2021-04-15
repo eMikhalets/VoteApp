@@ -1,4 +1,4 @@
-# VoteApp ![Logo](/app/src/main/res/mipmap-xhdpi/ic_app_icon.png)
+# VoteApp ![Logo](/app/src/main/res/mipmap-xhdpi/ic_launcher.png)
 
 ## The application allows you to upload photos to the server and vote between two random images ##
 
@@ -36,4 +36,4 @@ Used architecture pattern - Model-View-ViewModel
 
 ## Screenshots ##
 
-<img src="/screenshots/Screenshot_1.png" width="250"> <img src="/screenshots/Screenshot_2.png" width="250"> <img src="/screenshots/Screenshot_3.png" width="250"> <img src="/screenshots/Screenshot_4.png" width="250"> <img src="/screenshots/Screenshot_5.png" width="250"> <img src="/screenshots/Screenshot_6.png" width="250"> <img src="/screenshots/Screenshot_7.png" width="250"> <img src="/screenshots/Screenshot_8" width="250">
+<img src="/screenshots/Screenshot_1.jpg" width="250"> <img src="/screenshots/Screenshot_2.jpg" width="250"> <img src="/screenshots/Screenshot_3.jpg" width="250"> <img src="/screenshots/Screenshot_4.jpg" width="250"> <img src="/screenshots/Screenshot_5.jpg" width="250"> <img src="/screenshots/Screenshot_6.jpg" width="250"> <img src="/screenshots/Screenshot_7.jpg" width="250"> <img src="/screenshots/Screenshot_8.jpg" width="250">
